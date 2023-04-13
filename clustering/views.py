@@ -3,20 +3,6 @@ from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.conf.urls.static import static
-import os
-import tensorflow as tf
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
-import json
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import MinMaxScaler
-import base64
-from io import BytesIO
-from sklearn import metrics
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import classification_report
 
 
 # Create your views here.
