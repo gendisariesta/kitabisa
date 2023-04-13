@@ -88,9 +88,9 @@ WSGI_APPLICATION = 'kitabisa.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test',
+        'NAME': 'kitabisa',
         'USER': 'root',
-        'PASSWORD': 'Bismillah2203',
+        'PASSWORD': 'fikkaps21',
     }
 }
 

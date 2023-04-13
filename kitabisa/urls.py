@@ -23,7 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
-    path('dashboard', views.dashboard),
+    path('dashboard', views.dashboard, name="dashboard"),
     path('', include('account.urls')),
     path('dtks/', include('dtks.urls')),
     path('clustering/', include('clustering.urls')),
