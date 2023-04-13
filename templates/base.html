@@ -30,6 +30,10 @@
     <script src="{% static "mapping/leaflet/leaflet.js" %}"></script>
     <script src="{% static "admin/plugins/jquery/jquery.min.js" %}"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        #map { height: 570px; width: 750px; }
+    </style>
     {% block head %}
     
     {% endblock head %}
@@ -61,7 +65,7 @@
         <div class="nav-header">
             <div class="brand-logo">
                 <a href="index.html">
-                    <img src="{% static 'home/images/logo_pbg.png' %}" height="40" width="40" alt="">
+                    <img src="{% static 'img/logo_pbg.png' %}" height="40" width="40" alt="">
                     <!-- <b class="logo-abbr"><img src="{%static 'admin/images/logo.png' %}" alt=""> </b>
                     <span class="logo-compact"><img src="{%static 'admin/images/logo-compact.png' %}" alt=""></span>
                     <span class="brand-title">
@@ -134,48 +138,51 @@
         <div class="nk-nav-scroll">
             <ul class="metismenu" id="menu">
                 <li class="mega-menu mega-menu-sm">
-                    {% comment %} <a href="{% url "home:index" %}" aria-expanded="false"> {% endcomment %}
+                    <a href="#" aria-expanded="false">
                         <span class="nav-text">Dashboard</span>
                     </a>
                 </li>
                 <li>
-                {% comment %} <a href="{% url 'dtks:index' %}" aria-expanded="false"> {% endcomment %}
+                <a href="{% url 'dtks:index' %}" aria-expanded="false">
                     <span class="nav-text">DTKS</span>
                 </a>
             </li>
-            <li>
-                    {% comment %} <a href="{% url 'clustering:index' %}" aria-expanded="false"> {% endcomment %}
-                        <span class="nav-text">Clustering</span>
-                    </a>
-                </li>
-                <li>
-                {% comment %} <a href="{% url 'mapping:penerima' %}" aria-expanded="false"> {% endcomment %}
-                    <span class="nav-text">Perankingan Bansos</span>
+            <li class="mega-menu mega-menu-sm">
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <span class="nav-text">Clustering</span>
                 </a>
-            </li>
+                <ul aria-expanded="false" class="collapse">
+                    {% block side %}
+                    {% endblock side %}
+                </ul>
+              </li>
+            <li>
+              <a href="javascript:void()" aria-expanded="false">
+                  <span class="nav-text">Perankingan Bansos</span>
+              </a>
+          </li>
                 <li class="mega-menu mega-menu-sm">
-                    {% comment %} <a class="has-arrow" href="{% url 'clustering:index' %}" aria-expanded="false"> {% endcomment %}
+                    <a class="has-arrow" href="#" aria-expanded="false">
                         <span class="nav-text">Bantuan Sosial</span>
                     </a>
                     <ul aria-expanded="false" class="collapse">
-                    {% comment %} <li><a href="{% url 'data_bansos:penerima' slug='sembako-lansia' %}">Sembako Lansia</a></li>
-                    <li><a href="{% url 'data_bansos:penerima' slug='sembako-disabilitas' %}">Sembako Disabilitas</a></li>
-                    <li><a href="{% url 'data_bansos:penerima' slug='odkb' %}">ODKB</a></li>
-                    <li><a href="{% url 'data_bansos:penerima' slug='alat-bantu-disabilitas' %}">Alat Bantu Disabilitas</a></li> {% endcomment %}
+                        {% for b in bansos %}
+                        <li><a href="#">{{b.nama_bansos}}</a></li>
+                        {% endfor %}
                 </ul>
                 </li>
                 <li>
-                {% comment %} <a href="{% url 'mapping:index' %}" aria-expanded="false"> {% endcomment %}
+                <a href="#" aria-expanded="false">
                     <span class="nav-text">Pemetaan Bansos</span>
                 </a>
             </li>
                 <li class="mega-menu mega-menu-sm">
-                {% comment %} <a class="has-arrow" href="{% url 'clustering:index' %}" aria-expanded="false"> {% endcomment %}
+                <a class="has-arrow" href="#" aria-expanded="false">
                     <span class="nav-text">Admin</span>
                 </a>
                 <ul aria-expanded="false" class="collapse">
                     <li><a href="#">Bansos</a></li>
-                    {% comment %} <li><a href="{% url 'user:index' %}">User</a></li> {% endcomment %}
+                    <li><a href="#">User</a></li>
                     <li><a href="#">Kecamatan</a></li>
                 </ul>
             </li>
@@ -222,8 +229,10 @@
 <script src="{% static "admin/plugins/jquery-validation/jquery.validate.min.js" %}"></script>
 <script src="{% static "admin/js/plugins-init/jquery-steps-init.js" %}"></script>
 
+<script src="{% static 'admin/plugins/chart.js/Chart.bundle.min.js' %}"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <!-- Chartjs -->
 <script src="{% static 'admin/plugins/chart.js/Chart.bundle.min.js' %}"></script>
 <!-- Circle progress -->

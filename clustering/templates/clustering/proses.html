@@ -1,0 +1,94 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block head %}
+{% endblock head %} {% block body %}
+<div class="content-body" style="min-height: 788px">
+  <div class="row page-titles mx-0">
+    <div class="col p-md-0">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+          <a href="#">List DTKS</a>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <!-- row -->
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <div class="card">
+          <div class="card-body">
+              <h4 class="card-title mb-4">Perhitungan Clustering</h4>
+              <form action="#">
+                <div class="input-group">
+                  <select class="js-example-basic-single custom-select" style="height:100%">
+                      <option selected="selected">Isi nama clustering...</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                  </select>
+              </div>
+            </form>
+            <div class="table-responsive mt-3">
+              <table class="table" style="border:2px solid #eeeee4">
+                  <thead style="background-color:#eeeee4;">
+                      <tr>
+                          <th style="width:0%">#</th>
+                          <th style="width:5%">No</th>
+                          <th>Name</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <th><input type="checkbox" value=""></th>
+                          <th>1</th>
+                          <td>Kolor Tea Shirt For Man</td>
+                      </tr>
+                      <tr>
+                          <th><input type="checkbox" value=""></th>
+                          <th>2</th>
+                          <td>Kolor Tea Shirt For Women</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="card">
+          <div class="card-body">
+              <h4 class="card-title mb-4">Analisis K</h4>
+              
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+              <h4 class="card-title mb-4">Output Clustering</h4>
+              
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- #/ container -->
+</div>
+{% endblock body %}
+
+{% block footer %}
+<script>
+  $(".js-example-basic-single").select2({
+    tags: true
+  });
+</script>
+{% endblock footer %}
