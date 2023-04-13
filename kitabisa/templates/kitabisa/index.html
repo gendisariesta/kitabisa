@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+
+{% endblock head %}
+
+
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+
+            <div class="container-fluid mt-3">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card basic-card">
+                            <div class="card-body">
+                                <h3 class="card-title text-blue">Populasi Lansia</h3>
+                                <div class="d-inline-block">
+                                    <h1 class="text-black">2890</h1>
+                                    <!-- <p class="text-white mb-0">2021</p> -->
+                                </div>
+                                <span class="material-icons float-right display-5 opacity-5 yellow-logo">elderly</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card basic-card">
+                            <div class="card-body">
+                                <h3 class="card-title text-blue">Populasi Disabilitas</h3>
+                                <div class="d-inline-block">
+                                    <h1 class="text-black">574</h1>
+                                    <!-- <p class="text-white mb-0">2021</p> -->
+                                </div>
+                                <span class="material-icons float-right display-5 opacity-5 green-logo">accessible</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card basic-card">
+                            <div class="card-body">
+                                <h3 class="card-title text-blue">Populasi Yatim Piatu</h3>
+                                <div class="d-inline-block">
+                                    <h1 class="text-black">298</h1>
+                                    <!-- <p class="text-white mb-0">2021</p> -->
+                                </div>
+                                <span class="material-icons float-right display-5 opacity-5 yellow-logo">escalator_warning</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card basic-card">
+                            <div class="card-body">
+                                <h3 class="card-title text-blue">Populasi ODKB</h3>
+                                <div class="d-inline-block">
+                                    <h1 class="text-black">403</h1>
+                                    <!-- <p class="text-white mb-0">2021</p> -->
+                                </div>
+                                <span class="material-icons float-right display-5 opacity-5 green-logo">accessibility_new</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card basic-card">
+                            <div class="card-body">
+                                <h3 class="card-title text-blue">Populasi Rantang Berkah</h3>
+                                <div class="d-inline-block">
+                                    <h1 class="text-black">16</h1>
+                                    <!-- <p class="text-white mb-0">2021</p> -->
+                                </div>
+                                <span class="material-icons float-right display-5 opacity-5 yellow-logo">restaurant</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card basic-card">
+                            <div class="card-body">
+                                <h3 class="card-title text-blue">Populasi Alat Disabilitas</h3>
+                                <div class="d-inline-block">
+                                    <h1 class="text-black">180</h1>
+                                    <!-- <p class="text-white mb-0">2021</p> -->
+                                </div>
+                                <span class="material-icons float-right display-5 opacity-5 green-logo">accessible_forward</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card basic-card">
+                            <div class="card-body">
+                                <h3 class="card-title text-blue">Populasi Penderes Jatuh</h3>
+                                <div class="d-inline-block">
+                                    <h1 class="text-black">34</h1>
+                                    <!-- <p class="text-white mb-0">2021</p> -->
+                                </div>
+                                <span class="material-icons float-right display-5 opacity-5 yellow-logo">sports_handball</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card basic-card">
+                            <div class="card-body">
+                                <h3 class="card-title text-blue">Populasi Kebencanaan</h3>
+                                <div class="d-inline-block">
+                                    <h1 class="text-black">2160</h1>
+                                    <!-- <p class="text-white mb-0">2021</p> -->
+                                </div>
+                                <span class="material-icons float-right display-5 opacity-5 green-logo">local_fire_department</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img class="d-block w-100" src="..." alt="First slide">
+                      </div>
+                      <div class="carousel-item">
+                        <img class="d-block w-100" src="..." alt="Second slide">
+                      </div>
+                      <div class="carousel-item">
+                        <img class="d-block w-100" src="..." alt="Third slide">
+                      </div>
+                    </div>
+                  </div> -->
+
+
+                <div class="row">
+                    <div class="col-xl-3 col-lg-6 col-sm-6 col-xxl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title text-blue">Grafik Penerima Bansos tiap Kecamatan</h4>
+                                <div id="flotPie1" class="flot-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-sm-6 col-xxl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title text-blue">Jumlah Penerima Bansos<span
+                                        class="input-group-prepend pull-right"><button
+                                            class="btn btn-outline-dark btn-sm badge-pill dropdown-toggle" type="button"
+                                            data-toggle="dropdown">Tahun 2021</button>
+                                        <div class="dropdown-menu"><a class="dropdown-item btn-sm" href="#">2021</a> <a
+                                                class="dropdown-item btn-sm" href="#">2022</a> <a class="dropdown-item btn-sm"
+                                                href="#">2023</a>
+                                    </span></h4>
+                                <!-- <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 390px;"><div id="activity" style="overflow: hidden; width: auto; height: 390px;"> -->
+                                <div class="media-body pt-3 pb-3">
+                                    <div class="media-body">
+                                        <h5>Jenis Bansos<span class="pull-right">Jumlah</span></h5>
+                                    </div>
+                                </div>
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h6>Sembako Lansia<span class="pull-right">250</span></h6>
+                                        <h6>Sembako Lansia<span class="pull-right">250</span></h6>
+                                        <h6>Uang Yatim Piatu<span class="pull-right">5000</span></h6>
+                                        <h6>Uang ODKB<span class="pull-right">300</span></h6>
+                                        <h6>Alat Bantu Disabilitas<span class="pull-right">16</span></h6>
+                                        <h6>Rantang Berkah<span class="pull-right">189</span></h6>
+                                        <h6>Penderes Jatuh<span class="pull-right">34</span></h6>
+                                        <h6>Kebencanaan<span class="pull-right">3540</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #/ container -->
+    </div>
+    <!--**********************************
+            Content body end
+        ***********************************-->
+
+{% endblock body %}
+
+{% block footer %}
+
+{% endblock footer %}
