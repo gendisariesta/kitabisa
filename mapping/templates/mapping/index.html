@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}{% endblock head %}
+
+{% block body %}
+<div class="content-body">
+
+    <div class="container-fluid mt-3">
+        
+        <div class="row">
+            
+            <div class="col-xl-6 col-lg-12 col-sm-12 col-xxl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">
+                                <h4 class="card-title mb-3" style="color:#063970; font-weight:bold;">Pemetaan Bantuan Sosial</h4>
+                                {{m|safe}}
+                            </div>
+                            <div class="col mt-5">
+                                <form action="{% url 'mapping:index' %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                    {% comment %} {{form.as_p}} {% endcomment %}
+                                    </div>
+                                    <button type="submit" class="mb-4 btn text-white" style="background-color:#063970;border-color:#063970;">Filter</button>
+                                </form>
+                                <div class="row mt-5">
+                                    <div class="col">
+                                        <h4 class="card-title mb-4" style="color:#063970; font-weight:bold;">Keterangan</h4>
+                                        {% for bansos in bansos %}
+                                        <div class="row mt-1">
+                                            <div class="col-1 text-center">
+                                                <svg width="20" height="20">
+                                                    <rect width="20" height="20" stroke="#063970" stroke-width="2" fill="{{bansos.color}}" />
+                                                </svg>
+                                                {% comment %} <img src="{% static "mapping/leaflet/images/marker-icon.png" %}" width="15px" alt=""> {% endcomment %}
+                                            </div>
+                                            <div class="col">
+                                                <h6>{{bansos.nama_bansos}}</h6>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>        
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #/ container -->
+</div>
+{% endblock body %}
+
+{% block footer %}{% endblock footer %}

@@ -5,7 +5,6 @@ from dtks.models import Bansos
 def index(request):
   
   context={
-    'bansos':bansos
   }
   return render(request, 'landing_page.html', context)
 

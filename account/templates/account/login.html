@@ -56,6 +56,7 @@
                                     </div>
                                     <div class="form-group">
                                         <input type="password" id="password" name="password" class="form-control" placeholder="Password" style="background:#eeeee4; border-radius: 1rem; padding-left:30px;">
+                                        <span id="eye-pass{{data_user.id}}" toggle="#newpassword" class="fa fa-fw fa-eye field-icon toggle-password" onclick="showPass1({{data_user.id}})"></span>
                                     </div>
                                     <button type="submit" class="btn login-form__btn submit w-100" style="background:#063970; border-radius: 1rem;">Sign In</button>
                                 </form>

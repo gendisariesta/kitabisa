@@ -113,12 +113,13 @@
                             <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
+                                        <li><h4>{{user.username}}</h4></li>
                                         <li>
                                             <a href="app-profile.html"><i class="icon-user"></i>
                                                 <span>Profile</span></a>
                                         </li>
                                         <hr class="my-2">
-                                        {% comment %} <li><a href="{% url 'auth:login' %}"><i class="icon-key"></i> <span>Logout</span></a> {% endcomment %}
+                                        <li><a href="{% url 'account:logout' %}"><i class="icon-key"></i> <span>Logout</span></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -134,7 +135,7 @@
     <!--**********************************
                 Sidebar start
             ***********************************-->
-            <div class="nk-sidebar">
+    <div class="nk-sidebar">
         <div class="nk-nav-scroll">
             <ul class="metismenu" id="menu">
                 <li class="mega-menu mega-menu-sm">
@@ -143,53 +144,53 @@
                     </a>
                 </li>
                 <li>
-                <a href="{% url 'dtks:index' %}" aria-expanded="false">
-                    <span class="nav-text">DTKS</span>
-                </a>
-            </li>
-            <li class="mega-menu mega-menu-sm">
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <span class="nav-text">Clustering</span>
-                </a>
-                <ul aria-expanded="false" class="collapse">
-                    {% block side %}
-                    {% endblock side %}
-                </ul>
-              </li>
-            <li>
-              <a href="javascript:void()" aria-expanded="false">
-                  <span class="nav-text">Perankingan Bansos</span>
-              </a>
-          </li>
+                    <a href="{% url 'dtks:index' %}" aria-expanded="false">
+                        <span class="nav-text">DTKS</span>
+                    </a>
+                </li>
                 <li class="mega-menu mega-menu-sm">
                     <a class="has-arrow" href="#" aria-expanded="false">
-                        <span class="nav-text">Bantuan Sosial</span>
+                        <span class="nav-text">Clustering</span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse">
+                        {% block side %}
+                        {% endblock side %}
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void()" aria-expanded="false">
+                        <span class="nav-text">Perankingan Bansos</span>
+                    </a>    
+                </li>
+                <li class="mega-menu mega-menu-sm">
+                    <a class="has-arrow" href="#" aria-expanded="false">
+                        <span class="nav-text">Penerima Bantuan Sosial</span>
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         {% for b in bansos %}
-                        <li><a href="#">{{b.nama_bansos}}</a></li>
+                        <li><a href="{% url 'mapping:penerima' slug=b.slug %}">{{b.nama_bansos}}</a></li>
                         {% endfor %}
-                </ul>
+                    </ul>
                 </li>
                 <li>
-                <a href="#" aria-expanded="false">
-                    <span class="nav-text">Pemetaan Bansos</span>
-                </a>
-            </li>
+                    <a href="{% url 'mapping:index' %}" aria-expanded="false">
+                        <span class="nav-text">Pemetaan Bansos</span>
+                    </a>
+                </li>
                 <li class="mega-menu mega-menu-sm">
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <span class="nav-text">Admin</span>
-                </a>
-                <ul aria-expanded="false" class="collapse">
-                    <li><a href="#">Bansos</a></li>
-                    <li><a href="#">User</a></li>
-                    <li><a href="#">Kecamatan</a></li>
-                </ul>
-            </li>
+                    <a class="has-arrow" href="#" aria-expanded="false">
+                        <span class="nav-text">Admin</span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{% url 'mapping:bansos' %}">Bansos</a></li>
+                        <li><a href="{% url 'account:user' %}">User</a></li>
+                        <li><a href="{% url 'mapping:kecamatan' %}">Kecamatan</a></li>
+                    </ul>
+                </li>
                 
             </ul>
         </div>
-        </div>
+    </div>
         <!--**********************************
         Sidebar end
         ***********************************-->
