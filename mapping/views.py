@@ -51,20 +51,24 @@ def index(request):
 
 def penerima(request, slug):
     # bansos = Bansos.objects.get(slug=slug)
+    bansos = Bansos.objects.all()
     penerima = Penerima.objects.filter(bansos__slug__contains=slug)
     context={
         'title':'Daftar Penerima',
-        'penerima':penerima
+        'penerima':penerima,
+        'bansos':bansos
     }
     return render(request, 'mapping/penerima.html', context)
 
 def detail(request, id):
-    anggota=Anggota.objects.get(id=id)
-    bansos=Penerima.objects.filter(anggota_id=id).order_by('tahun')
+    penerima = Penerima.objects.get(id=id)
+    bansos = Bansos.objects.all()
+    # bansos=Penerima.objects.filter(anggota_id=id).order_by('tahun')
     
     context={
         'title':'Detail',
-        'data_anggota': anggota,
+        # 'data_anggota': anggota,
+        'penerima':penerima,
         'bansos':bansos,
         
     }

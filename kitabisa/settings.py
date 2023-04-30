@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'dtks',
     'clustering',
     'ranking',
-    'mapping'
+    'mapping',
+    'exportdata',
+    'import_export'
 ]
 
 AUTH_USER_MODEL = 'account.User'
@@ -50,6 +52,8 @@ AUTH_USER_MODEL = 'account.User'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

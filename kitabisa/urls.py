@@ -28,6 +28,7 @@ urlpatterns = [
     path('dtks/', include('dtks.urls')),
     path('clustering/', include('clustering.urls')),
     path('mapping/', include('mapping.urls')),
+    path('export/', include('exportdata.urls')),
 ]
 if settings.DEBUG:
         urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
