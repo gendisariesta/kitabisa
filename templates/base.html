@@ -167,9 +167,8 @@
                         <span class="nav-text">Penerima Bantuan Sosial</span>
                     </a>
                     <ul aria-expanded="false" class="collapse">
-                        {% for b in bansos %}
-                        <li><a href="{% url 'mapping:penerima' slug=b.slug %}">{{b.nama_bansos}}</a></li>
-                        {% endfor %}
+                        <li><a href="{% url 'mapping:penerima' slug='sembako-lansia' %}">Sembako Lansia</a></li>
+                        <li><a href="{% url 'mapping:penerima' slug='sembako-disabilitas' %}">Sembako Disabilitas</a></li>
                     </ul>
                 </li>
                 <li>
@@ -187,7 +186,11 @@
                         <li><a href="{% url 'mapping:kecamatan' %}">Kecamatan</a></li>
                     </ul>
                 </li>
-                
+                <li>
+                    <a href="{% url 'exportdata:index' %}" aria-expanded="false">
+                        <span class="nav-text">Export Data</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -263,7 +266,7 @@
 
     <script src="{% static "admin/js/dashboard/dashboard-1.js" %}"></script>
 
-    <script>
+    {% comment %} <script>
       var photoImg = '<img src="{% static "mapping/leaflet/images/bansos.jpg" %}" height="150px""/>';
       var locations = [
           ["<b>Elon</b><br> Menerima sebanyak 3 kali<br> Tanggal terakhir menerima : 27 Oktober 2022<br> "+photoImg, -7.385735, 109.36043],
@@ -286,11 +289,7 @@
             .bindPopup(locations[i][0])
             .addTo(map);
       }
-
-      {% comment %} L.marker([-7.385735, 109.36043]).addTo(map)
-          .bindPopup('Elon Musk<br> Menerima sebanyak 3 kali<br> Tanggal terakhir menerima : 27 Oktober 2022')
-          .openPopup(); {% endcomment %}
-    </script>
+    </script> {% endcomment %}
     <script type="text/javascript">
       $('.show_confirm').click(function(event) {
         var form =  $(this).closest("form");
