@@ -70,7 +70,7 @@ ROOT_URLCONF = 'kitabisa.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,7 +94,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'kitabisa',
         'USER': 'root',
-        'PASSWORD': 'fikkaps21',
+        'PASSWORD': 'Bismillah2203',
+        'OPTIONS':{'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"}
     }
 }
 

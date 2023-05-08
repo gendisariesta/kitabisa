@@ -19,66 +19,86 @@
 
   <div class="container-fluid">
     <div class="row">
-      <div class="col-6">
+      <div class="col-12">
         <div class="card">
           <div class="card-body">
               <h4 class="card-title mb-4">Perhitungan Clustering</h4>
-              <form action="#">
-                <div class="input-group">
-                  <select class="js-example-basic-single custom-select" style="height:100%">
-                      <option selected="selected">Isi nama clustering...</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                  </select>
+              <form method="POST">
+                {% csrf_token %}
+                <div class="form-group row">
+                  <div class="col-sm-6 d-flex">
+                    <label>Nama Clustering</label>
+                      <input type="text" class="form-control" placeholder="Isi nama clustering" id="nama_cl" name="nama_cl" required>
+                  </div>
+                  <div class="col-sm-6 d-flex">
+                    <label>Jumlah Klaster</label>
+                      <input type="number" class="form-control" name="klaster" id="klaster" required>
+                  </div>
               </div>
-            </form>
-            <div class="table-responsive mt-3">
-              <table class="table" style="border:2px solid #eeeee4">
+              <div class="table-responsive input-cluster" style="height:300px;overflow:auto;">
+                <table class="table" style="border:2px solid #eeeee4">
                   <thead style="background-color:#eeeee4;">
-                      <tr>
-                          <th style="width:0%">#</th>
-                          <th style="width:5%">No</th>
-                          <th>Name</th>
-                      </tr>
+                    <tr>
+                      <th style="width:0%">#</th>
+                      <th style="width:5%">No</th>
+                      <th>Nama Atribut</th>
+                    </tr>
                   </thead>
                   <tbody>
-                      <tr>
-                          <th><input type="checkbox" value=""></th>
-                          <th>1</th>
-                          <td>Kolor Tea Shirt For Man</td>
+                    {% for atr in atribut %}
+                    <tr id="{{atr}}">
+                          <th><input class="{{atr}} checkbox" type="checkbox" name="{{atr}}"></th>
+                          <th>{{forloop.counter}}</th>
+                          <td>{{atr}}</td>
                       </tr>
-                      <tr>
-                          <th><input type="checkbox" value=""></th>
-                          <th>2</th>
-                          <td>Kolor Tea Shirt For Women</td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <button type="submit" class="btn mb-1 btn-info" style="width:100%">Proses Clustering</button>
+              </form>
           </div>
         </div>
       </div>
-
-      <div class="col-6">
-        <div class="card">
-          <div class="card-body">
-              <h4 class="card-title mb-4">Analisis K</h4>
-              
-          </div>
-        </div>
-      </div>
-
-
       <div class="col-12">
         <div class="card">
           <div class="card-body">
               <h4 class="card-title mb-4">Output Clustering</h4>
-              
+              <div class="table-responsive" style="border:1px solid #f3f3f9;">
+                <table class="table" id="table-output">
+                    <thead style="background-color:#f3f3f9;">
+                        <tr>
+                            <th>#</th>
+                            {% for c in cols %}
+                              <td>{{c}}</td>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for df in output %}
+                      <tr>
+                        <th>{{forloop.counter}}</th>
+                        {% for a in df  %}
+                        <td>{{a}}</td>
+                        {% endfor %}
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
           </div>
         </div>
       </div>
-
+      <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Line Scatter Diagram</h4>
+                {% if data %}
+                        <img src="data:image/png;base64, {{data|safe}}">
+                  {% endif %}
+              </div>
+        </div>
+    </div>
     </div>
   </div>
   <!-- #/ container -->
@@ -87,8 +107,51 @@
 
 {% block footer %}
 <script>
+  $(document).ready( function () {
+    $('#table-output').DataTable();
+} );
   $(".js-example-basic-single").select2({
     tags: true
   });
+  $("input#nama_cl").on({
+    keydown: function(e) {
+      if (e.which === 32)
+        return false;
+    },
+    change: function() {
+      this.value = this.value.replace(/\s/g, "");
+    }
+  });
+  
+  {% for atr in atribut  %}
+  $('input[name="{{atr}}"]').change(function() {
+    if(this.checked) {
+          $('input[name="{{atr}}"]').val("True");
+        }
+    else $('input[name="{{atr}}"]').val("False");
+      });
+  if ($('input[name="{{atr}}"]:checked').length > 0) {
+        $('input[name="{{atr}}"]').val("False");
+  }
+  {% endfor %}
+
+
+  {% if data_cluster %}
+  $('#nama_cl').val("{{data_cluster.nama_cluster}}").prop("disabled",true);
+  $('#klaster').val("{{data_cluster.jumlah_k}}").prop("disabled",true);
+  $('button[type="submit"]').prop("hidden",true);
+  $('.input-cluster').css("height", "");
+
+  {% for v in value %}
+    {% if v.val != True %}
+        $('#{{v.name}}').prop("hidden",true);
+        {% else %}
+        $('.{{v.name}}').prop("checked", true).prop("disabled",true);
+        {% endif %}
+    {% endfor %}
+  {% endif %}
+
 </script>
+
+
 {% endblock footer %}

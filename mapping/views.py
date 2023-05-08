@@ -18,9 +18,9 @@ def index(request):
     m = folium.Map(location=[-7.3653, 109.3707], zoom_start= 12)
     
     #cluster marker
-    latitudes = [ang.rumah.koordinat_lat for ang in anggota]
-    longitudes = [ang.rumah.koordinat_long for ang in anggota]
-    FastMarkerCluster(data=list(zip(latitudes, longitudes))).add_to(m)
+    # latitudes = [ang.rumah.koordinat_lat for ang in anggota]
+    # longitudes = [ang.rumah.koordinat_long for ang in anggota]
+    # FastMarkerCluster(data=list(latitudes)).add_to(m)
     
     #filter
     # penerima_filter=PenerimaFilter(request.POST, queryset=Penerima.objects.all())
@@ -31,10 +31,10 @@ def index(request):
     
     #marker penerima
     for marker in penerima:
-        folium.Marker([marker.anggota.rumah.koordinat_lat, marker.anggota.rumah.koordinat_long], tooltip='Click for more',
+        folium.Marker([marker.anggota.rumah.koordinat_lat], tooltip='Click for more',
                         popup='<b>Nama : </b>'+marker.anggota.nama_art+'<br>'+'<b>Kecamatan : </b>'+marker.anggota.rumah.kecamatan.nama_kecamatan+
                         '<br><b>Desa : </b>'+marker.anggota.rumah.desa+'<br><b>Menerima sebanyak 3 kali</b><br><b>Bansos : </b>'+
-                        marker.bansos.nama_bansos+'<hr style="border: solid green 4px;opacity: 100;margin-top:10px; margin-bottom:10px;width: 150px;"><a href="#">Detail |</a><a href="http://maps.google.com/?q='+marker.anggota.rumah.koordinat_long+','+marker.anggota.rumah.koordinat_long+'"target="_blank"> Route</a>',
+                        marker.bansos.nama_bansos+'<hr style="border: solid green 4px;opacity: 100;margin-top:10px; margin-bottom:10px;width: 150px;"><a href="#">Detail |</a><a href="http://maps.google.com/?q='+marker.anggota.rumah.koordinat_lat+'"target="_blank"> Route</a>',
                         icon=folium.Icon(color=marker.bansos.color, icon='')).add_to(m)
     #get HTML representation of map object
     m = m._repr_html_()
