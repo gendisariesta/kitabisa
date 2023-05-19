@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{% extends 'base_tksk.html' %} 
 {% load static %} 
 {% block head %}
 {% endblock head %} {% block body %}
@@ -7,10 +7,10 @@
     <div class="col p-md-0">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="{% url 'dtks:index' %}">List DTKS</a>
+          <a href="{% url 'tksk:dashboard' %}">Dashboard</a>
         </li>
         <li class="breadcrumb-item active">
-          <a href="{% url 'dtks:detail' data_rumah.id %}">Detail DTKS RT</a>
+          <a href="{% url 'tksk:detailkrt' data_rumah.id %}">Detail Data RT</a>
         </li>
       </ol>
     </div>

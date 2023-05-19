@@ -1,7 +1,7 @@
 import django_filters
 from django import forms
 from dtks.models import Bansos, Kecamatan
-from mapping.models import Penerima
+from penerima.models import Penerima
 
 class PenerimaFilter(django_filters.FilterSet):
     b = []

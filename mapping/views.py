@@ -1,34 +1,59 @@
 from django.shortcuts import render, redirect
+from django.db.models import Avg
 from dtks.models import Anggota, Kecamatan, Bansos
-from .models import Penerima
-#from mapping.filter import PenerimaFilter
+from penerima.models import Penerima
+from mapping.filters import PenerimaFilter
 
+import geocoder
 import folium
+from folium.plugins import HeatMap
 from folium.plugins import FastMarkerCluster
+from geopy.geocoders import Nominatim
 
+geolocator = Nominatim(user_agent="bytescout", timeout=None)
+
+def getloc_lats_longs(locations):
+    loc_lats_longs = []
+    for loc in locations:
+        loc_lat_long = geolocator.geocode(query = loc+', Purbalingga')
+        count = Anggota.objects.filter(rumah__kecamatan__nama_kecamatan = loc).count()
+        loc_lats_longs.append([loc_lat_long.latitude, loc_lat_long.longitude, count])
+    return loc_lats_longs
 # Create your views here.
 def index(request):
     #tahun=Penerima.objects.values_list("tahun", flat=True).order_by("tahun").distinct()
     kecamatan = Kecamatan.objects.all()
     bansos = Bansos.objects.all()
     anggota = Anggota.objects.all()
-    penerima = Penerima.objects.all()
+    # penerima = Penerima.objects.all()
+    nama_kecamatan = Kecamatan.objects.values_list('nama_kecamatan', flat=True)
+    avg_lat = Penerima.objects.aggregate(avg=Avg('anggota__rumah__koordinat_lat'))['avg']
+    avg_long = Penerima.objects.aggregate(avg=Avg('anggota__rumah__koordinat_long'))['avg']
 
     #Create Map Object
-    m = folium.Map(location=[-7.3653, 109.3707], zoom_start= 12)
+    m = folium.Map(location=[avg_lat, avg_long], zoom_start= 12)
     
     #cluster marker
+    # latitudes = [ang.rumah.koordinat_lat for ang in anggota]
+    # longitudes = [ang.rumah.koordinat_long for ang in anggota]
+    # FastMarkerCluster(data=list(zip(latitudes, longitudes))).add_to(m)
+
+    #Map Heat
     latitudes = [ang.rumah.koordinat_lat for ang in anggota]
     longitudes = [ang.rumah.koordinat_long for ang in anggota]
-    FastMarkerCluster(data=list(zip(latitudes, longitudes))).add_to(m)
+    HeatMap(data=list(zip(latitudes, longitudes)), radius=50, blur=20).add_to(m)
+    # lats_longs = getloc_lats_longs(nama_kecamatan)
+    # HeatMap(lats_longs, radius=40, blur=20).add_to(m)
     
     #filter
-    # penerima_filter=PenerimaFilter(request.POST, queryset=Penerima.objects.all())
-    # penerima=penerima_filter.qs
+    penerima_filter=PenerimaFilter(request.POST, queryset=Penerima.objects.all())
+    penerima=penerima_filter.qs
 
     # image_name='bansos.jpg'
     # image=static('mapping/leaflet/images/')+image_name
-    
+    #marker anggota
+    # for marker in anggota:
+    #     folium.Marker([marker.rumah.koordinat_lat, marker.rumah.koordinat_long]).add_to(m)
     #marker penerima
     for marker in penerima:
         folium.Marker([marker.anggota.rumah.koordinat_lat, marker.anggota.rumah.koordinat_long], tooltip='Click for more',
@@ -45,34 +70,9 @@ def index(request):
     'kecamatan':kecamatan,
     # 'tahun':tahun,
     'bansos':bansos,
-    # 'form':penerima_filter.form,
+    'form':penerima_filter.form,
     }
     return render (request, 'mapping/index.html', context)
-
-def penerima(request, slug):
-    # bansos = Bansos.objects.get(slug=slug)
-    bansos = Bansos.objects.all()
-    penerima = Penerima.objects.filter(bansos__slug__contains=slug)
-    context={
-        'title':'Daftar Penerima',
-        'penerima':penerima,
-        'bansos':bansos
-    }
-    return render(request, 'mapping/penerima.html', context)
-
-def detail(request, id):
-    penerima = Penerima.objects.get(id=id)
-    bansos = Bansos.objects.all()
-    # bansos=Penerima.objects.filter(anggota_id=id).order_by('tahun')
-    
-    context={
-        'title':'Detail',
-        # 'data_anggota': anggota,
-        'penerima':penerima,
-        'bansos':bansos,
-        
-    }
-    return render(request, 'mapping/detail_penerima.html', context)
 
 def bansos(request):
     bansos = Bansos.objects.all()

@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'ranking',
     'mapping',
     'exportdata',
-    'import_export'
+    'import_export',
+    'penerima',
+    'tksk'
 ]
 
 AUTH_USER_MODEL = 'account.User'

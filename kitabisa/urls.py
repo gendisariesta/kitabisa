@@ -29,6 +29,8 @@ urlpatterns = [
     path('clustering/', include('clustering.urls')),
     path('mapping/', include('mapping.urls')),
     path('export/', include('exportdata.urls')),
+    path('penerima/', include('penerima.urls')),
+    path('tksk/', include('tksk.urls')),
 ]
 if settings.DEBUG:
         urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

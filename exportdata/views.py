@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .resources import PenerimaResource
-from mapping.models import Penerima
+from penerima.models import Penerima
 from exportdata.filters import PenerimaFilter
 
 

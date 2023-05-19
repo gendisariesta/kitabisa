@@ -20,6 +20,9 @@ def index(request):
     new_testing = request.FILES['file-excel-rt']
     data_import = dataset.load(new_testing.read(), format='xlsx')
     for data in data_import:
+      coordinate = data[71]
+      if coordinate is not None:
+        coordinates = coordinate.split(",")
       if data[63]=='1':
         luas_lahan = 0
       else :
@@ -34,8 +37,8 @@ def index(request):
         rt=data[11],
         rw=data[12],
         alamat=data[9],
-        koordinat_lat = data[71],
-        koordinat_long = data[71],
+        koordinat_lat = coordinates[0],
+        koordinat_long = coordinates[1],
       )
       data_rumah.save()
       data_aset = Aset(
@@ -123,7 +126,7 @@ def input_form(request):
     if koordinat_lat=="" and koordinat_long=="":
       koordinat_lat=None
       koordinat_long=None
-    data_rumah = Rumah(IDJTG=idjtg,nama_krt=nama_krt,kabupaten=kabupaten,kecamatan=kecamatan,desa=desa,dusun=dusun,rt=rt,rw=rw,alamat=alamat,koordinat_lat = koordinat_lat,koordinat_long = koordinat_long)
+    data_rumah = Rumah(IDJTG=idjtg,nama_krt=nama_krt,kabupaten=kabupaten,kecamatan=kecamatan,desa=desa,dusun=dusun,rt=rt,rw=rw,alamat=alamat,koordinat_lat = koordinat_lat+','+koordinat_long,koordinat_long = koordinat_long)
     data_rumah.save()
     
     gas = request.POST['gas']

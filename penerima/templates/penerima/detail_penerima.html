@@ -15,10 +15,10 @@
             <a href="{% url 'dashboard' %}">Dashboard</a>
           </li>
           <li class="breadcrumb-item active">
-            <a href="{% url 'mapping:penerima' slug=penerima.bansos.slug %}">Penerima Bansos</a>
+            <a href="{% url 'penerima:index' slug=penerima.bansos.slug %}">Penerima Bansos</a>
           </li>
           <li class="breadcrumb-item active">
-            <a href="{% url 'mapping:detail' id=penerima.id %}">Detail</a>
+            <a href="{% url 'penerima:detail' id=penerima.id %}">Detail</a>
           </li>
         </ol>
       </div>

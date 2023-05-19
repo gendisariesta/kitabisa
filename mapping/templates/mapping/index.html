@@ -22,7 +22,7 @@
                                 <form action="{% url 'mapping:index' %}" method="POST">
                                     {% csrf_token %}
                                     <div class="form-group">
-                                    {% comment %} {{form.as_p}} {% endcomment %}
+                                    {{form.as_p}}
                                     </div>
                                     <button type="submit" class="mb-4 btn text-white" style="background-color:#063970;border-color:#063970;">Filter</button>
                                 </form>

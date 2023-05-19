@@ -167,13 +167,18 @@
                         <span class="nav-text">Penerima Bantuan Sosial</span>
                     </a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="{% url 'mapping:penerima' slug='sembako-lansia' %}">Sembako Lansia</a></li>
-                        <li><a href="{% url 'mapping:penerima' slug='sembako-disabilitas' %}">Sembako Disabilitas</a></li>
+                        <li><a href="{% url 'penerima:index' slug='sembako-lansia' %}">Sembako Lansia</a></li>
+                        <li><a href="{% url 'penerima:index' slug='sembako-disabilitas' %}">Sembako Disabilitas</a></li>
                     </ul>
                 </li>
                 <li>
                     <a href="{% url 'mapping:index' %}" aria-expanded="false">
                         <span class="nav-text">Pemetaan Bansos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'exportdata:index' %}" aria-expanded="false">
+                        <span class="nav-text">Export Data</span>
                     </a>
                 </li>
                 <li class="mega-menu mega-menu-sm">
@@ -185,11 +190,6 @@
                         <li><a href="{% url 'account:user' %}">User</a></li>
                         <li><a href="{% url 'mapping:kecamatan' %}">Kecamatan</a></li>
                     </ul>
-                </li>
-                <li>
-                    <a href="{% url 'exportdata:index' %}" aria-expanded="false">
-                        <span class="nav-text">Export Data</span>
-                    </a>
                 </li>
             </ul>
         </div>
