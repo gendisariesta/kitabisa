@@ -10,6 +10,7 @@ The smaller device rules always should write below the bigger device rules
 Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Component
 */
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700");
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,700");
 @import url(../icons/font-awesome/css/font-awesome.min.css);
 @import url(../icons/simple-line-icons/css/simple-line-icons.css);
 @import url(../icons/weather-icons/css/weather-icons.min.css);
@@ -89,7 +90,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
   --breakpoint-xxl: 1400;
-  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji",Poppins;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
 
 *,
@@ -113,7 +114,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 body {
   margin: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.5;
@@ -7616,7 +7617,7 @@ sub {
   position: absolute;
   left: 0;
   top: 0;
-  background: #063970;
+  background: #00001A;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
   transition: all .2s ease; }
   .nav-header .logo-abbr {
@@ -8166,6 +8167,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
       margin-left: 14.375rem; } }
 
 .nk-sidebar {
+  background-color: #00001A;
   width: 15.1875rem;
   padding-bottom: 112px;
   height: 100%;
@@ -8173,7 +8175,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   top: 5rem;
   padding-top: 0;
   z-index: 99;
-  background: #fff;
+  background: #00001A;
   transition: all .2s ease; }
   @media only screen and (min-width: 1200px) and (max-width: 1350px) {
     .nk-sidebar {
@@ -8228,7 +8230,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
       padding: 0.8125rem 1.25rem;
       outline-width: 0;
       transition: all .3s ease-out;
-      color: #464a53; }
+      color: #fff; }
     .nk-sidebar .metismenu ul a {
       padding: 0.625rem 0.9375rem 0.625rem 2.8125rem; }
     .nk-sidebar .metismenu ul ul a {
@@ -14042,7 +14044,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   padding-right: 15rem; }
 
 [data-nav-headerbg="color_1"] .nav-header {
-  background-color: #063970; }
+  background-color: #00001A; }
 
 [data-nav-headerbg="color_2"] .nav-header {
   background-color: #27394F !important; }
@@ -14152,7 +14154,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   color: #fff; }
 
 [data-sibebarbg="color_1"] .nk-sidebar .metismenu {
-  background-color: #fff; }
+  background-color: #00001A; }
   [data-sibebarbg="color_1"] .nk-sidebar .metismenu > li {
     color: #27394F; }
     [data-sibebarbg="color_1"] .nk-sidebar .metismenu > li ul a {

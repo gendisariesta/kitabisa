@@ -65,7 +65,8 @@
         <div class="nav-header">
             <div class="brand-logo">
                 <a href="index.html">
-                    <img src="{% static 'img/logo_pbg.png' %}" height="40" width="40" alt="">
+                    <img src="{% static 'img/logo_pbg.png' %}"  width="40" alt="">
+                    <span>Sistem-Bansos</span>
                     <!-- <b class="logo-abbr"><img src="{%static 'admin/images/logo.png' %}" alt=""> </b>
                     <span class="logo-compact"><img src="{%static 'admin/images/logo-compact.png' %}" alt=""></span>
                     <span class="brand-title">
@@ -155,6 +156,8 @@
                     <ul aria-expanded="false" class="collapse">
                         <li><a href="{% url 'clustering:index' %}">Analisis Data</a></li>
                         <li><a href="{% url 'clustering:proses' %}">Proses Clustering</a></li>
+                        <li><a href="{% url 'clustering:analisis_cluster' %}">Analisis Jumlah K</a></li>
+                        <li><a href="{% url 'clustering:hasil' %}">Hasil Cluster</a></li>
                     </ul>
                 </li>
                 <li>

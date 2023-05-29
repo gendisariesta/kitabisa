@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Avg
 from dtks.models import Anggota, Kecamatan, Bansos
 from penerima.models import Penerima
-from mapping.filters import PenerimaFilter
+# from mapping.filters import PenerimaFilter
 
 import geocoder
 import folium
@@ -25,7 +25,7 @@ def index(request):
     kecamatan = Kecamatan.objects.all()
     bansos = Bansos.objects.all()
     anggota = Anggota.objects.all()
-    # penerima = Penerima.objects.all()
+    penerima = Penerima.objects.all()
     nama_kecamatan = Kecamatan.objects.values_list('nama_kecamatan', flat=True)
     avg_lat = Penerima.objects.aggregate(avg=Avg('anggota__rumah__koordinat_lat'))['avg']
     avg_long = Penerima.objects.aggregate(avg=Avg('anggota__rumah__koordinat_long'))['avg']
@@ -46,8 +46,8 @@ def index(request):
     # HeatMap(lats_longs, radius=40, blur=20).add_to(m)
     
     #filter
-    penerima_filter=PenerimaFilter(request.POST, queryset=Penerima.objects.all())
-    penerima=penerima_filter.qs
+    # penerima_filter=PenerimaFilter(request.POST, queryset=Penerima.objects.all())
+    # penerima=penerima_filter.qs
 
     # image_name='bansos.jpg'
     # image=static('mapping/leaflet/images/')+image_name

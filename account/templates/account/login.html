@@ -34,11 +34,11 @@
 
 
 
-    <div class="login-form-bg h-100" style="background: #063970;">
-        <div class="container h-100" style="background: #063970;">
+    <div class="login-form-bg h-100" style="background: #00001A;">
+        <div class="container h-100" style="background: #00001A;">
             <div class="row justify-content-center h-100">
                 <div class="col-xl-6 ms-auto" style="align-self: center;">
-                    <img src="{% static "auth/images/logo_pbg.png" %}" alt="" class="mb-3" width="25%">
+                    <img src="{% static "img/logo_pbg.png" %}" alt="" class="mb-3" width="25%">
                     <h1 class="text-white"><b>Sistem Penerimaan <br>Bantuan Sosial</b></h1>
                     <hr style="height:2px !important; background-color: white; width: 80%;">
                     <h2 class="text-white">DINSOSDALDUKKBP3A<br> Kabupaten Purbalingga</h2>
@@ -47,7 +47,7 @@
                     <div class="form-input-content">
                         <div class="card login-form mb-0" style="border-radius: 1rem;">
                             <div class="card-body pt-5">
-                                <h3 class="text-center" style="color:#063970;">User Login</h3>
+                                <h3 class="text-center" style="color:#00001A;">User Login</h3>
         
                                 <form class="mt-5 mb-5 login-input" method="POST">
                                     {% csrf_token %}
@@ -58,7 +58,7 @@
                                         <input type="password" id="password" name="password" class="form-control" placeholder="Password" style="background:#eeeee4; border-radius: 1rem; padding-left:30px;">
                                         <span id="eye-pass{{data_user.id}}" toggle="#newpassword" class="fa fa-fw fa-eye field-icon toggle-password" onclick="showPass1({{data_user.id}})"></span>
                                     </div>
-                                    <button type="submit" class="btn login-form__btn submit w-100" style="background:#063970; border-radius: 1rem;">Sign In</button>
+                                    <button type="submit" class="btn login-form__btn submit w-100" style="background:#00001A; border-radius: 1rem;">Sign In</button>
                                 </form>
                                 <p class="mt-5 login-form__footer text-center">Dont have account? <a href="#" class="text-primary">Sign Up</a> now</p>
                             </div>
