@@ -21,7 +21,7 @@ def index(request):
     atribut_aset = ['gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
                'motor','mobil','perahu','motor_tempel','perahu_motor','kapal','lahan','sapi','kerbau','kuda','babi','kambing','unggas']
     atribut_count = (len(atribut_kondisi_rumah)+len(atribut_aset))
-    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
+    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
     df_kondisi_rumah = pd.read_sql('SELECT * FROM dtks_kondisi_rumah', con=db_connection)
     df_aset = pd.read_sql('SELECT * FROM dtks_aset', con=db_connection)
     desc = []
@@ -146,7 +146,7 @@ def proses_cluster(request, name):
             variable.append(atr)
        
     test = []
-    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
+    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
     df = pd.read_sql('SELECT * FROM clustering_'+name, con=db_connection)
     kmeans = KMeans(n_clusters=data_cluster.jumlah_k)
     y_predict = kmeans.fit_predict(df[variable])
