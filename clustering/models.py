@@ -1,4 +1,5 @@
 from django.db import models
+from dtks.models import Rumah 
 
 # Create your models here.
 class Jenis(models.Model):
@@ -31,3 +32,4 @@ class Jenis(models.Model):
   
   def __str__(self):
     return "{}".format(self.nama_cluster)
+  

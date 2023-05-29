@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .resources import PenerimaResource
 from penerima.models import Penerima
-from exportdata.filters import PenerimaFilter
+# from exportdata.filters import PenerimaFilter
 
 
 
@@ -10,7 +10,7 @@ def index(request):
     # penerima_filter=PenerimaFilter(request.POST, queryset=Penerima.objects.all())
     context={
         'title':'Export Data',
-        'form':penerima_filter.form,
+        # 'form':penerima_filter.form,
     }
     return render(request, 'exportdata/index.html', context)
 

@@ -74,13 +74,14 @@
               <h4 class="card-title mb-4">Deskripsi Atribut</h4>
               <div class="table-responsive" style="border:1px solid #f3f3f9;height:320px;overflow:auto;">
                 <table class="table">
-                    <thead style="background-color:#f3f3f9;">
+                    <thead style="background-color:#f3f3f9;position: sticky;top:0">
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Minimum</th>
                             <th>Maximum</th>
+                            <th>Minimum</th>
                             <th>Mean</th>
+                            <th>Std</th>
                             <th>Count</th>
                         </tr>
                     </thead>
@@ -92,6 +93,7 @@
                             <td class="color-danger">{{describe.max}}</td>
                             <td class="color-danger">{{describe.min}}</td>
                             <td class="color-danger">{{describe.mean}}</td>
+                            <td class="color-danger">{{describe.std}}</td>
                             <td class="color-danger">{{describe.count}}</td>
                         </tr>
                         {% endfor %}
