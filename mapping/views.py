@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Avg
-from dtks.models import Anggota, Kecamatan, Bansos
+from dtks.models import Anggota, Kecamatan, Bansos, Rumah
 from penerima.models import Penerima
 # from mapping.filters import PenerimaFilter
 
@@ -56,7 +56,7 @@ def index(request):
     #     folium.Marker([marker.rumah.koordinat_lat, marker.rumah.koordinat_long]).add_to(m)
     #marker penerima
     for marker in penerima:
-        folium.Marker([marker.anggota.rumah.koordinat_lat], tooltip='Click for more',
+        folium.Marker([marker.anggota.rumah.koordinat_lat, marker.anggota.rumah.koordinat_long], tooltip='Click for more',
                         popup='<b>Nama : </b>'+marker.anggota.nama_art+'<br>'+'<b>Kecamatan : </b>'+marker.anggota.rumah.kecamatan.nama_kecamatan+
                         '<br><b>Desa : </b>'+marker.anggota.rumah.desa+'<br><b>Menerima sebanyak 3 kali</b><br><b>Bansos : </b>'+
                         marker.bansos.nama_bansos+'<hr style="border: solid green 4px;opacity: 100;margin-top:10px; margin-bottom:10px;width: 150px;"><a href="#">Detail |</a><a href="http://maps.google.com/?q='+marker.anggota.rumah.koordinat_lat+'"target="_blank"> Route</a>',

@@ -28,7 +28,7 @@ for i in atribut_aset :
 def index(request):
     row_count = Rumah.objects.all().count()
     atribut_count = (len(atribut_kondisi_rumah)+len(atribut_aset))
-    label = ['IDJTG']
+    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
     df_kondisi_rumah = pd.read_sql('SELECT * FROM dtks_kondisi_rumah', con=db_connection)
     df_aset = pd.read_sql('SELECT * FROM dtks_aset', con=db_connection)
     
@@ -163,7 +163,7 @@ def proses_cluster(request, name):
             variable.append(atr)
        
     test = []
-    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
+    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
     df = pd.read_sql('SELECT * FROM clustering_'+name, con=db_connection)
     df_scaled = prepocessing(df[variable])
     kmeans = KMeans(n_clusters=data_cluster.jumlah_k, random_state=30)

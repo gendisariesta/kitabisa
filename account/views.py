@@ -1,11 +1,19 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.contrib.auth import authenticate, login, logout
-from . models import User
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.models import Group
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
+from .models import User
+from .forms import CreateUserForm
+from dtks.models import Kecamatan
+from django.contrib.auth.decorators import login_required
+from .decorators import unauthenticated_user, allowed_users
 # from django.contrib.auth.models import User
 
 # Create your views here.
-
+@unauthenticated_user
 def loginView(request):
   context={
         'title':'Login',
@@ -17,10 +25,17 @@ def loginView(request):
       
       user = authenticate(request, username=username, password=password)
 
-      if user is not None:
-        login(request, user)
-        return redirect ('dashboard')
+      if user is not None :
+        if user.groups.all()[0].name == "Superadmin" or user.groups.all()[0].name == "Admin":
+          login(request, user)
+          messages.success(request, 'Login Success! Welcome '+user.name)
+          return redirect ('dashboard')
+        elif user is not None and user.groups.all()[0].name == "TKSK":
+          login(request, user)
+          messages.success(request, 'Login Success! Welcome '+user.name)
+          return redirect ('tksk:dashboard')
       else:
+        messages.error(request, 'Login Failed! Please enter username and password correctly')  
         return redirect ('account:login')
   # if request.method=="GET":
   #     if request.user.is_authenticated():
@@ -28,13 +43,41 @@ def loginView(request):
   #     else:
   return render(request, 'account/login.html', context)
 
+@login_required(login_url='account:login')
 def logoutView(request):
   
   logout(request)
   return redirect('account:login')
 
+@login_required(login_url='account:login')
+@allowed_users(allowed_roles=['Superadmin'])
+def registration(request):
+  form = CreateUserForm()
+  if request.method =='POST':
+    role = request.POST.get('role')
+    form = CreateUserForm(request.POST)
+    if form.is_valid():
+      user = form.save()
+      username = form.cleaned_data.get('username')
+      group = Group.objects.get(name=role)
+      user.groups.add(group)
+      messages.success(request, 'Account was created for ' + username)
+      if request.POST.get("add"):
+        return HttpResponseRedirect(reverse('account:user'))
+      elif request.POST.get("add_another"):  # You can use else in here too if there is only 2 submit types.
+        return HttpResponseRedirect(reverse('account:registration'))
+  context={
+    'title':'Tambah User',
+    'form':form
+  }
+  return render(request, 'account/registration.html', context)
+
 def user(request):
-  user = User.objects.all()
+  user = User.objects.exclude(groups__name='Superadmin')
+  kecamatan = Kecamatan.objects.all()
+  form = CreateUserForm()
+
+  
   # if User.objects.filter(role='Pimpinan'):
   #   badge="primary"
   # elif role == 'Pimpinan':
@@ -43,20 +86,22 @@ def user(request):
   #   badge = "warning"
   context = {
     'title' : 'User',
-    'user'  : user,
+    'data_user'  : user,
     'badge' : 'success',
     'no'    : 1,
+    'form'  : form,
+    'kecamatan' : kecamatan
   }
-  if request.method == 'POST':
-    nama = request.POST['nama']
-    username = request.POST['username']
-    password = request.POST['password']
-    location = request.POST['location']
-    # new_user = User(name=nama,username=username,password=password,role=role,location=location)
-    new_user=User.objects.create_user(name=nama,username=username,location=location)
-    new_user.set_password(password)
-    new_user.save()
-    return redirect ('account:user')
+  # if request.method == 'POST':
+  #   nama = request.POST['nama']
+  #   username = request.POST['username']
+  #   password = request.POST['password']
+  #   location = request.POST['location']
+  #   # new_user = User(name=nama,username=username,password=password,role=role,location=location)
+  #   new_user=User.objects.create_user(name=nama,username=username,location=location)
+  #   new_user.set_password(password)
+  #   new_user.save()
+  #   return redirect ('account:user')
   
   return render(request, 'account/user.html', context)
 
@@ -67,14 +112,39 @@ def delete(request, id):
 def update(request, id):
   
   if request.method == 'POST':
-    newnama = request.POST['newnama']
-    newusername = request.POST['newusername']
     # newpassword = request.POST['newpassword']
-    newlocation = request.POST['newlocation']
+    role = request.POST.get('newrole')
+    newnama = request.POST.get('newnama')
+    newusername = request.POST.get('newusername')
+    newlocation = request.POST.get('newlocation')
+    group = Group.objects.get(name=role)
     user = User.objects.get(id=id)
+    user.groups.clear()
+    user.groups.add(group)
     user.name = newnama
     user.username = newusername
     user.location = newlocation
     # user.set_password(newpassword)
     user.save()
+    messages.success(request, 'User updated!')
     return redirect ('account:user')
+
+def profile(request, id):
+  data_user = User.objects.get(id=id)
+  if request.method == 'POST':
+    form = PasswordChangeForm(request.user, request.POST)
+    if form.is_valid():
+      user = form.save()
+      update_session_auth_hash(request, user)  # Important!
+      messages.success(request, 'Your password was successfully updated!')
+      return redirect('account:profile')
+    else:
+      messages.error(request, 'Please correct the error below.')
+  else:
+      form = PasswordChangeForm(request.user)
+  context={
+    'title':'User Profile',
+    'user': data_user,
+    'form': form
+  }
+  return render(request, 'account/profile.html', context)

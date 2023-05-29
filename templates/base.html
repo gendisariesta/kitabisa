@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Dashboard</title>
+    <title>{{title}}</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/logo_pbg.png' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
@@ -116,7 +117,7 @@
                                     <ul>
                                         <li><h4>{{user.username}}</h4></li>
                                         <li>
-                                            <a href="app-profile.html"><i class="icon-user"></i>
+                                            <a href="{% url 'account:profile' id=user.id %}"><i class="icon-user"></i>
                                                 <span>Profile</span></a>
                                         </li>
                                         <hr class="my-2">
@@ -140,7 +141,7 @@
         <div class="nk-nav-scroll">
             <ul class="metismenu" id="menu">
                 <li class="mega-menu mega-menu-sm">
-                    <a href="#" aria-expanded="false">
+                    <a href="{% url 'dashboard' %}" aria-expanded="false">
                         <span class="nav-text">Dashboard</span>
                     </a>
                 </li>
@@ -318,30 +319,7 @@
         })    
       });
 
-      function showPass() {
-        var x = document.getElementById("password");
-        if (x.type === "password") {
-          x.type = "text";   
-          document.getElementById("eye-pass").classList.add("fa-eye-slash");
-          document.getElementById("eye-pass").classList.remove("fa-eye");
-        } else {
-          x.type = "password";
-          document.getElementById("eye-pass").classList.add("fa-eye");
-          document.getElementById("eye-pass").classList.remove("fa-eye-slash");
-        }
-      }
-      function showPass1(id) {
-        var x = document.getElementById("newpassword"+id);
-        if (x.type === "password") {
-          x.type = "text";   
-          document.getElementById("eye-pass"+id).classList.add("fa-eye-slash");
-          document.getElementById("eye-pass"+id).classList.remove("fa-eye");
-        } else {
-          x.type = "password";
-          document.getElementById("eye-pass"+id).classList.add("fa-eye");
-          document.getElementById("eye-pass"+id).classList.remove("fa-eye-slash");
-        }
-      }
+      
       $('#tabel-dtks').DataTable();
     </script>
   {% block footer %}

@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+
+{% endblock head %}
+
+
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body" style="min-height: 788px">
+            <div class="row page-titles mx-0">
+              <div class="col p-md-0">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <a href="{% url 'dashboard' %}">Dashboard</a>
+                  </li>
+                  <li class="breadcrumb-item active">
+                    <a href="{% url 'account:user' %}">{{title}}</a>
+                  </li>
+                </ol>
+              </div>
+            </div>
+            <!-- row -->
+          
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-12">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                        </button>{{message}}</div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                  <div class="card" >
+                    <div class="card-body">
+                      
+                        <h4 class="card-title">Profil User</h4>
+                        <p>Nama saya <strong>{{user.name}}</strong>. Saya menggunakan <strong>{{user.username}}</strong> sebagai username saya. Lokasi bekerja saya adalah di <strong>{{user.location}}</strong>.  
+                            Saya mempunyai hak akses sebagai <strong>{{user.groups.all.0.name}}</strong> pada <strong>Sistem Bansos</strong> ini. 
+                            Kata sandi itu RAHASIA!. Jika kamu mengetahuinya, saya dapat melakukan ganti kata sandi melalui <a href="{% url 'account:change_password' %}" type="button" class="btn bg-light btn-sm text-info">form ubah kata sandi</a>. 
+                            Saya juga dapat melakukan perubahan terhadap Nama dan Username saya melalui <button type="button" id="clickMe" class="btn bg-light btn-sm text-info">form update</button>. Terima kasih!
+                        </p>
+                    </div>
+                  </div>
+                  <div class="card hidden-div" id="newCard" style="display:none;">
+                    <div class="card-body">
+                      <button type="button" class="close" id="HideHidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="card-title">Ubah Kata Sandi</h4>
+                        <div class="basic-form">
+                            <form>
+                                <div class="form-group">
+                                    {{form}}
+                                    <button type="submit">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                </div>
+              </div>
+            </div>
+            <!-- #/ container -->
+          </div>
+    <!--**********************************
+            Content body end
+        ***********************************-->
+
+{% endblock body %}
+
+{% block footer %}
+<script>
+  {% comment %} var button = document.getElementById('clickMe');
+  var newCard = document.getElementById('newCard');
+  button.addEventListener('click', function() {
+    newCard.style.display = 'block';
+  }); {% endcomment %}
+  {% comment %} $(document).ready(function() {
+    $(".hidden-div").hide();
+  }); {% endcomment %}
+  $('#HideHidden').click(function() {   
+      $(".hidden-div").hide();
+  });
+
+  $('#clickMe').click(function() {   
+      $(".hidden-div").show();
+  });
+</script>
+<script>
+  function showPass() {
+    var x = document.getElementById("password1");
+    if (x.type === "password") {
+      x.type = "text";   
+      document.getElementById("eye-pass").classList.add("fa-eye-slash");
+      document.getElementById("eye-pass").classList.remove("fa-eye");
+    } else {
+      x.type = "password";
+      document.getElementById("eye-pass").classList.add("fa-eye");
+      document.getElementById("eye-pass").classList.remove("fa-eye-slash");
+    }
+  }
+  function showPass2() {
+    var y = document.getElementById("password2");
+    if (y.type === "password") {
+      y.type = "text";   
+      document.getElementById("eye-pass").classList.add("fa-eye-slash");
+      document.getElementById("eye-pass").classList.remove("fa-eye");
+    } else {
+      y.type = "password";
+      document.getElementById("eye-pass").classList.add("fa-eye");
+      document.getElementById("eye-pass").classList.remove("fa-eye-slash");
+    }
+  }
+  {% comment %} function showPass1(id) {
+    var x = document.getElementById(id);
+    if (x.type === "password") {
+      x.type = "text";   
+      document.getElementById("eye-pass"+id).classList.add("fa-eye-slash");
+      document.getElementById("eye-pass"+id).classList.remove("fa-eye");
+    } else {
+      x.type = "password";
+      document.getElementById("eye-pass"+id).classList.add("fa-eye");
+      document.getElementById("eye-pass"+id).classList.remove("fa-eye-slash");
+    }
+  } {% endcomment %}
+</script>
+{% endblock footer %}
