@@ -30,17 +30,8 @@
         Preloader end
     ********************-->
 
-    
-
-
-
-<<<<<<< HEAD
     <div class="login-form-bg h-100" style="background: #00001A;">
         <div class="container h-100" style="background: #00001A;">
-=======
-    <div class="login-form-bg h-100" style="background: #00001a;">
-        <div class="container h-100" style="background: #00001a;">
->>>>>>> c6919c82914b4a1d1d29201e1833abff9baeeeca
             <div class="row justify-content-center h-100">
                 <div class="col-xl-6 ms-auto" style="align-self: center;">
                     <img src="{% static "img/logo_pbg.png" %}" alt="" class="mb-3" width="25%">
@@ -52,10 +43,6 @@
                     <div class="form-input-content">
                         <div class="card login-form mb-0" style="border-radius: 1rem;">
                             <div class="card-body pt-5">
-<<<<<<< HEAD
-                                <h3 class="text-center" style="color:#00001A;">User Login</h3>
-        
-=======
                                 <h3 class="text-center" style="color:#063970;">User Login</h3>
                                 {% if messages %}
                                     {% for message in messages %}
@@ -64,7 +51,6 @@
                                     </button>{{message}}</div>
                                     {% endfor %}
                                 {% endif %}
->>>>>>> c6919c82914b4a1d1d29201e1833abff9baeeeca
                                 <form class="mt-5 mb-5 login-input" method="POST">
                                     {% csrf_token %}
                                     <div class="form-group">
@@ -74,11 +60,7 @@
                                         <input type="password" id="password" name="password" class="form-control" placeholder="Password" style="background:#eeeee4; border-radius: 1rem; padding-left:30px;">
                                         <span id="eye-pass{{data_user.id}}" toggle="#newpassword" class="fa fa-fw fa-eye field-icon toggle-password" onclick="showPass()"></span>
                                     </div>
-<<<<<<< HEAD
-                                    <button type="submit" class="btn login-form__btn submit w-100" style="background:#00001A; border-radius: 1rem;">Sign In</button>
-=======
                                     <button type="submit" class="btn login-form__btn submit w-100" style="background:#000a1a; border-radius: 1rem;">Sign In</button>
->>>>>>> c6919c82914b4a1d1d29201e1833abff9baeeeca
                                 </form>
                                 {% comment %} <p class="mt-5 login-form__footer text-center">Dont have account? <a href="#" class="text-primary">Sign Up</a> now</p> {% endcomment %}
                             </div>
