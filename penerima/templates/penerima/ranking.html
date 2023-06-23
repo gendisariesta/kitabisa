@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block head %}{% endblock head %}
+
+{% block body %}
+<div class="content-body">
+
+    <div class="container-fluid mt-3">
+        
+        <div class="row">
+            
+            <div class="col-xl-6 col-lg-12 col-sm-12 col-xxl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h4 style="color:#063970; font-weight:bold;">Perankingan Bansos (Verifikasi Data)</h4>
+                            {% if belum_diverifikasi == 0 and penerima == 0 %}
+                            <form method="POST" action="{% url 'penerima:proses' %}">
+                                {% csrf_token %}
+                                <input name="_method" type="hidden" value="DISETUJUI">
+                                <button type="submit" class="btn mt-1 btn-info float-left">Proses Data</button>
+                            </form>
+                            
+                            {% endif %}
+                        </div>
+                        <div class="table-responsive" >
+                            <table class="table table-striped zero-configuration" id="table-ranking">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>NIK</th>
+                                        <th>Status</th>
+                                        <th>Detail</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ranking in ranking %}
+                                    <tr>
+                                        <th>{{forloop.counter}}</th>
+                                        <td>{{ranking.anggota.nama_art}}</td>
+                                        <td>{{ranking.anggota.nik}}</td>
+                                        <td>{{ranking.status}}</td>
+                                        <td>
+                                            <a href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="btn mb-1 btn-primary btn-sm px-2"><i class="fa fa-star font-18 align-middle"></i>Detail</a>
+                                        </td>
+                                        <td>
+                                            {% if ranking.status == 'Belum Diverifikasi' %}
+                                            <form method="POST" action="{% url 'penerima:disetujui' id=ranking.id %}">
+                                                {% csrf_token %}
+                                                <input name="_method" type="hidden" value="DISETUJUI">
+                                                <button type="submit" class="sweet-confirm btn mb-1 btn-rounded btn-success btn-xs px-2 confirm_approve" data-toggle="tooltip">
+                                                  Disetujui
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="{% url 'penerima:ditolak' id=ranking.id %}">
+                                                {% csrf_token %}
+                                                <input name="_method" type="hidden" value="DITOLAK">
+                                                <button type="submit" class="sweet-confirm btn mb-1 btn-rounded btn-danger btn-xs px-2 confirm_reject" data-toggle="tooltip">
+                                                  Ditolak
+                                                </button>
+                                            </form>
+                                            {% comment %} <span href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="badge badge-pill badge-success px-2">Disetujui</span> {% endcomment %}
+                                            {% comment %} <span href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="badge badge-pill badge-danger px-2">Ditolak</span> {% endcomment %}
+                                            {% endif %}
+                                        </td>
+                                        {% comment %} <td>
+                                            <a href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="badge badge-pill badge-warning px-2">{{ranking.status}}</a>
+                                        </td> {% endcomment %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #/ container -->
+</div>
+{% endblock body %}
+
+{% block footer %}
+<script type="text/javascript">
+$('.confirm_approve').click(function(event) {
+    var form =  $(this).closest("form");
+    var name = $(this).data("name");
+    event.preventDefault();
+    Swal.fire({
+    title: 'Apakah anda yakin untuk menyetujui data ini?',
+    text: "Setelah disetujui, data akan langsung masuk dalam perhitungan",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Ya, setujui!'
+    }).then((result) => {
+    if (result.isConfirmed) {
+        Swal.fire(
+        'Disetujui!',
+        'Data penerima telah disetujui.',
+        'success'
+        )
+        form.submit();
+    }
+    })     
+});
+
+
+$('.confirm_reject').click(function(event) {
+    var form =  $(this).closest("form");
+    var name = $(this).data("name");
+    event.preventDefault();
+    Swal.fire({
+    title: 'Apakah anda yakin untuk menolak data ini?',
+    text: "Setelah ditolak, data akan langsung dihapus dari perhitungan",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Ya, tolak!'
+    }).then((result) => {
+    if (result.isConfirmed) {
+        Swal.fire(
+        'Ditolak!',
+        'Data penerima telah ditolak.',
+        'success'
+        )
+        form.submit();
+    }
+    }) 
+});
+</script>
+<script>
+    $(document).ready( function () {
+      $('#table-ranking').DataTable();
+      
+  } );
+  
+</script>
+{% endblock footer %}

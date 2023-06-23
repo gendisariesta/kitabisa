@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Rumah, Aset, Kondisi_Rumah, Anggota, Kecamatan
+from penerima.models import Penerima
 from tablib import Dataset
 import pandas as pd 
 
@@ -260,9 +261,11 @@ def detail(request, id):
 def detail_art(request, id):
   data_anggota = Anggota.objects.get(id=id)
   id_rumah = data_anggota.rumah_id
+  bansos=Penerima.objects.filter(anggota_id=id).order_by('tahun')
   context={
     'data_anggota' : data_anggota,
-    'id_rumah'  : id_rumah
+    'id_rumah'  : id_rumah,
+    'bansos' : bansos
   }
   return render(request, 'dtks/detail_art.html', context)
 
