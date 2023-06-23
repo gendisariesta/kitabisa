@@ -18,13 +18,13 @@
   <!-- row -->
 
   <div class="container-fluid">
+    <form method="POST" id="data_awal">
+      {% csrf_token %}
     <div class="row">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
               <h4 class="card-title mb-4">Perhitungan Clustering</h4>
-              <form method="POST">
-                {% csrf_token %}
                 <div class="form-group row">
                   <div class="col-sm-6 d-flex">
                     <label>Nama Clustering</label>
@@ -36,8 +36,8 @@
                   </div>
               </div>
               <div class="table-responsive input-cluster" style="height:300px;overflow:auto;">
-                <table class="table" style="border:2px solid #eeeee4">
-                  <thead style="background-color:#eeeee4;">
+                <table class="table" style="border:1px solid #00001A;">
+                  <thead style="background-color:white;position:sticky;top:0;">
                     <tr>
                       <th style="width:0%">#</th>
                       <th style="width:5%">No</th>
@@ -55,23 +55,23 @@
                     </tbody>
                   </table>
                 </div>
-                <button type="submit" class="btn mb-1 btn-info" style="width:100%">Proses Clustering</button>
-              </form>
+                <button id="proses" name="proses" type="submit" class="btn mb-1" style="width:100%;background-color:#00001a;color:white;">Proses Clustering</button>
           </div>
         </div>
       </div>
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-              <h4 class="card-title mb-4">Output Clustering</h4>
+              <h4 class="card-title mb-0">Output Clustering</h4>
               <div class="table-responsive" style="border:1px solid #f3f3f9;">
                 <table class="table" id="table-output">
                     <thead style="background-color:#f3f3f9;">
                         <tr>
                             <th>#</th>
                             {% for c in cols %}
-                              <td>{{c}}</td>
+                              <th>{{c}}</th>
                             {% endfor %}
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,11 +81,15 @@
                         {% for a in df  %}
                         <td>{{a}}</td>
                         {% endfor %}
+                        <td>
+                          <a href="{% url 'clustering:dtks' df.1 %}" target="_blank" class="btn btn-rounded btn-info" style="font-size:12px;">Lihat Data</a>
+                        </td>
                       </tr>
                       {% endfor %}
                     </tbody>
                 </table>
             </div>
+            <button id="simpan" name="simpan" type="submit" class="btn mb-1" style="width:100%;background-color:#00001a;color:white;" hidden>Simpan Clustering</button>
           </div>
         </div>
       </div>
@@ -102,6 +106,7 @@
     </div>
   </div>
   <!-- #/ container -->
+  </form>
 </div>
 {% endblock body %}
 
@@ -122,34 +127,28 @@
       this.value = this.value.replace(/\s/g, "");
     }
   });
-  
-  {% for atr in atribut  %}
-  $('input[name="{{atr}}"]').change(function() {
-    if(this.checked) {
-          $('input[name="{{atr}}"]').val("True");
-        }
-    else $('input[name="{{atr}}"]').val("False");
-      });
-  if ($('input[name="{{atr}}"]:checked').length > 0) {
-        $('input[name="{{atr}}"]').val("False");
-  }
-  {% endfor %}
 
+  {% if output %}
+    $('#proses').prop("hidden",true);
+    $('#simpan').prop("hidden",false);
+    $('.input-cluster').css("height", "");
+    $('#nama_cl').val("{{name_table}}").prop("disabled",true);
+    $('#klaster').val("{{jum_cluster}}").prop("disabled",true);
 
-  {% if data_cluster %}
-  $('#nama_cl').val("{{data_cluster.nama_cluster}}").prop("disabled",true);
-  $('#klaster').val("{{data_cluster.jumlah_k}}").prop("disabled",true);
-  $('button[type="submit"]').prop("hidden",true);
-  $('.input-cluster').css("height", "");
-
-  {% for v in value %}
-    {% if v.val != True %}
-        $('#{{v.name}}').prop("hidden",true);
-        {% else %}
-        $('.{{v.name}}').prop("checked", true).prop("disabled",true);
-        {% endif %}
+  {% for atr in atribut %}
+    {% if atr in value %}
+    $('.{{atr}}').prop("checked", true).prop("disabled",true);
+    {% else %}
+    $('#{{atr}}').prop("hidden",true);
+    {% endif %}
     {% endfor %}
+    
   {% endif %}
+
+  {% if simpan  %}  
+  $('#simpan').prop("hidden",true);
+  {% endif %}
+
 
 </script>
 

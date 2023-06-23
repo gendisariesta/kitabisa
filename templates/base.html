@@ -34,6 +34,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         #map { height: 570px; width: 750px; }
+        .container-fluid{color:black;}
     </style>
     {% block head %}
     
@@ -150,11 +151,11 @@
                         <span class="nav-text">DTKS</span>
                     </a>
                 </li>
-                <li class="mega-menu mega-menu-sm">
+                <li class="mega-menu mega-menu-sm clustering">
                     <a class="has-arrow" href="#" aria-expanded="false">
                         <span class="nav-text">Clustering</span>
                     </a>
-                    <ul aria-expanded="false" class="collapse">
+                    <ul aria-expanded="false" class="collapse clustering">
                         <li><a href="{% url 'clustering:index' %}">Analisis Data</a></li>
                         <li><a href="{% url 'clustering:proses' %}">Proses Clustering</a></li>
                         <li><a href="{% url 'clustering:analisis_cluster' %}">Analisis Jumlah K</a></li>
@@ -203,7 +204,7 @@
         ***********************************-->
 
         {% block body %}
-        
+
         {% endblock body %}
 
         
@@ -317,10 +318,12 @@
               form.submit();
           }
         })    
-      });
-
-      
+      });    
       $('#tabel-dtks').DataTable();
+
+    if(document.URL.indexOf("/c/") >= 0){ 
+        $('.clustering').addClass("in active");
+    }
     </script>
   {% block footer %}
   

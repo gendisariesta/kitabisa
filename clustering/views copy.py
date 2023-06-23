@@ -25,11 +25,9 @@ for i in atribut_kondisi_rumah :
 for i in atribut_aset :
     atribut.append(i)
 
-
 def index(request):
     row_count = Rumah.objects.all().count()
     atribut_count = (len(atribut_kondisi_rumah)+len(atribut_aset))
-    label = ['IDJTG']
     df_kondisi_rumah = pd.read_sql('SELECT * FROM dtks_kondisi_rumah', con=db_connection)
     df_aset = pd.read_sql('SELECT * FROM dtks_aset', con=db_connection)
     
@@ -131,6 +129,25 @@ def proses(request):
     }
     return render(request, 'clustering/proses.html',context)
 
+def prepocessing(df):
+    if ('luas_lahan' in df.columns):
+        mean_lahan  = df['luas_lahan'].mean()
+        std_lahan = df['luas_lahan'].std()
+        limit_atas_lahan = mean_lahan+3*std_lahan
+        df = df[(df['luas_lahan'] < limit_atas_lahan)]
+        scaler = StandardScaler()
+        scaler.fit(df)
+        df_scaled = scaler.transform(df)
+        df_scaled = pd.DataFrame(df_scaled, columns=[df.columns])
+    
+    else :
+        scaler = StandardScaler()
+        scaler.fit(df)
+        df_scaled = scaler.transform(df)
+        df_scaled = pd.DataFrame(df_scaled)
+    
+    return df_scaled
+
 def proses_cluster(request, name):
     data_cluster = Jenis.objects.get(nama_cluster=name)
     atribut = ['luas_bangunan','luas_lahan','gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
@@ -144,15 +161,16 @@ def proses_cluster(request, name):
             variable.append(atr)
        
     test = []
-    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
     df = pd.read_sql('SELECT * FROM clustering_'+name, con=db_connection)
-    kmeans = KMeans(n_clusters=data_cluster.jumlah_k)
-    y_predict = kmeans.fit_predict(df[variable])
-    df['cluster'] = y_predict
-    # for x in range(data_cluster.jumlah_k):
-    #     number = str(x)
-    #     df = "df"
-    #     # number.join(df) = df[df.cluster==0]
+    df_scaled = prepocessing(df[variable])
+    print(df_scaled)
+    print (df)
+    
+    kmeans = KMeans(n_clusters=data_cluster.jumlah_k, random_state=30)
+    y_predict = kmeans.fit_predict(df_scaled)
+    
+    df_scaled['cluster'] = y_predict
+
     df2 = df[df.cluster==0]
     df3 = df[df.cluster==1]
     df4 = df[df.cluster==2]
@@ -176,7 +194,6 @@ def proses_cluster(request, name):
         cursor=connection.cursor()
         cursor.execute("UPDATE clustering_"+name+" SET cluster="+str(row["cluster"])+" WHERE IDJTG="+str(row["IDJTG"])+";")
         connection.commit()
-    print(output)
     
          
     context = {
@@ -199,28 +216,70 @@ def get_graph():
     graph = graph.decode('utf-8')
     buffer.close()
     return graph
-
+    
 def analisis_cluster(request):
+    get = []
+    value = []
+    if request.method=="POST":
+        for check_atr in atribut_kondisi_rumah :
+            if (request.POST.get(check_atr) != None):
+                get.append("dtks_kondisi_rumah."+check_atr)
+                value.append(check_atr)
+                
+        for check_atr in atribut_aset :
+            if (request.POST.get(check_atr) != None):
+                get.append("dtks_aset."+check_atr)
+                value.append(check_atr)
+
+    
+        sql = "SELECT {}".format(", ".join(str(i) for i in get))+" FROM dtks_kondisi_rumah, dtks_aset WHERE dtks_kondisi_rumah.rumah_id = dtks_aset.rumah_id"
+        df = pd.read_sql(sql, con=db_connection)
+        df_ = prepocessing(df)
+    
+        dbi_ = dbi(df_)
+        sse_ = sse(df_)
+        
+        context ={
+            'dbi'   : dbi_,
+            'sse'   : sse_,
+            'value'   : value,
+            'atribut' : atribut,
+
+        }
+        return render(request, 'clustering/jumlah_k.html',context)    
+    
     context = {
         'atribut' : atribut,
+        
     }
     return render(request, 'clustering/jumlah_k.html',context)
 
-def dbi():
+def dbi(df):
     dbi = []
     index = range(2,10)
     for i in index:
         kmeans = KMeans(n_clusters=i, init='k-means++', n_init=10, max_iter=100, random_state=42)
-        labels = kmeans.fit_predict(df_scaled)
-        db_index = davies_bouldin_score(df_scaled, labels)
-        dbi.append(db_index)
-    print(i, db_index)
-    
-    
-    pass
+        labels = kmeans.fit_predict(df)
+        db_index = davies_bouldin_score(df, labels)
+        dbi.append({"index" : i, "dbi" : db_index})
+    return dbi
 
-def sse():
-    pass
+def sse(df):
+    sse = []
+    index = range(2,10)
+    for i in index:
+        kmeans = KMeans(n_clusters=i, init='k-means++', n_init=10, max_iter=100, random_state=0)
+        kmeans.fit(df)
+        sse_ = kmeans.inertia_
+        sse.append({"index" : i, "sse" : sse_})
+    return sse
 
 def hasil(request):
-    return render(request, 'clustering/jumlah_k.html')
+    clustering = Jenis.objects.all()
+    
+    context = {
+        "cluster"   : clustering
+    }
+    return render(request, 'clustering/hasil.html', context) 
+
+

@@ -2950,7 +2950,7 @@ input[type="button"].btn-block {
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #063970; }
+  background-color: #00001a; }
 
 .nav-fill .nav-item {
   flex: 1 1 auto;
@@ -7151,7 +7151,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 .basic-card {
   background-color : #ffffff;
-  border-bottom: 3px solid #063970 !important;
+  border-bottom: 3px solid #00001a !important;
 }
 .text-blue{
   color: #063970;
@@ -10031,10 +10031,12 @@ input[type="checkbox"]:after {
   height: 1.2rem;
   margin-top: -3px;
   margin-left: -3px;
-  border: 1px solid #EEEEEE;
+  border: 1px solid black;
   border-radius: 0px;
   background: #fff;
-  line-height: 1.3; }
+  line-height: 1.3;
+  border-radius: 5px;
+}
 
 input[type="checkbox"]:checked:after {
   width: 1.2rem;
@@ -10107,7 +10109,7 @@ input[type="checkbox"]:checked:after {
       .wizard > .steps {
         width: 60%; } }
     .wizard > .steps li.current a {
-      background-color: #063970;
+      background-color: #00001a;
       color: #fff; }
     .wizard > .steps li.disabled a, .wizard > .steps li.done a {
       background-color: #fff;
@@ -10164,7 +10166,7 @@ input[type="checkbox"]:checked:after {
     padding: 1rem 2rem;
    }
     .wizard > .actions li:not(.disabled) a {
-      background-color: #063970;
+      background-color: #00001a;
       color: #fff; }
 
 .wizard .actions ul li.disabled a {

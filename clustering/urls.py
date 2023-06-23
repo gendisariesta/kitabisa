@@ -5,7 +5,9 @@ app_name = 'clustering'
 urlpatterns = [
     path('', views.index, name='index'),
     path('proses', views.proses, name='proses'),
-    path('proses/<str:name>', views.proses_cluster, name='proses_cluster'),
+    path('c/<str:name>', views.c, name='c'),
     path('analisis_cluster', views.analisis_cluster, name='analisis_cluster'),
     path('hasil', views.hasil, name='hasil'),
+    path('delete/<str:name>', views.delete, name='delete'),
+    path('dtks/<str:idjtg>', views.dtks, name='dtks'),
 ]

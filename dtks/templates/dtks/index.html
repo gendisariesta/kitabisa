@@ -32,28 +32,28 @@
                   <div class="card-body">
                       <h4 class="card-title mb-4">Tabel User</h4>
                       
-                        <a href="{% url 'dtks:input_form' %}" type="button" class="btn btn-info ">
+                        <a href="{% url 'dtks:input_form' %}" type="button" class="btn btn-dark" style="background-color:#00001A;">
                           Tambah Data Manual<span class="btn-icon-right"
                             ><i class="fa fa-plus"></i
                           ></span>
                             </a>
-                            <button type="button" class="btn btn-info " data-toggle="modal" data-target="#modal-excel-krt" data-backdrop="static">
+                            <button type="button" class="btn btn-dark" style="background-color:#00001A;" data-toggle="modal" data-target="#modal-excel-krt" data-backdrop="static">
                               Tambah Data Excel RT<span class="btn-icon-right"
                                 ><i class="fa fa-plus"></i
                               ></span>
                                 </button> 
-                                <button type="button" class="btn btn-info " data-toggle="modal" data-target="#modal-excel-art" data-backdrop="static">
+                                <button type="button" class="btn btn-dark" style="background-color:#00001A;" data-toggle="modal" data-target="#modal-excel-art" data-backdrop="static">
                                   Tambah Data Excel ART<span class="btn-icon-right"
                                     ><i class="fa fa-plus"></i
                                   ></span>
                                     </button>
-                                <div class="dropdown custom-dropdown">
+                                {% comment %} <div class="dropdown custom-dropdown">
                                   <button type="button" class="btn btn-primary" data-toggle="dropdown"><i class="ti-search mr-2"></i>Semua Kecamatan<span class="btn-icon-right"
                                     ><i class="fa fa-angle-down m-l-5"></i>
                                   </button>
                                   <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Bobotsari</a> <a class="dropdown-item" href="#">9 AM</a> <a class="dropdown-item" href="#">12 AM</a>
                                   </div>
-                              </div>
+                              </div> {% endcomment %}
                       
                     <table class="table" id="tabel-dtks">
                       <thead>
@@ -74,7 +74,7 @@
                           <th>{{forloop.counter}}</th>
                           <td class="color-primary d-flex">
                             <div class="btn-group" role="group">
-                              <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
+                              <button type="button" class="btn mb-1 btn-info  dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
                               <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
                                 <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
                                 <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 

@@ -27,28 +27,44 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-              <h4 class="card-title mb-4">List Hasil Clustering K-Means</h4>
-              <div class="media border-bottom-1 p-t-15" style="background-color: #f3f3f9;padding: 1rem;">
-                <div class="media-body">
-                    <div class="row">
-                      {% for cl in cluster %}
-                        <div class="col-lg-12" id="{{cl.id}}">
-                            <h5>{{cl.nama_cluster}}</h5>
-                            <p class="mb-0">Jumlah Cluster : {{cl.jumlah_k}}</p>
-                            <p class="mb-0">Atribut : 
-                              {% for atr in atribut%}
-                                {% if cl.atr == True %}
-                                  {{atr}}
-                                {% endif %}
-                              {% endfor %}
-
-                            </p>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+            <h4 class="card-title mb-4">Deskripsi Atribut</h4>
+            <div class="table-responsive" style="border:1px solid #00001A;">
+              <table class="table">
+                  <thead style="background-color:#00001A;color:white;position:sticky;top:0;">
+                      <tr>
+                          <th>#</th>
+                          <th>Nama Cluster</th>
+                          <th>Jumlah K</th>
+                          <th>Ket. Atribut</th>
+                          <th>Aksi</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for cl in cluster %}
+                      <tr>
+                          <th>{{forloop.counter}}</th>
+                          <td>{{cl.nama_cluster}}</td>
+                          <td>{{cl.jumlah_k}}</td>
+                          <td>{{cl.atribut}}</td>
+                          <td class="color-primary">
+                            <div class="btn-group" role="group">
+                              <button type="button" class="btn mb-1 btn-info  dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
+                              <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
+                                <a class="dropdown-item" href="{% url 'clustering:c' cl.nama_cluster %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
+                                {% comment %} <a class="dropdown-item" href="{% url 'clustering:c' cl.nama_cluster %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a>  {% endcomment %}
+                                <form method="POST" action="{% url 'clustering:delete' cl.nama_cluster %}">
+                                  {% csrf_token %}
+                                  <input name="_method" type="hidden" value="DELETE">
+                                  <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
+                                </form>
+                              </div>
+                          </td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
           </div>
+        </div>
         </div>
       </div>
     </div>

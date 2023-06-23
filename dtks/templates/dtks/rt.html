@@ -54,47 +54,47 @@
             <div class="tab-content br-n pn mt-4">
               <div id="navpills-1" class="tab-pane active">
                 <div class="row">
-                  <div class="col-3">
+                  {% comment %} <div class="col-3">
                     <p class="inputdata-label mb-1">Foto Kartu Keluarga</p>
                     <img
                       src="{% static 'img/bg-home.jpg' %}"
                       alt=""
                       class="img-fluid thumbnail m-r-15"
                     />
-                  </div>
-                  <div class="col-9">
+                  </div> {% endcomment %}
+                  <div class="col-12">
                     <div class="row">
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">
                           Nama Kepala Rumah Tangga
                         </p>
                         <p>{{data_rumah.nama_krt}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">IDJTG</p>
                         <p>{{data_rumah.IDJTG}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">Kabupaten/Kota</p>
                         <p>{{data_rumah.kabupaten}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">Kecamatan</p>
                         <p>{{data_rumah.kecamatan}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">Desa/Kelurahan</p>
                         <p>{{data_rumah.desa}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">Dusun</p>
                         <p>{{data_rumah.dusun}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">RT/RW</p>
                         <p>{{data_rumah.rt}}/{{data_rumah.rw}}</p>
                       </div>
-                      <div class="col-6">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">Alamat</p>
                         <p>{{data_rumah.alamat}}</p>
                       </div>
@@ -323,64 +323,62 @@
               </div>
               <div id="navpills-3" class="tab-pane">
                 <div class="row">
-                  <div class="col-3">
+                  {% comment %} <div class="col-3">
                     <p class="inputdata-label mb-1">Foto Kondisi Rumah</p>
                     <img
                       src="{% static 'img/bg-home.jpg' %}"
                       alt=""
                       class="img-fluid thumbnail m-r-15"
                     />
-                  </div>
-                  <div class="col-9">
+                  </div> {% endcomment %}
+                  <div class="col-12">
                     <div class="row">
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">1a. Status Bangunan</p>
                         <p>{{data_kondisi.status_bangunan}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">1b. Luas bangunan</p>
                         <p>{{data_kondisi.luas_bangunan}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">1c. Status Lahan</p>
                         <p>{{data_kondisi.status_lahan}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">
                           1d. Jika status lahan berkode 1:
                         </p>
                         <p>{{data_kondisi.luas_lahan}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">2. Luas Lantai</p>
                         <p>{{data_kondisi.luas_lantai}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">
                           3. Jenis lantai terluas
                         </p>
                         <p>{{data_kondisi.jenis_lantai}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">
                           4a. Jenis dinding terluas
                         </p>
                         <p>{{data_kondisi.jenis_dinding}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">
                           4b. jika 4a berkode 1,2,3
                         </p>
                         <p>{{data_kondisi.kondisi_dinding}}</p>
                       </div>
-                      <div class="col-4">
+                      <div class="col-3">
                         <p class="inputdata-label mb-1">5a. Jenis Atap</p>
                         <p>{{data_kondisi.jenis_atap}}</p>
                       </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="row">
+                  
+                  
                       <div class="col-3">
                         <p class="inputdata-label mb-1">
                           5b. jika 5a berkode 1,2,3,4,5,6,7

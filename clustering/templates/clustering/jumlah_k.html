@@ -27,8 +27,8 @@
               <form method="POST">
                 {% csrf_token %}
               <div class="table-responsive input-cluster" style="height:300px;overflow:auto;">
-                <table class="table" style="border:2px solid #eeeee4">
-                  <thead style="background-color:#eeeee4;">
+                <table class="table" style="border:1px solid #00001A">
+                  <thead style="background-color:white;position:sticky;top:0;">
                     <tr>
                       <th style="width:0%">#</th>
                       <th style="width:5%">No</th>
@@ -46,7 +46,7 @@
                     </tbody>
                   </table>
                 </div>
-                <button type="submit" class="btn mb-1 btn-info" style="width:100%">Proses Analisis</button>
+                <button type="submit" class="btn mb-1" style="width:100%;background-color:#00001a;color:white;">Proses Analisis</button>
               </form>
           </div>
         </div>
@@ -85,24 +85,24 @@
     <div class="col-12">
       <div class="card">
           <div class="card-body">
-              <h4 class="card-title">Sum of Square Error</h4>
+              <h4 class="card-title">Silhouette Coefficient</h4>
               <div class="row">
                 <div class="col-6">
-              <canvas id="sse_chart" width="600" height="400"></canvas>
+              <canvas id="silhouette_chart" width="600" height="400"></canvas>
             </div>
             <div class="col-6">
                 <table class="table" style="border:2px solid #eeeee4">
                   <thead style="background-color:#eeeee4;">
                     <tr>
                       <th style="width:5%">No</th>
-                      <th>Nilai SSE</th>
+                      <th>Nilai Silhouette Coefficient</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for sse_ in sse %}
+                    {% for silhouette in silhouette %}
                     <tr>
-                          <th>{{sse_.index}}</th>
-                          <td>{{sse_.sse}}</td>
+                          <th>{{silhouette_.index}}</th>
+                          <td>{{silhouette_.silhouette}}</td>
                       </tr>
                       {% endfor %}
                     </tbody>
@@ -143,9 +143,9 @@
         data_dbi.push({{dbi_.dbi}});
       {% endfor %}
   
-  var data_sse = [];
-      {% for sse_ in sse %}
-        data_sse.push({{sse_.sse}});
+  var data_silhouette = [];
+      {% for silhouette_ in silhouette %}
+        data_silhouette.push({{silhouette_.silhouette}});
       {% endfor %}
 
   var data_index = [];
@@ -155,7 +155,7 @@
   
   console.log(data_index)
   var ctx = document.getElementById("dbi_chart");
-  var ctx1 = document.getElementById("sse_chart");
+  var ctx1 = document.getElementById("silhouette_chart");
 
   new Chart(ctx, {
     type: 'line',
@@ -187,7 +187,7 @@ new Chart(ctx1, {
   data: {
       labels: data_index,
       datasets: [{
-          data: data_sse,
+          data: data_silhouette,
           lineTension: 0,
           fill: false,
           borderColor: "#06254f",

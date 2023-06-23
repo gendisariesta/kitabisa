@@ -11,6 +11,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import davies_bouldin_score
+from sklearn.metrics import silhouette_score
 import matplotlib.pyplot as plt
 import base64, urllib
 from io import BytesIO
@@ -55,156 +56,120 @@ def index(request):
     }
     return render(request, 'clustering/index.html', context) 
 
+def outlier(df):
+    mean_lahan  = df['luas_lahan'].mean()
+    std_lahan = df['luas_lahan'].std()
+    limit_atas_lahan = mean_lahan+3*std_lahan
+    df = df[(df['luas_lahan'] < limit_atas_lahan)]
+    return df
+    
+def scaling(df):
+    scaler = StandardScaler()
+    scaler.fit(df)
+    df_scaled = scaler.transform(df)
+    df_scaled = pd.DataFrame(df_scaled)
+    return df_scaled
+
 def proses(request):
-    label = ['IDJTG']
-    if request.method=="POST":
+    global data, name_table, jum_cluster, value, atr_kondisi, atr_aset
+    
+    if 'proses' in request.POST:
         name_table = request.POST.get('nama_cl')
         jum_cluster = request.POST.get('klaster')
-        for check_atr in atribut :
-            check_atr = request.POST.get(check_atr)
-        data_cluster = Jenis(
-            nama_cluster = name_table,
-            jumlah_k = jum_cluster,
-            luas_bangunan = request.POST.get('luas_bangunan'),
-            luas_lahan = request.POST.get('luas_lahan'),
-            gas = request.POST.get('gas'),
-            kulkas = request.POST.get('kulkas'),
-            ac = request.POST.get('ac'),
-            pemanas_air = request.POST.get('pemanas_air'),
-            telepon_rumah = request.POST.get('telepon_rumah'),
-            tv = request.POST.get('tv'),
-            perhiasan = request.POST.get('perhiasan'),
-            komputer = request.POST.get('komputer'),
-            sepeda = request.POST.get('sepeda'),
-            motor = request.POST.get('motor'),
-            mobil = request.POST.get('mobil'),
-            perahu = request.POST.get('perahu'),
-            motor_tempel = request.POST.get('motor_tempel'),
-            perahu_motor = request.POST.get('perahu_motor'),
-            kapal = request.POST.get('kapal'),
-            lahan = request.POST.get('lahan'),
-            sapi = request.POST.get('sapi'),
-            kerbau = request.POST.get('kerbau'),
-            kuda = request.POST.get('kuda'),
-            babi = request.POST.get('babi'),
-            kambing = request.POST.get('kambing'),
-            unggas = request.POST.get('unggas'),
-            
-        )
-        data_cluster.save()
+
+        value = []
+        get = []
+        query = []
         atr_kondisi = []
         atr_aset = []
-        cursor=connection.cursor()
-        cursor.execute("CREATE TABLE clustering_"+name_table+"(cluster varchar(100) DEFAULT NULL, IDJTG varchar(100));")
+        
         for check_atr in atribut_kondisi_rumah :
             if (request.POST.get(check_atr) != None):
+                get.append("dtks_kondisi_rumah."+check_atr)
+                query.append(check_atr+" INT")
+                value.append(check_atr)
                 atr_kondisi.append(check_atr)
-                cursor.execute("ALTER TABLE clustering_"+name_table+" ADD "+check_atr+" INT;")
+                
         for check_atr in atribut_aset :
             if (request.POST.get(check_atr) != None):
+                get.append("dtks_aset."+check_atr)
+                query.append(check_atr+" INT")
+                value.append(check_atr)
                 atr_aset.append(check_atr)
-                cursor.execute("ALTER TABLE clustering_"+name_table+" ADD "+check_atr+" INT;")
-        idjtg = Rumah.objects.values_list("IDJTG", flat=True)
-        data_dtks = []
+    
+        sql = "SELECT dtks_rumah.IDJTG, {}".format(", ".join(str(i) for i in get))+" FROM dtks_rumah, dtks_kondisi_rumah, dtks_aset WHERE dtks_rumah.id = dtks_kondisi_rumah.rumah_id and dtks_kondisi_rumah.rumah_id = dtks_aset.rumah_id"
+        df = pd.read_sql(sql, con=db_connection)
+        if ('luas_lahan' in df.columns):
+            df = outlier(df)
+            df_scaled = scaling(df[value])
+            kmeans = KMeans(n_clusters=int(jum_cluster), random_state=30)
+            y_predict = kmeans.fit_predict(df_scaled)
+            df['cluster'] = y_predict
+            data = df
+            output =[]
+            for index, row in df.iterrows():
+                output.append(row.values)
+            
+            cols = []
+            for i in df.columns :
+                cols.append(i)
+                            
+            df2 = df[df.cluster==0]
+            df3 = df[df.cluster==1]
+            df4 = df[df.cluster==2]
+            plt.switch_backend('agg')
+            plt.scatter(df2['cluster'],df2['luas_lahan'],color='green')
+            plt.scatter(df3['cluster'],df3['luas_lahan'],color='red')
+            plt.scatter(df4['cluster'],df4['luas_lahan'],color='black')
+
+            plt.xlabel('luas_bangunan')
+            plt.ylabel('luas_lahan')
+            graph = get_graph()
+            
+        context = {
+            "output" : output,
+            "cols" : cols,
+            "atribut"   :   atribut, 
+            "value"     : value,
+            "data"      : graph,
+            "name_table"  : name_table,
+            "jum_cluster"   : jum_cluster
+        }
+        return render(request, 'clustering/proses.html', context)
+    if 'simpan' in request.POST:
+        val_atr = "{}".format(', '.join(value))
+        cluster_jenis = Jenis(nama_cluster = name_table, jumlah_k = jum_cluster, atribut = val_atr)
+        cluster_jenis.save()
+        cursor=connection.cursor()
+        cursor.execute("CREATE TABLE clustering_"+name_table+"(cluster varchar(100) DEFAULT NULL, IDJTG varchar(100));")
+        for check_atr in value :
+            cursor.execute("ALTER TABLE clustering_"+name_table+" ADD "+check_atr+" INT;")
         
+        data_dtks = []
+        idjtg = data['IDJTG']
+        print(idjtg)
         for i in idjtg :
-            value = (0,i,)
+            values = (0,i,)
             for k in atr_kondisi:
                 data_rumah = Rumah.objects.get(IDJTG=i)
                 a = Kondisi_Rumah.objects.values_list(k, flat=True).get(rumah=data_rumah)
-                value = value+(a,)
+                values = values+(a,)
             for s in atr_aset:
                 data_rumah = Rumah.objects.get(IDJTG=i)
                 b = Aset.objects.values_list(s, flat=True).get(rumah=data_rumah)
-                value = value+(b,)
-            data_dtks.append(value)
-        values = ', '.join(map(str, data_dtks))
-        sql = "INSERT INTO clustering_"+name_table+" VALUES {}".format(values)
+                values = values+(b,)
+            data_dtks.append(values)
+        values_ = ', '.join(map(str, data_dtks))
+        sql = "INSERT INTO clustering_"+name_table+" VALUES {}".format(values_)
         cursor.execute(sql)
-              
-        return HttpResponseRedirect(reverse('clustering:proses_cluster',args=(name_table,)))
-    
+        for index, row in data.iterrows():
+            cursor.execute("UPDATE clustering_"+name_table+" SET cluster="+str(row["cluster"])+" WHERE IDJTG="+str(row["IDJTG"])+";")
+            connection.commit()
+        return HttpResponseRedirect(reverse('clustering:c',args=(name_table,)))
     context ={
         'atribut' : atribut
     }
     return render(request, 'clustering/proses.html',context)
-
-def prepocessing(df):
-    if ('luas_lahan' in df.columns):
-        mean_lahan  = df['luas_lahan'].mean()
-        std_lahan = df['luas_lahan'].std()
-        limit_atas_lahan = mean_lahan+3*std_lahan
-        df = df[(df['luas_lahan'] < limit_atas_lahan)]
-        scaler = StandardScaler()
-        scaler.fit(df)
-        df_scaled = scaler.transform(df)
-        df_scaled = pd.DataFrame(df_scaled)
-        return df_scaled
-    
-    else :
-        scaler = StandardScaler()
-        scaler.fit(df)
-        df_scaled = scaler.transform(df)
-        df_scaled = pd.DataFrame(df_scaled)
-        
-        return df_scaled
-
-def proses_cluster(request, name):
-    data_cluster = Jenis.objects.get(nama_cluster=name)
-    atribut = ['luas_bangunan','luas_lahan','gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
-               'motor','mobil','perahu','motor_tempel','perahu_motor','kapal','lahan','sapi','kerbau','kuda','babi','kambing','unggas']
-    value = []
-    variable = []
-    for atr in atribut :
-        value_list = Jenis.objects.values_list(atr, flat=True).get(nama_cluster=name)
-        value.append({'val' : value_list, 'name' : atr})
-        if value_list == True :
-            variable.append(atr)
-       
-    test = []
-    df = pd.read_sql('SELECT * FROM clustering_'+name, con=db_connection)
-    df_scaled = prepocessing(df[variable])
-    kmeans = KMeans(n_clusters=data_cluster.jumlah_k, random_state=30)
-    y_predict = kmeans.fit_predict(df_scaled)
-    
-    df['cluster'] = y_predict
-
-    df2 = df[df.cluster==0]
-    df3 = df[df.cluster==1]
-    df4 = df[df.cluster==2]
-    plt.switch_backend('agg')
-    plt.scatter(df2['luas_bangunan'],df2['luas_lahan'],color='green')
-    plt.scatter(df3['luas_bangunan'],df3['luas_lahan'],color='red')
-    plt.scatter(df4['luas_bangunan'],df4['luas_lahan'],color='black')
-
-    plt.xlabel('luas_bangunan')
-    plt.ylabel('luas_lahan')
-    graph = get_graph()
-    
-    output = []
-    cols = []
-    for i in df.columns :
-        cols.append(i)
-    
-    for index, row in df.iterrows():
-        output.append(row.values)
-        test.append({"x" : row['luas_bangunan'], "y" : row["luas_lahan"]})
-        cursor=connection.cursor()
-        cursor.execute("UPDATE clustering_"+name+" SET cluster="+str(row["cluster"])+" WHERE IDJTG="+str(row["IDJTG"])+";")
-        connection.commit()
-    print(output)
-    
-         
-    context = {
-        "data_cluster" : data_cluster,
-        "atribut"   :   atribut, 
-        "value"     : value,
-        "output"    : output,
-        "cols"      : cols,
-        "test"      : test,
-        "data"      : graph
-    }
-    return render(request, 'clustering/proses.html', context)
 
 def get_graph():
     buffer = BytesIO()
@@ -215,7 +180,45 @@ def get_graph():
     graph = graph.decode('utf-8')
     buffer.close()
     return graph
+
+def c(request, name):
+    nama = name
+    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
+    data = pd.read_sql('SELECT * FROM clustering_'+nama, con=db_connection)
+    value = data.columns[2:]
+    jum = data['cluster'].nunique()
+    output = []
+    cols = []
+    for i in data.columns :
+        cols.append(i)
+    for index, row in data.iterrows():
+        output.append(row.values) 
     
+    df2 = data[(data['cluster'] == 0)]
+    df3 = data[(data['cluster'] == 1)]
+    df4 = data[(data['cluster'] == 2)]
+    
+    plt.switch_backend('agg')
+    plt.scatter(df2['cluster'],df2['luas_lahan'],color='green')
+    plt.scatter(df3['cluster'],df3['luas_lahan'],color='red')
+    plt.scatter(df4['cluster'],df4['luas_lahan'],color='black')
+
+    plt.xlabel('luas_bangunan')
+    plt.ylabel('luas_lahan')
+    graph = get_graph()
+    print(output)
+    context = {
+        "atribut"   :   atribut, 
+        "value"     : value,
+        "output"    : output,
+        "cols"      : cols,
+        "data"      : graph,
+        "name_table"    : name,
+        "jum_cluster"   : jum,
+        "simpan"    : "true"
+    }
+    return render(request, 'clustering/proses.html', context)
+
 def analisis_cluster(request):
     get = []
     value = []
@@ -229,18 +232,22 @@ def analisis_cluster(request):
             if (request.POST.get(check_atr) != None):
                 get.append("dtks_aset."+check_atr)
                 value.append(check_atr)
-
     
         sql = "SELECT {}".format(", ".join(str(i) for i in get))+" FROM dtks_kondisi_rumah, dtks_aset WHERE dtks_kondisi_rumah.rumah_id = dtks_aset.rumah_id"
         df = pd.read_sql(sql, con=db_connection)
-        df_ = prepocessing(df)
-    
-        dbi_ = dbi(df_)
-        sse_ = sse(df_)
+        if ('luas_lahan' in df.columns):
+            df = outlier(df)
+            df_ = scaling(df)
+            dbi_ = dbi(df_)
+            silhouette_ = silhouette(df_)
+        else:
+            df_ = scaling(df)
+            dbi_ = dbi(df_)
+            silhouette_ = silhouette(df_)
         
         context ={
             'dbi'   : dbi_,
-            'sse'   : sse_,
+            'silhouette'   : silhouette_,
             'value'   : value,
             'atribut' : atribut,
 
@@ -263,15 +270,15 @@ def dbi(df):
         dbi.append({"index" : i, "dbi" : db_index})
     return dbi
 
-def sse(df):
-    sse = []
+def silhouette(df):
+    score = []
     index = range(2,10)
     for i in index:
-        kmeans = KMeans(n_clusters=i, init='k-means++', n_init=10, max_iter=100, random_state=0)
-        kmeans.fit(df)
-        sse_ = kmeans.inertia_
-        sse.append({"index" : i, "sse" : sse_})
-    return sse
+        kmeans = KMeans(n_clusters=i, init='k-means++', n_init=10, max_iter=100, random_state=42)
+        labels = kmeans.fit_predict(df)
+        silhouette_avg = silhouette_score(df, labels)
+        score.append(({"index" : i, "silhouette" : silhouette_avg}))
+    return score
 
 def hasil(request):
     clustering = Jenis.objects.all()
@@ -281,4 +288,15 @@ def hasil(request):
     }
     return render(request, 'clustering/hasil.html', context) 
 
+def delete(request, name):
+  Jenis.objects.get(nama_cluster=name).delete()
+  cursor=connection.cursor()
+  cursor.execute("DROP TABLE clustering_"+name+";")
+  return HttpResponseRedirect('/clustering/hasil')
+
+def dtks(request, idjtg):
+    data = Rumah.objects.get(IDJTG = idjtg).id
+    
+    return HttpResponseRedirect(reverse('dtks:detail',args=(data,)))
+    
 
