@@ -17,3 +17,14 @@ class Penerima(models.Model):
 
   def __str__(self):
     return "{}. {}".format(self.id, self.anggota) 
+
+
+class Ranking(models.Model):
+  STATUS_VERIF=[
+    ('Belum Diverifikasi', 'Belum Diverifikasi'),
+    ('Disetujui', 'Disetujui'),
+    ('Ditolak', 'Ditolak'),
+    ('Penerima', 'Penerima'),
+  ]
+  anggota=models.ForeignKey(Anggota, on_delete=models.CASCADE)
+  status=models.CharField(max_length=20, choices=STATUS_VERIF, default='Balum Diverifikasi')
