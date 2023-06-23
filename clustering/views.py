@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import base64, urllib
 from io import BytesIO
 
-db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
+db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
 atribut_kondisi_rumah = ['luas_bangunan','luas_lahan']
 atribut_aset = ['gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
                'motor','mobil','perahu','motor_tempel','perahu_motor','kapal','lahan','sapi','kerbau','kuda','babi','kambing','unggas']

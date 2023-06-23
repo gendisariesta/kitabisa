@@ -1864,8 +1864,8 @@ fieldset:disabled a.btn {
 
 .btn-info {
   color: #fff;
-  background-color: #4d7cff;
-  border-color: #4d7cff; }
+  background-color: #252e4b;
+  border-color: #252e4b; }
   .btn-info:hover {
     color: #fff;
     background-color: #2760ff;
@@ -2950,7 +2950,7 @@ input[type="button"].btn-block {
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #00001a; }
+  background-color: #252e4b; }
 
 .nav-fill .nav-item {
   flex: 1 1 auto;
@@ -7151,7 +7151,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 .basic-card {
   background-color : #ffffff;
-  border-bottom: 3px solid #00001a !important;
+  border-bottom: 3px solid #252e4b !important;
 }
 .text-blue{
   color: #063970;
@@ -7170,6 +7170,15 @@ a.text-dark:hover, a.text-dark:focus {
   border-radius: 10px!important;
   color: #063970;
  }
+.inputdata-label{
+  font-weight: bold;
+  color: #00144d;
+  
+}
+.detail-label{
+  font-weight: bold;
+  color: #252e4b;
+}
 
 .gradient-1 {
   color: #fff !important; }
@@ -7617,7 +7626,7 @@ sub {
   position: absolute;
   left: 0;
   top: 0;
-  background: #00001A;
+  background: #252e4b;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
   transition: all .2s ease; }
   .nav-header .logo-abbr {
@@ -8167,7 +8176,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
       margin-left: 14.375rem; } }
 
 .nk-sidebar {
-  background-color: #00001A;
+  background-color: #252e4b;
   width: 15.1875rem;
   padding-bottom: 112px;
   height: 100%;
@@ -8175,7 +8184,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   top: 5rem;
   padding-top: 0;
   z-index: 99;
-  background: #00001A;
+  background: #252e4b;
   transition: all .2s ease; }
   @media only screen and (min-width: 1200px) and (max-width: 1350px) {
     .nk-sidebar {
@@ -10109,7 +10118,7 @@ input[type="checkbox"]:checked:after {
       .wizard > .steps {
         width: 60%; } }
     .wizard > .steps li.current a {
-      background-color: #00001a;
+      background-color: #252e4b;
       color: #fff; }
     .wizard > .steps li.disabled a, .wizard > .steps li.done a {
       background-color: #fff;
@@ -10166,7 +10175,7 @@ input[type="checkbox"]:checked:after {
     padding: 1rem 2rem;
    }
     .wizard > .actions li:not(.disabled) a {
-      background-color: #00001a;
+      background-color: #252e4b;
       color: #fff; }
 
 .wizard .actions ul li.disabled a {
@@ -11126,9 +11135,9 @@ table.dataTable thead .sorting::after {
 .btn-info {
   color: #fff; }
   .btn-info:active, .btn-info:focus, .btn-info:hover {
-    background: #1a56ff;
+    background: #252e4b;
     color: #fff;
-    border-color: #1a56ff; }
+    border-color: #252e4b; }
 
 .btn-light:active, .btn-light:focus, .btn-light:hover {
   background: #919191;
@@ -14046,7 +14055,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   padding-right: 15rem; }
 
 [data-nav-headerbg="color_1"] .nav-header {
-  background-color: #00001A; }
+  background-color: #252e4b; }
 
 [data-nav-headerbg="color_2"] .nav-header {
   background-color: #27394F !important; }
@@ -14156,7 +14165,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   color: #fff; }
 
 [data-sibebarbg="color_1"] .nk-sidebar .metismenu {
-  background-color: #00001A; }
+  background-color: #252e4b; }
   [data-sibebarbg="color_1"] .nk-sidebar .metismenu > li {
     color: #27394F; }
     [data-sibebarbg="color_1"] .nk-sidebar .metismenu > li ul a {
