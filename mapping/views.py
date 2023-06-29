@@ -3,6 +3,8 @@ from django.db.models import Avg
 from dtks.models import Anggota, Kecamatan, Bansos, Rumah
 from penerima.models import Penerima
 from mapping.filters import PenerimaFilter
+from django.contrib.auth.decorators import login_required
+from account.decorators import unauthenticated_user, allowed_users
 
 import geocoder
 import folium
@@ -19,7 +21,9 @@ def getloc_lats_longs(locations):
         count = Anggota.objects.filter(rumah__kecamatan__nama_kecamatan = loc).count()
         loc_lats_longs.append([loc_lat_long.latitude, loc_lat_long.longitude, count])
     return loc_lats_longs
+ 
 # Create your views here.
+@login_required(login_url='account:login')
 def index(request):
     #tahun=Penerima.objects.values_list("tahun", flat=True).order_by("tahun").distinct()
     kecamatan = Kecamatan.objects.all()
@@ -63,7 +67,10 @@ def index(request):
                         icon=folium.Icon(color=marker.bansos.color, icon='')).add_to(m)
     #get HTML representation of map object
     m = m._repr_html_()
-    
+    if request.user.groups.all()[0].name == "TKSK":
+        base = 'base_tksk.html'
+    else:
+        base = 'base.html'
     context={
     'title': 'Mapping',
     'm' : m,
@@ -71,9 +78,12 @@ def index(request):
     # 'tahun':tahun,
     'bansos':bansos,
     'form':penerima_filter.form,
+    'base':base
     }
     return render (request, 'mapping/index.html', context)
 
+@login_required(login_url='account:login')
+@allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def bansos(request):
     bansos = Bansos.objects.all()
     if request.method == 'POST':
@@ -85,6 +95,7 @@ def bansos(request):
         return redirect ('mapping:bansos')
     context={
         'bansos':bansos,
+        'title':'Data Bansos',
     }
     return render(request, 'mapping/bansos.html', context)
 
@@ -106,6 +117,8 @@ def update_bansos(request, id):
         bansos.save()
         return redirect ('mapping:bansos')
 
+@login_required(login_url='account:login')
+@allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def kecamatan(request):
     bansos = Bansos.objects.all()
     kecamatan = Kecamatan.objects.all()
@@ -117,6 +130,7 @@ def kecamatan(request):
     context={
        'bansos':bansos,
        'kecamatan':kecamatan,
+       'title':'Data Kecamatan',
     }
     return render(request, 'mapping/kecamatan.html', context)
 

@@ -3,13 +3,20 @@ from django.http import HttpResponse
 from .resources import PenerimaResource
 from penerima.models import Penerima
 from exportdata.filters import PenerimaFilter
+from dtks.models import Bansos
+
+from django.contrib.auth.decorators import login_required
+from account.decorators import unauthenticated_user, allowed_users
 
 
-
+@login_required(login_url='account:login')
+@allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def index(request):
     penerima_filter=PenerimaFilter(request.POST, queryset=Penerima.objects.all())
+    bansos = Bansos.objects.all()
     context={
         'title':'Export Data',
+        'bansos':bansos,
         'form':penerima_filter.form,
     }
     return render(request, 'exportdata/index.html', context)

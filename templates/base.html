@@ -66,14 +66,13 @@
         ***********************************-->
         <div class="nav-header">
             <div class="brand-logo">
-                <a href="index.html">
-                    <img src="{% static 'img/logo_pbg.png' %}"  width="40" alt="">
-                    <span>Sistem-Bansos</span>
-                    <!-- <b class="logo-abbr"><img src="{%static 'admin/images/logo.png' %}" alt=""> </b>
-                    <span class="logo-compact"><img src="{%static 'admin/images/logo-compact.png' %}" alt=""></span>
+                <a href="{% url 'dashboard' %}">
+                    <b class="logo-abbr"><img src="{% static 'img/logo_pbg.png' %}" alt=""> </b>
+                    <span class="logo-compact"><img src="{% static 'img/logo-text-pbg.png' %}" alt=""></span>
                     <span class="brand-title">
-                        <img src="{%static 'home/images/logo_pbg.png' %}" alt="">
-                    </span> -->
+                        <img width="160px" src="{% static 'img/logo_text.png' %}" alt="">
+                    </span>
+                    <hr style="border: white solid;">
                 </a>
             </div>
         </div>
@@ -89,21 +88,6 @@
                 <div class="nav-control">
                     <div class="hamburger">
                         <span class="toggle-icon"><i class="icon-menu"></i></span>
-                    </div>
-                </div>
-                <div class="header-left">
-                    <div class="input-group icons">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i
-                                    class="mdi mdi-magnify"></i></span>
-                        </div>
-                        <input type="search" class="form-control" placeholder="Search Dashboard"
-                            aria-label="Search Dashboard">
-                        <div class="drop-down animated flipInX d-md-none">
-                            <form action="#">
-                                <input type="text" class="form-control" placeholder="Search">
-                            </form>
-                        </div>
                     </div>
                 </div>
                 <div class="header-right">
@@ -140,20 +124,20 @@
             ***********************************-->
     <div class="nk-sidebar">
         <div class="nk-nav-scroll">
-            <ul class="metismenu" id="menu">
+            <ul class="metismenu" id="menu" style="margin-top: 20px;">
                 <li class="mega-menu mega-menu-sm">
                     <a href="{% url 'dashboard' %}" aria-expanded="false">
-                        <span class="nav-text">Dashboard</span>
+                        <i class="icon-speedometer menu-icon" style="color:white;"></i><span class="nav-text">Dashboard</span>
                     </a>
                 </li>
                 <li>
                     <a href="{% url 'dtks:index' %}" aria-expanded="false">
-                        <span class="nav-text">DTKS</span>
+                        <i class="icon-note menu-icon" style="color:white;"></i><span class="nav-text">DTKS</span>
                     </a>
                 </li>
                 <li class="mega-menu mega-menu-sm clustering">
                     <a class="has-arrow" href="#" aria-expanded="false">
-                        <span class="nav-text">Clustering</span>
+                        <i class="ti-vector menu-icon" style="color:white;"></i><span class="nav-text">Clustering</span>
                     </a>
                     <ul aria-expanded="false" class="collapse clustering">
                         <li><a href="{% url 'clustering:index' %}">Analisis Data</a></li>
@@ -163,36 +147,40 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="{% url 'penerima:ranking' %}" aria-expanded="false">
-                        <span class="nav-text">Perankingan Bansos</span>
+                    {% now "Y" as current_year %}
+                    <a href="{% url 'penerima:ranking' current_year %}" aria-expanded="false">
+                        <i class="icon-badge menu-icon" style="color:white;"></i><span class="nav-text">Perankingan Bansos</span>
                     </a>    
                 </li>
                 <li class="mega-menu mega-menu-sm">
                     <a class="has-arrow" href="#" aria-expanded="false">
-                        <span class="nav-text">Penerima Bantuan Sosial</span>
+                        <i class="icon-menu menu-icon" style="color:white;"></i><span class="nav-text">Penerima Bansos</span>
                     </a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="{% url 'penerima:index' slug='sembako-lansia' %}">Sembako Lansia</a></li>
-                        <li><a href="{% url 'penerima:index' slug='sembako-disabilitas' %}">Sembako Disabilitas</a></li>
+                        {% for bansos in bansos %}
+                        <li><a href="{% url 'penerima:index' bansos.slug %}">{{bansos.nama_bansos}}</a></li>
+                        {% endfor %}
                     </ul>
                 </li>
                 <li>
                     <a href="{% url 'mapping:index' %}" aria-expanded="false">
-                        <span class="nav-text">Pemetaan Bansos</span>
+                        <i class="ti-location-pin menu-icon" style="color:white;"></i><span class="nav-text">Pemetaan Bansos</span>
                     </a>
                 </li>
                 <li>
                     <a href="{% url 'exportdata:index' %}" aria-expanded="false">
-                        <span class="nav-text">Export Data</span>
+                        <i class="ti-export menu-icon" style="color:white;"></i><span class="nav-text">Export Data</span>
                     </a>
                 </li>
                 <li class="mega-menu mega-menu-sm">
                     <a class="has-arrow" href="#" aria-expanded="false">
-                        <span class="nav-text">Admin</span>
+                        <i class="ti-files menu-icon" style="color:white;"></i><span class="nav-text">Master data</span>
                     </a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="{% url 'mapping:bansos' %}">Bansos</a></li>
+                        {% if user.groups.all.0.name == 'Superadmin' %}
                         <li><a href="{% url 'account:user' %}">User</a></li>
+                        {% endif %}
+                        <li><a href="{% url 'mapping:bansos' %}">Bansos</a></li>
                         <li><a href="{% url 'mapping:kecamatan' %}">Kecamatan</a></li>
                     </ul>
                 </li>

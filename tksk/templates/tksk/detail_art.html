@@ -168,20 +168,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                      {% for bansos in bansos %}
+                      {% for b in bansos_list %}
                       <tr>
                         <td>{{forloop.counter}}</td>
-                        <td>{{bansos.bansos}}</td>
-                        <td>{{bansos.tahun}}</td>
+                        <td>{{b.bansos}}</td>
+                        <td>{{b.tahun}}</td>
                         <td>
-                          {% if bansos.status == "Diterima" %}
-                          <span class="badge badge-success px-2">{{bansos.status}}</span>
+                          {% if b.status == "Diterima" %}
+                          <span class="badge badge-success px-2">{{b.status}}</span>
                           {% endif %}
-                          {% if bansos.status == "Dalam Proses" %}
-                          <span class="badge badge-warning px-2">{{bansos.status}}</span>
+                          {% if b.status == "Dalam Proses" %}
+                          <span class="badge badge-warning px-2">{{b.status}}</span>
                           {% endif %}
                         </td>
-                        <td><img src="/media/{{bansos.foto_bukti}}" alt="" width="150px"></td>
+                        <td><img src="/media/{{b.foto_bukti}}" alt="" width="150px"></td>
                       </tr>
                       {% endfor %}
                     </tbody>

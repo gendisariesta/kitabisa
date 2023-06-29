@@ -1,19 +1,26 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Rumah, Aset, Kondisi_Rumah, Anggota, Kecamatan
+from .models import Rumah, Aset, Kondisi_Rumah, Anggota, Kecamatan, Bansos
 from penerima.models import Penerima
 from tablib import Dataset
 import pandas as pd 
 
+from django.contrib.auth.decorators import login_required
+from account.decorators import unauthenticated_user, allowed_users
+
 
 # Create your views here.
+@login_required(login_url='account:login')
+@allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def index(request):
   data_rumah = Rumah.objects.all()
   data_aset = Aset.objects.all()
+  bansos = Bansos.objects.all()
   context={
     'title': 'DTKS',
     'data_rumah': data_rumah,
+    'bansos':bansos,
     'data_aset': data_aset
   }
   if request.method == 'POST' :
@@ -104,11 +111,19 @@ def index(request):
       
   return render(request, 'dtks/index.html', context)
 
+@login_required(login_url='account:login')
 def input_form(request):
+  if request.user.groups.all()[0].name == "TKSK":
+    base = 'base_tksk.html'
+  else:
+    base = 'base.html'
   data_kecamatan = Kecamatan.objects.all()
+  bansos = Bansos.objects.all()
   context={
-    'title': 'Input Form DTKS',
-    'data_kecamatan' : data_kecamatan
+    'title': 'Input KRT',
+    'data_kecamatan' : data_kecamatan,
+    'base':base,
+    'bansos':bansos,
   }
   
   if request.method == 'POST':
@@ -244,13 +259,22 @@ def input_form(request):
     return HttpResponseRedirect(reverse('dtks:detail',args=(id,)))
   return render(request, 'dtks/input_form.html', context)
 
+@login_required(login_url='account:login')
 def detail(request, id):
+  if request.user.groups.all()[0].name == "TKSK":
+    base = 'base_tksk.html'
+  else:
+    base = 'base.html'
   data_rumah = Rumah.objects.get(id=id)
   id_rumah = data_rumah.id
   data_aset = Aset.objects.get(rumah=id_rumah)
   data_kondisi = Kondisi_Rumah.objects.get(rumah=id_rumah)
   data_anggota = Anggota.objects.filter(rumah=id_rumah)
+  bansos = Bansos.objects.all()
   context={
+    'base':base,
+    'bansos':bansos,
+    'title':'Detail KRT',
     'data_rumah'    : data_rumah,
     'data_aset'     : data_aset,
     'data_kondisi'  : data_kondisi,
@@ -258,18 +282,32 @@ def detail(request, id):
   }
   return render(request, 'dtks/rt.html', context)
 
+@login_required(login_url='account:login')
 def detail_art(request, id):
+  if request.user.groups.all()[0].name == "TKSK":
+    base = 'base_tksk.html'
+  else:
+    base = 'base.html'
   data_anggota = Anggota.objects.get(id=id)
   id_rumah = data_anggota.rumah_id
-  bansos=Penerima.objects.filter(anggota_id=id).order_by('tahun')
+  bansos_list=Penerima.objects.filter(anggota_id=id).order_by('tahun')
+  bansos = Bansos.objects.all()
   context={
+    'base':base,
+    'title':'Detail ART',
     'data_anggota' : data_anggota,
     'id_rumah'  : id_rumah,
-    'bansos' : bansos
+    'bansos_list' : bansos_list,
+    'bansos' : bansos,
   }
   return render(request, 'dtks/detail_art.html', context)
 
+@login_required(login_url='account:login')
 def input_art(request, id):
+  if request.user.groups.all()[0].name == "TKSK":
+    base = 'base_tksk.html'
+  else:
+    base = 'base.html'
   data_rumah = Rumah.objects.get(id=id)
   id = data_rumah.id
   
@@ -340,19 +378,29 @@ def input_art(request, id):
       bansos_lainnya = bansos_lainnya
       )
     data_anggota.save()
-    return HttpResponseRedirect(reverse('dtks:detail',args=(id,)))  
+    return HttpResponseRedirect(reverse('dtks:detail',args=(id,)))
+  
+  bansos = Bansos.objects.all()
   context={
+    'base':base,
     'data_rumah'  : data_rumah,
     'input_art'    : 'active',
+    'bansos':bansos,
+    'title':'Input ART',
   }
   return render(request, 'dtks/input_art.html', context)
 
+@login_required(login_url='account:login')
+@allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def input_excel_art(request):
   data_rumah = Rumah.objects.all()
   data_anggota = Anggota.objects.all()
+  bansos = Bansos.objects.all()
   context={
     'title': 'DTKS',
     'data_rumah': data_rumah,
+    'bansos':bansos,
+    'title':'Login',
   }
   if request.method == 'POST' :
     dataset = Dataset()
@@ -398,14 +446,22 @@ def input_excel_art(request):
   return render(request, 'dtks/index.html', context)
 
 #Edit Functions
+@login_required(login_url='account:login')
 def edit_krt(request, id):
+  if request.user.groups.all()[0].name == "TKSK":
+    base = 'base_tksk.html'
+  else:
+    base = 'base.html'
   data_kecamatan = Kecamatan.objects.all()
   data_rumah = Rumah.objects.get(id=id)
   id_rumah = data_rumah.id
   data_aset = Aset.objects.get(rumah=id_rumah)
   data_kondisi = Kondisi_Rumah.objects.get(rumah=id_rumah)
+  bansos = Bansos.objects.all()
   context={
-    'title': 'Input Form DTKS',
+    'base':base,
+    'bansos':bansos,
+    'title': 'Edit KRT',
     'data_kecamatan' : data_kecamatan,
     'data_rumah' : data_rumah,
     'data_aset' : data_aset,
@@ -484,14 +540,21 @@ def edit_krt(request, id):
     return HttpResponseRedirect(reverse('dtks:detail',args=(id,)))
   return render(request, 'dtks/input_form.html', context)
 
+@login_required(login_url='account:login')
 def edit_art(request, id):
+  if request.user.groups.all()[0].name == "TKSK":
+    base = 'base_tksk.html'
+  else:
+    base = 'base.html'
   data_anggota = Anggota.objects.get(id=id)
   data_rumah = data_anggota.rumah
   tanggal_lahir = data_anggota.tanggal_lahir.strftime("%Y-%m-%d")
   tgl_kehamilan = data_anggota.tgl_kehamilan.strftime("%Y-%m-%d")
-  
+  bansos = Bansos.objects.all()
   context={
-    'title': 'Input Form DTKS',
+    'title': 'Edit ART',
+    'base':base,
+    'bansos':bansos,
     'data_anggota' : data_anggota,
     'data_rumah' : data_rumah,
     'tanggal_lahir' : tanggal_lahir,

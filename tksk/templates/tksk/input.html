@@ -30,9 +30,9 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-body">
-                      <h4 class="card-title mb-4">Tabel KRT Kecamatan Kalimanah</h4>
+                      <h4 class="card-title mb-4">TABEL KRT KECAMATAN {{user.location}}</h4>
                       
-                        <a href="{% url 'tksk:input_krt' %}" type="button" class="btn btn-info ">
+                        <a href="{% url 'dtks:input_form' %}" type="button" class="btn btn-info ">
                           Tambah Data<span class="btn-icon-right"
                             ><i class="fa fa-plus"></i
                           ></span>
@@ -58,7 +58,7 @@
                             <div class="btn-group" role="group">
                               <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
                               <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                <a class="dropdown-item" href="{% url 'tksk:detailkrt' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
+                                <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
                                 <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
                                 <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
                                   {% csrf_token %}

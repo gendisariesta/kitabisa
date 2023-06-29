@@ -7,7 +7,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from .models import User
 from .forms import CreateUserForm
-from dtks.models import Kecamatan
+from dtks.models import Kecamatan, Bansos
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, allowed_users
 # from django.contrib.auth.models import User
@@ -30,7 +30,7 @@ def loginView(request):
           login(request, user)
           messages.success(request, 'Login Success! Welcome '+user.name)
           return redirect ('dashboard')
-        elif user is not None and user.groups.all()[0].name == "TKSK":
+        elif user.groups.all()[0].name == "TKSK":
           login(request, user)
           messages.success(request, 'Login Success! Welcome '+user.name)
           return redirect ('tksk:dashboard')
@@ -47,6 +47,7 @@ def loginView(request):
 def logoutView(request):
   
   logout(request)
+  messages.success(request, 'Logout Success!')  
   return redirect('account:login')
 
 @login_required(login_url='account:login')
@@ -67,11 +68,13 @@ def registration(request):
       elif request.POST.get("add_another"):  # You can use else in here too if there is only 2 submit types.
         return HttpResponseRedirect(reverse('account:registration'))
   context={
-    'title':'Tambah User',
+    'title':'Create User',
     'form':form
   }
   return render(request, 'account/registration.html', context)
 
+@login_required(login_url='account:login')
+@allowed_users(allowed_roles=['Superadmin'])
 def user(request):
   user = User.objects.exclude(groups__name='Superadmin')
   kecamatan = Kecamatan.objects.all()
@@ -129,6 +132,7 @@ def update(request, id):
     messages.success(request, 'User updated!')
     return redirect ('account:user')
 
+@login_required(login_url='account:login')
 def profile(request, id):
   data_user = User.objects.get(id=id)
   if request.method == 'POST':
@@ -142,9 +146,15 @@ def profile(request, id):
       messages.error(request, 'Please correct the error below.')
   else:
       form = PasswordChangeForm(request.user)
+      
+  if request.user.groups.all()[0].name == "TKSK":
+    base = 'base_tksk.html'
+  else:
+    base = 'base.html'
   context={
     'title':'User Profile',
     'user': data_user,
+    'base':base,
     'form': form
   }
   return render(request, 'account/profile.html', context)

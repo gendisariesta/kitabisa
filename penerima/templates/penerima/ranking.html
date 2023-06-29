@@ -13,14 +13,27 @@
                     <div class="card-body">
                         <div class="card-title">
                             <h4 style="color:#063970; font-weight:bold;">Perankingan Bansos (Verifikasi Data)</h4>
-                            {% if belum_diverifikasi == 0 and penerima == 0 %}
-                            <form method="POST" action="{% url 'penerima:proses' %}">
-                                {% csrf_token %}
-                                <input name="_method" type="hidden" value="DISETUJUI">
-                                <button type="submit" class="btn mt-1 btn-info float-left">Proses Data</button>
-                            </form>
+                            <div class="dropdown-button">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn mt-2 btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tahun</button>
+                                    <div class="dropdown-menu">
+                                        {% for t in t %}
+                                        <a class="dropdown-item" href="{% url 'penerima:ranking' tahun=t %}">{{t}}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="btn-group" role="group">
+                                {% if belum_diverifikasi == 0 and penerima == 0 %}
+                                <form method="POST" action="{% url 'penerima:proses' %}">
+                                    {% csrf_token %}
+                                    <input name="_method" type="hidden" value="DISETUJUI">
+                                    <button type="submit" class="btn mt-2 ml-2 btn-info">Proses Data</button>
+                                </form>
+                                {% endif %}
+                                </div>
+                            </div>
+
                             
-                            {% endif %}
                         </div>
                         <div class="table-responsive" >
                             <table class="table table-striped zero-configuration" id="table-ranking">
@@ -42,27 +55,29 @@
                                         <td>{{ranking.anggota.nik}}</td>
                                         <td>{{ranking.status}}</td>
                                         <td>
-                                            <a href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="btn mb-1 btn-primary btn-sm px-2"><i class="fa fa-star font-18 align-middle"></i>Detail</a>
+                                            <a href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="btn mb-1 btn-info btn-sm px-2"><i class="fa fa-eye font-18 align-middle"></i>  Detail</a>
                                         </td>
                                         <td>
-                                            {% if ranking.status == 'Belum Diverifikasi' %}
-                                            <form method="POST" action="{% url 'penerima:disetujui' id=ranking.id %}">
-                                                {% csrf_token %}
-                                                <input name="_method" type="hidden" value="DISETUJUI">
-                                                <button type="submit" class="sweet-confirm btn mb-1 btn-rounded btn-success btn-xs px-2 confirm_approve" data-toggle="tooltip">
-                                                  Disetujui
-                                                </button>
-                                            </form>
-                                            <form method="POST" action="{% url 'penerima:ditolak' id=ranking.id %}">
-                                                {% csrf_token %}
-                                                <input name="_method" type="hidden" value="DITOLAK">
-                                                <button type="submit" class="sweet-confirm btn mb-1 btn-rounded btn-danger btn-xs px-2 confirm_reject" data-toggle="tooltip">
-                                                  Ditolak
-                                                </button>
-                                            </form>
-                                            {% comment %} <span href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="badge badge-pill badge-success px-2">Disetujui</span> {% endcomment %}
-                                            {% comment %} <span href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="badge badge-pill badge-danger px-2">Ditolak</span> {% endcomment %}
-                                            {% endif %}
+                                            <div class="btn-group">
+                                                {% if ranking.status == 'Belum Diverifikasi' %}
+                                                <form method="POST" action="{% url 'penerima:disetujui' id=ranking.id %}">
+                                                    {% csrf_token %}
+                                                    <input name="_method" type="hidden" value="DISETUJUI">
+                                                    <button type="submit" class="sweet-confirm btn mb-1 btn-rounded btn-success btn-xs px-2 confirm_approve" data-toggle="tooltip">
+                                                      Setujui <i class="fa fa-check"></i>
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="{% url 'penerima:ditolak' id=ranking.id %}">
+                                                    {% csrf_token %}
+                                                    <input name="_method" type="hidden" value="DITOLAK">
+                                                    <button type="submit" class="sweet-confirm btn mb-1 btn-rounded btn-danger btn-xs px-2 confirm_reject" data-toggle="tooltip">
+                                                      Tolak <i class="fa fa-times"></i>
+                                                    </button>
+                                                </form>
+                                                {% comment %} <span href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="badge badge-pill badge-success px-2">Disetujui</span> {% endcomment %}
+                                                {% comment %} <span href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="badge badge-pill badge-danger px-2">Ditolak</span> {% endcomment %}
+                                                {% endif %}
+                                            </div>
                                         </td>
                                         {% comment %} <td>
                                             <a href="{% url 'dtks:detail_art' id=ranking.anggota.id %}" class="badge badge-pill badge-warning px-2">{{ranking.status}}</a>

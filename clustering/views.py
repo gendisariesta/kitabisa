@@ -1,6 +1,6 @@
 # Create your views here.
 from django.shortcuts import render, redirect
-from dtks.models import Rumah, Aset, Kondisi_Rumah
+from dtks.models import Rumah, Aset, Kondisi_Rumah, Bansos
 from . models import Jenis
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -16,7 +16,10 @@ import matplotlib.pyplot as plt
 import base64, urllib
 from io import BytesIO
 
-db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
+from django.contrib.auth.decorators import login_required
+from account.decorators import unauthenticated_user, allowed_users
+
+db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
 atribut_kondisi_rumah = ['luas_bangunan','luas_lahan']
 atribut_aset = ['gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
                'motor','mobil','perahu','motor_tempel','perahu_motor','kapal','lahan','sapi','kerbau','kuda','babi','kambing','unggas']
@@ -48,11 +51,13 @@ def index(request):
         std_data = df_aset[i].std()
         count_data = df_aset[i].count()
         desc.append({'nama' : i, 'max' : max_data, 'min' : min_data, 'mean' : std_data, 'std' : mean_data, 'count' : count_data})
-    
+    bansos = Bansos.objects.all()
     context = {
         'row_count' : row_count,
         'atribut_count' : atribut_count,
-        'desc'     : desc
+        'desc'     : desc,
+        'title':'Clustering',
+        'bansos':bansos,
     }
     return render(request, 'clustering/index.html', context) 
 
@@ -125,7 +130,8 @@ def proses(request):
             plt.xlabel('luas_bangunan')
             plt.ylabel('luas_lahan')
             graph = get_graph()
-            
+        
+        bansos = Bansos.objects.all()   
         context = {
             "output" : output,
             "cols" : cols,
@@ -133,7 +139,9 @@ def proses(request):
             "value"     : value,
             "data"      : graph,
             "name_table"  : name_table,
-            "jum_cluster"   : jum_cluster
+            "jum_cluster"   : jum_cluster,
+            'bansos':bansos,
+            'title':'Clustering',
         }
         return render(request, 'clustering/proses.html', context)
     if 'simpan' in request.POST:
@@ -166,8 +174,12 @@ def proses(request):
             cursor.execute("UPDATE clustering_"+name_table+" SET cluster="+str(row["cluster"])+" WHERE IDJTG="+str(row["IDJTG"])+";")
             connection.commit()
         return HttpResponseRedirect(reverse('clustering:c',args=(name_table,)))
+    
+    bansos = Bansos.objects.all()
     context ={
-        'atribut' : atribut
+        'atribut' : atribut,
+        'bansos':bansos,
+        'title':'Clustering',
     }
     return render(request, 'clustering/proses.html',context)
 
@@ -183,7 +195,7 @@ def get_graph():
 
 def c(request, name):
     nama = name
-    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
+    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
     data = pd.read_sql('SELECT * FROM clustering_'+nama, con=db_connection)
     value = data.columns[2:]
     jum = data['cluster'].nunique()
@@ -207,6 +219,8 @@ def c(request, name):
     plt.ylabel('luas_lahan')
     graph = get_graph()
     print(output)
+
+    bansos = Bansos.objects.all()
     context = {
         "atribut"   :   atribut, 
         "value"     : value,
@@ -215,7 +229,9 @@ def c(request, name):
         "data"      : graph,
         "name_table"    : name,
         "jum_cluster"   : jum,
-        "simpan"    : "true"
+        "simpan"    : "true",
+        'bansos':bansos,
+        'title':'Clustering',
     }
     return render(request, 'clustering/proses.html', context)
 
@@ -244,19 +260,23 @@ def analisis_cluster(request):
             df_ = scaling(df)
             dbi_ = dbi(df_)
             silhouette_ = silhouette(df_)
-        
+
+        bansos = Bansos.objects.all()
         context ={
             'dbi'   : dbi_,
             'silhouette'   : silhouette_,
             'value'   : value,
             'atribut' : atribut,
-
+            'bansos':bansos,
+            'title':'Clustering',
         }
-        return render(request, 'clustering/jumlah_k.html',context)    
-    
+        return render(request, 'clustering/jumlah_k.html',context) 
+       
+    bansos = Bansos.objects.all()
     context = {
         'atribut' : atribut,
-        
+        'bansos':bansos,
+        'title':'Clustering',
     }
     return render(request, 'clustering/jumlah_k.html',context)
 
@@ -283,8 +303,11 @@ def silhouette(df):
 def hasil(request):
     clustering = Jenis.objects.all()
     
+    bansos = Bansos.objects.all()
     context = {
-        "cluster"   : clustering
+        "cluster"   : clustering,
+        'bansos':bansos,
+        'title':'Clustering',
     }
     return render(request, 'clustering/hasil.html', context) 
 
