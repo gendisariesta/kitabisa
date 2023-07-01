@@ -10,11 +10,19 @@ from datetime import datetime
 @login_required(login_url='account:login')
 def index(request, slug):
     # bansos = Bansos.objects.get(slug=slug)
+    if request.user.groups.all()[0].name == "TKSK":
+        base = 'base_tksk.html'
+        penerima = Penerima.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(bansos__slug__contains=slug)
+    else:
+        base = 'base.html'
+        penerima = Penerima.objects.filter(bansos__slug__contains=slug)
+
     bansos = Bansos.objects.all()
-    penerima = Penerima.objects.filter(bansos__slug__contains=slug)
+    
     context={
         'title':'Daftar Penerima',
         'penerima':penerima,
+        'base':base,
         'bansos':bansos
     }
     return render(request, 'penerima/index.html', context)
@@ -23,12 +31,19 @@ def index(request, slug):
 def detail(request, id):
     penerima = Penerima.objects.get(id=id)
     bansos = Bansos.objects.all()
+    jumlah_menerima = Penerima.objects.filter(anggota=penerima.anggota.id).filter(bansos__nama_bansos=penerima.bansos).count()
     # bansos=Penerima.objects.filter(anggota_id=id).order_by('tahun')
+    if request.user.groups.all()[0].name == "TKSK":
+        base = 'base_tksk.html'
+    else:
+        base = 'base.html'
     context={
         'title':'Detail Penerima',
+        'base':base,
         # 'data_anggota': anggota,
         'penerima':penerima,
         'bansos':bansos,
+        'jumlah_menerima':jumlah_menerima
         
     }
     return render(request, 'penerima/detail_penerima.html', context)

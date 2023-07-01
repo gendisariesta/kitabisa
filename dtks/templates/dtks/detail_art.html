@@ -164,7 +164,7 @@
                             <th>Bansos</th>
                             <th>Tahun</th>
                             <th>Status</th>
-                            <th>Foto Bukti</th>
+                            <th>Bukti Penerimaan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -181,7 +181,13 @@
                           <span class="badge badge-warning px-2">{{bansos.status}}</span>
                           {% endif %}
                         </td>
-                        <td><img src="/media/{{bansos.foto_bukti}}" alt="" width="150px"></td>
+                        <td>
+                          {% if bansos.status == 'Diterima' %}
+                          <a href="/media/{{bansos.foto_bukti}}" target="_blank" >Lihat Bukti</a>
+                          {% else %}
+                          -
+                          {% endif %}
+                        </td>
                       </tr>
                       {% endfor %}
                     </tbody>
