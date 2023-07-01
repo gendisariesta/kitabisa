@@ -36,7 +36,7 @@
                   </div>
               </div>
               <div class="table-responsive input-cluster" style="height:300px;overflow:auto;">
-                <table class="table" style="border:1px solid #00001A;">
+                <table class="table" style="border:1px solid #252e4b;">
                   <thead style="background-color:white;position:sticky;top:0;">
                     <tr>
                       <th style="width:0%">#</th>
@@ -55,7 +55,7 @@
                     </tbody>
                   </table>
                 </div>
-                <button id="proses" name="proses" type="submit" class="btn mb-1" style="width:100%;background-color:#00001a;color:white;">Proses Clustering</button>
+                <button id="proses" name="proses" type="submit" class="btn mb-1" style="width:100%;background-color:#252e4b;color:white;">Proses Clustering</button>
           </div>
         </div>
       </div>
@@ -82,14 +82,14 @@
                         <td>{{a}}</td>
                         {% endfor %}
                         <td>
-                          <a href="{% url 'clustering:dtks' df.1 %}" target="_blank" class="btn btn-rounded btn-info" style="font-size:12px;">Lihat Data</a>
+                          <a href="{% url 'clustering:dtks' df.1 %}" target="_blank" class="badge badge-pill badge-dark px-2" style="font-size:12px;">Lihat Data</a>
                         </td>
                       </tr>
                       {% endfor %}
                     </tbody>
                 </table>
             </div>
-            <button id="simpan" name="simpan" type="submit" class="btn mb-1" style="width:100%;background-color:#00001a;color:white;" hidden>Simpan Clustering</button>
+            <button id="simpan" name="simpan" type="submit" class="btn mb-1" style="width:100%;background-color:#252e4b;color:white;" hidden>Simpan Clustering</button>
           </div>
         </div>
       </div>

@@ -16,6 +16,7 @@ def index(request):
 def dashboard(request):
   bansos = Bansos.objects.all()
   context={
+    'title':"Dashboard",
     'bansos':bansos
   }
   return render(request, 'index.html', context)
