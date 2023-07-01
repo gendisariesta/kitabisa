@@ -13,6 +13,7 @@ from .decorators import unauthenticated_user, allowed_users
 # from django.contrib.auth.models import User
 
 # Create your views here.
+@unauthenticated_user
 def loginView(request):
   context={
         'title':'Login',
