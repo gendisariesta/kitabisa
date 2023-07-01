@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends base %}
 {% load static %}
 {% block head %}
 
@@ -32,10 +32,11 @@
                   <div class="card-body">
                       <h4 class="card-title mb-4">Tabel Data Terpadu Kesejahteraan Sosial (DTKS)</h4>
                         <a href="{% url 'dtks:input_form' %}" type="button" class="btn btn-dark">
-                          Tambah Data Manual<span class="btn-icon-right"
+                          Tambah Data Form<span class="btn-icon-right"
                             ><i class="fa fa-plus"></i
                           ></span>
                             </a>
+                            {% if user.groups.all.0.name == 'Superadmin' or user.groups.all.0.name == 'Admin' %}
                             <button type="button" class="btn btn-light btn-outline-dark" data-toggle="modal" data-target="#modal-excel-krt" data-backdrop="static">
                               Tambah Data Excel RT<span class="btn-icon-right"
                                 ><i class="fa fa-plus"></i
@@ -46,6 +47,7 @@
                                     ><i class="fa fa-plus"></i
                                   ></span>
                                     </button>
+                            {% endif %}
                                 {% comment %} <div class="dropdown custom-dropdown">
                                   <button type="button" class="btn btn-primary" data-toggle="dropdown"><i class="ti-search mr-2"></i>Semua Kecamatan<span class="btn-icon-right"
                                     ><i class="fa fa-angle-down m-l-5"></i>

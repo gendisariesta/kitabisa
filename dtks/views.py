@@ -12,16 +12,21 @@ from account.decorators import unauthenticated_user, allowed_users
 
 # Create your views here.
 @login_required(login_url='account:login')
-@allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def index(request):
-  data_rumah = Rumah.objects.all()
   data_aset = Aset.objects.all()
   bansos = Bansos.objects.all()
+  if request.user.groups.all()[0].name == "TKSK":
+    base = 'base_tksk.html'
+    data_rumah = Rumah.objects.filter(kecamatan__nama_kecamatan=request.user.location)
+  else:
+    base = 'base.html'
+    data_rumah = Rumah.objects.all()
   context={
     'title': 'DTKS',
     'data_rumah': data_rumah,
     'bansos':bansos,
-    'data_aset': data_aset
+    'data_aset': data_aset,
+    'base':base,
   }
   if request.method == 'POST' :
     dataset = Dataset()

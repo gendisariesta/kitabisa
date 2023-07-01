@@ -101,7 +101,7 @@
                                     <ul>
                                         <li><h4>{{user.username}}</h4></li>
                                         <li>
-                                            <a href="app-profile.html"><i class="icon-user"></i>
+                                            <a href="{% url 'account:profile' id=user.id %}"><i class="icon-user"></i>
                                                 <span>Profile</span></a>
                                         </li>
                                         <hr class="my-2">
@@ -130,7 +130,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'tksk:input' %}" aria-expanded="false">
+                    <a href="{% url 'dtks:index' %}" aria-expanded="false">
                         <i class="icon-note menu-icon" style="color:white;"></i><span class="nav-text">DTKS</span>
                     </a>
                 </li>
