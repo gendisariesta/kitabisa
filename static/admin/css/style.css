@@ -1879,8 +1879,8 @@ fieldset:disabled a.btn {
   .btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active,
   .show > .btn-info.dropdown-toggle {
     color: #fff;
-    background-color: #1a56ff;
-    border-color: #0d4dff; }
+    background-color: #101424;
+    border-color: #101424; }
     .btn-info:not(:disabled):not(.disabled):active:focus, .btn-info:not(:disabled):not(.disabled).active:focus,
     .show > .btn-info.dropdown-toggle:focus {
       box-shadow: 0 0 0 0.2rem rgba(77, 124, 255, 0.5); }
@@ -3278,7 +3278,8 @@ input[type="button"].btn-block {
   padding: 1.25rem; }
 
 .card-title {
-  margin-bottom: 0.75rem; }
+  margin-bottom: 0.75rem;
+ }
 
 .card-subtitle {
   margin-top: -0.375rem;
@@ -7172,7 +7173,7 @@ a.text-dark:hover, a.text-dark:focus {
  }
 .inputdata-label{
   font-weight: bold;
-  color: #00144d;
+  color: #000;
   
 }
 .detail-label{
@@ -11364,8 +11365,10 @@ table.dataTable thead .sorting::after {
   box-shadow: 6px 11px 41px -28px #a99de7; }
   .card-title {
     font-size: 18px;
-    font-weight: 500;
-    line-height: 18px; }
+    line-height: 18px; 
+    color:#252e4b; 
+    font-weight:bold;
+  }
   .card-header {
     border-bottom: 0px;
     background: transparent; }

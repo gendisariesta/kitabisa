@@ -22,6 +22,7 @@
       <div class="col-lg-12" id="detail-dtks-rt">
         <div class="card">
           <div class="card-body">
+            <h4 class="card-title mb-4">Detail DTKS KRT</h4>
             <ul class="nav nav-pills mb-3">
               <li class="nav-item">
                 <a
@@ -54,261 +55,253 @@
             <div class="tab-content br-n pn mt-4">
               <div id="navpills-1" class="tab-pane active">
                 <div class="row">
-                  {% comment %} <div class="col-3">
-                    <p class="inputdata-label mb-1">Foto Kartu Keluarga</p>
-                    <img
-                      src="{% static 'img/bg-home.jpg' %}"
-                      alt=""
-                      class="img-fluid thumbnail m-r-15"
-                    />
-                  </div> {% endcomment %}
                   <div class="col-12">
                     <div class="row">
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
+                      <div class="col-6 row">
+                        <p class="col-6">
                           Nama Kepala Rumah Tangga
                         </p>
-                        <p>{{data_rumah.nama_krt}}</p>
+                        <p class="col-6 inputdata-label">{{data_rumah.nama_krt}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">IDJTG</p>
-                        <p>{{data_rumah.IDJTG}}</p>
+                      <div class="col-6 row">
+                        <p class="col-6">IDJTG</p>
+                        <p class="col-6 inputdata-label">{{data_rumah.IDJTG}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">Kabupaten/Kota</p>
-                        <p>{{data_rumah.kabupaten}}</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Kabupaten/Kota</p>
+                        <p class="col-6 inputdata-label">{{data_rumah.kabupaten}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">Kecamatan</p>
-                        <p>{{data_rumah.kecamatan}}</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Kecamatan</p>
+                        <p class="col-6 inputdata-label">{{data_rumah.kecamatan}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">Desa/Kelurahan</p>
-                        <p>{{data_rumah.desa}}</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Desa/Kelurahan</p>
+                        <p class="col-6 inputdata-label">{{data_rumah.desa}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">Dusun</p>
-                        <p>{{data_rumah.dusun}}</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Dusun</p>
+                        <p class="col-6 inputdata-label">{{data_rumah.dusun}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">RT/RW</p>
-                        <p>{{data_rumah.rt}}/{{data_rumah.rw}}</p>
+                      <div class="col-6 row">
+                        <p class="col-6">RT/RW</p>
+                        <p class="col-6 inputdata-label">{{data_rumah.rt}}/{{data_rumah.rw}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">Alamat</p>
-                        <p>{{data_rumah.alamat}}</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Alamat</p>
+                        <p class="col-6 inputdata-label">{{data_rumah.alamat}}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div id="navpills-2" class="tab-pane">
-                <p class="inputdata-label mb-1">
+                <p class="detail-label mb-1">
                   1. Rumah tangga memiliki sendiri aset sebagai berikut:
                 </p>
                 <div class="row">
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Tabung gas 5.5/lebih</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Tabung gas 5.5/lebih</p>
                     {% if data_aset.gas == 0 or data_aset.gas == null %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Lemari es/Kulkas</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Lemari es/Kulkas</p>
                     {% if data_aset.kulkas == 0 or data_aset.kulkas == null %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">AC</p>
+                  <div class="col-6 row">
+                    <p class="col-6">AC</p>
                     {% if data_aset.ac == 0 or data_aset.ac == null %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Pemanas Air</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Pemanas Air</p>
                     {% if data_aset.pemanas_air == 0 or data_aset.pemanas_air == null %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Telepon Rumah</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Telepon Rumah</p>
                     {% if data_aset.telepon_rumah == 0 or data_aset.telepon_rumah == null %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">TV</p>
+                  <div class="col-6 row">
+                    <p class="col-6">TV</p>
                     {% if data_aset.tv == 0 or data_aset.tv == null %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">
+                  <div class="col-6 row">
+                    <p class="col-6">
                       Emas/Perhiasan senilai 10 gr
                     </p>
                     {% if data_aset.perhiasan == 0 or data_aset.perhiasan == null %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Komputer/Laptop</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Komputer/Laptop</p>
                     {% if data_aset.komputer == 0 or data_aset.komputer == null%}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Sepeda</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Sepeda</p>
                     {% if data_aset.sepeda == 0 or data_aset.sepeda == null%}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Sepeda Motor</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Sepeda Motor</p>
                     {% if data_aset.motor == 0 or data_aset.motor == null%}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Mobil</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Mobil</p>
                     {% if data_aset.mobil == 0 or data_aset.mobil == null%}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Perahu</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Perahu</p>
                     {% if data_aset.perahu == 0 or data_aset.perahu == null%}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Motor Tempel</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Motor Tempel</p>
                     {% if data_aset.motor_tempel == 0 or data_aset.motor_tempel == null %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Perahu Motor</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Perahu Motor</p>
                     {% if data_aset.perahu_motor == 0 or data_aset.perahu_motor == null%}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Kapal</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Kapal</p>
                     {% if data_aset.kapal == 0 or data_aset.kapal == null%}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>Punya</p>
+                    <p class="col-6 inputdata-label">Punya</p>
                     {% endif %}
                   </div>
                 </div>
-                <p class="inputdata-label mb-1 mt-3">
+                <p class="detail-label mb-1 mt-3">
                   2. Rumah tangga memiliki aset tidak bergerak sebagai berikut:
                 </p>
                 <div class="row">
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Lahan/m2</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Lahan/m2</p>
                     {% if data_aset.lahan == 0 %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>{{data_aset.lahan}}</p>
+                    <p class="col-6 inputdata-label">{{data_aset.lahan}}</p>
                     {% endif %}
                   </div>
-                  <div class="col-3">
-                    <p class="detail-label mb-1">Rumah di tempat lain</p>
+                  <div class="col-6 row">
+                    <p class="col-6">Rumah di tempat lain</p>
                     {% if data_aset.rumah_lain == 0 %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>{{data_aset.rumah_lain}}</p>
+                    <p class="col-6 inputdata-label">{{data_aset.rumah_lain}}</p>
                     {% endif %}
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-6">
-                    <p class="inputdata-label mb-1 mt-3">
+                  <div class="col-12">
+                    <p class="detail-label mb-1 mt-3">
                       3. Rumah tangga memiliki sendiri aset sebagai berikut:
                     </p>
                     <div class="row">
-                      <div class="col-3">
-                        <p class="detail-label mb-1">Sapi</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Sapi</p>
                         {% if data_aset.sapi == 0 %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>{{data_aset.sapi}}</p>
+                    <p class="col-6 inputdata-label">{{data_aset.sapi}}</p>
                     {% endif %}
                       </div>
-                      <div class="col-3">
-                        <p class="detail-label mb-1">Kerbau</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Kerbau</p>
                         {% if data_aset.kerbau == 0 %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>{{data_aset.kerbau}}</p>
+                    <p class="col-6 inputdata-label">{{data_aset.kerbau}}</p>
                     {% endif %}
                       </div>
-                      <div class="col-3">
-                        <p class="detail-label mb-1">Kuda</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Kuda</p>
                         {% if data_aset.kuda == 0 %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>{{data_aset.kuda}}</p>
+                    <p class="col-6 inputdata-label">{{data_aset.kuda}}</p>
                     {% endif %}
                       </div>
-                      <div class="col-3">
-                        <p class="detail-label mb-1">Babi</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Babi</p>
                         {% if data_aset.babi == 0 %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>{{data_aset.babi}}</p>
+                    <p class="col-6 inputdata-label">{{data_aset.babi}}</p>
                     {% endif %}
                       </div>
-                      <div class="col-3">
-                        <p class="detail-label mb-1">Unggas</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Unggas</p>
                         {% if data_aset.unggas == 0 %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>{{data_aset.unggas}}</p>
+                    <p class="col-6 inputdata-label">{{data_aset.unggas}}</p>
                     {% endif %}
                       </div>
-                      <div class="col-4">
-                        <p class="detail-label mb-1">Kambing/Domba</p>
+                      <div class="col-6 row">
+                        <p class="col-6">Kambing/Domba</p>
                         {% if data_aset.kambing == 0 %}
-                    <p>Tidak Punya</p>
+                    <p class="col-6 inputdata-label">Tidak Punya</p>
                     {% else %}
-                    <p>{{data_aset.kambing}}</p>
+                    <p class="col-6 inputdata-label">{{data_aset.kambing}}</p>
                     {% endif %}
                       </div>
                     </div>
                   </div>
                   <div class="col-6">
-                    <p class="inputdata-label mb-1 mt-3">
+                    <p class="detail-label mb-1 mt-3">
                       4. Jumlah pengeluaran RUTA dalam sebulan:
                     </p>
                     <div class="row">
@@ -323,141 +316,133 @@
               </div>
               <div id="navpills-3" class="tab-pane">
                 <div class="row">
-                  {% comment %} <div class="col-3">
-                    <p class="inputdata-label mb-1">Foto Kondisi Rumah</p>
-                    <img
-                      src="{% static 'img/bg-home.jpg' %}"
-                      alt=""
-                      class="img-fluid thumbnail m-r-15"
-                    />
-                  </div> {% endcomment %}
                   <div class="col-12">
                     <div class="row">
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">1a. Status Bangunan</p>
-                        <p>{{data_kondisi.status_bangunan}}</p>
+                      <div class="col-6 row">
+                        <p class="col-7">1a. Status Bangunan</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.status_bangunan}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">1b. Luas bangunan</p>
-                        <p>{{data_kondisi.luas_bangunan}}</p>
+                      <div class="col-6 row">
+                        <p class="col-7">7a. Sumber air minum</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.sumber_air}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">1c. Status Lahan</p>
-                        <p>{{data_kondisi.status_lahan}}</p>
+                      
+                      <div class="col-6 row">
+                        <p class="col-7">1b. Luas bangunan</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.luas_bangunan}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
-                          1d. Jika status lahan berkode 1:
-                        </p>
-                        <p>{{data_kondisi.luas_lahan}}</p>
-                      </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">2. Luas Lantai</p>
-                        <p>{{data_kondisi.luas_lantai}}</p>
-                      </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
-                          3. Jenis lantai terluas
-                        </p>
-                        <p>{{data_kondisi.jenis_lantai}}</p>
-                      </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
-                          4a. Jenis dinding terluas
-                        </p>
-                        <p>{{data_kondisi.jenis_dinding}}</p>
-                      </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
-                          4b. jika 4a berkode 1,2,3
-                        </p>
-                        <p>{{data_kondisi.kondisi_dinding}}</p>
-                      </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">5a. Jenis Atap</p>
-                        <p>{{data_kondisi.jenis_atap}}</p>
-                      </div>
-                  
-                  
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
-                          5b. jika 5a berkode 1,2,3,4,5,6,7
-                        </p>
-                        <p>{{data_kondisi.kondisi_atap}}</p>
-                      </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
-                          6. Jumlah Kamar Tidur
-                        </p>
-                        <p>{{data_kondisi.jum_kamar}}</p>
-                      </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">7a. Sumber air minum</p>
-                        <p>{{data_kondisi.sumber_air}}</p>
-                      </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
+                      <div class="col-6 row">
+                        <p class="col-7">
                           7b. Cara memperoleh air minum
                         </p>
-                        <p>{{data_kondisi.cara_air}}</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.cara_air}}</p>
+                      </div>    
+                      <div class="col-6 row">
+                        <p class="col-7">1c. Status Lahan</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.status_lahan}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
+                      <div class="col-6 row">
+                        <p class="col-7">
                           8a. Sumber Penerangan Utama
                         </p>
-                        <p>{{data_kondisi.sumber_penerangan}}</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.sumber_penerangan}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
+                      
+                      <div class="col-6 row">
+                        <p class="col-7">
+                          1d. Jika status lahan berkode 1:
+                        </p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.luas_lahan}}</p>
+                      </div>
+                      <div class="col-6 row">
+                        <p class="col-7">
                           8b. Jika 8a berkode 1, daya tampung
                         </p>
-                        <p>{{data_kondisi.daya}}</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.daya}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
+                      <div class="col-6 row">
+                        <p class="col-7">2. Luas Lantai</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.luas_lantai}}</p>
+                      </div>
+                      <div class="col-6 row">
+                        <p class="col-7">
                           8c. jika 8a berkode 1, ID Pelanggan
                         </p>
-                        <p>{{data_kondisi.id_pel}}</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.id_pel}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
+                      <div class="col-6 row">
+                        <p class="col-7">
+                          3. Jenis lantai terluas
+                        </p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.jenis_lantai}}</p>
+                      </div>
+                      <div class="col-6 row">
+                        <p class="col-7">
                           8d. Status Kepemilikan Listik
                         </p>
-                        <p>{{data_kondisi.status_listrik}}</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.status_listrik}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
+                      <div class="col-6 row">
+                        <p class="col-7">
+                          4a. Jenis dinding terluas
+                        </p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.jenis_dinding}}</p>
+                      </div>
+                      <div class="col-6 row">
+                        <p class="col-7">
                           9. Bahan Bakar/Energi utama untuk memasak
                         </p>
-                        <p>{{data_kondisi.bahan_bakar}}</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.bahan_bakar}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
+                      <div class="col-6 row">
+                        <p class="col-7">
+                          4b. jika 4a berkode 1,2,3
+                        </p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.kondisi_dinding}}</p>
+                      </div>
+                      <div class="col-6 row">
+                        <p class="col-7">
                           10a. Penggunaan Fasilitas Buang Air Besar (BAB)
                         </p>
-                        <p>{{data_kondisi.fasilitas_bab}}</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.fasilitas_bab}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">10b. Jenis Kloset</p>
-                        <p>{{data_kondisi.jenis_kloset}}</p>
+                      <div class="col-6 row">
+                        <p class="col-7">5a. Jenis Atap</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.jenis_atap}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">
+                      <div class="col-6 row">
+                        <p class="col-7">10b. Jenis Kloset</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.jenis_kloset}}</p>
+                      </div> 
+                      <div class="col-6 row">
+                        <p class="col-7">
+                          5b. jika 5a berkode 1,2,3,4,5,6,7
+                        </p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.kondisi_atap}}</p>
+                      </div>
+                      <div class="col-6 row">
+                        <p class="col-7">
                           10c. Tempat pembuangan akhir tinja
                         </p>
-                        <p>{{data_kondisi.buang_tinja}}</p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.buang_tinja}}</p>
                       </div>
-                      <div class="col-3">
-                        <p class="inputdata-label mb-1">11. Koordinat</p>
-                        <p>
+                      <div class="col-6 row">
+                        <p class="col-7">
+                          6. Jumlah Kamar Tidur
+                        </p>
+                        <p class="col-5 inputdata-label">{{data_kondisi.jum_kamar}}</p>
+                      </div>
+                      <div class="col-6 row">
+                        <p class="col-7">11. Koordinat</p>
+                        <p class="col-5 inputdata-label">
                           {{data_kondisi.koordinat_lat}},{{data_kondisi.koordinat_long}}
                         </p>
                       </div>
-                      <div class="col-9">
-                        <p class="inputdata-label mb-2">
-                          12. Keikutsertaan Bansos
+                      <div class="col-12 mt-3">
+                        <p class="detail-label">
+                        Keikutsertaan Bansos
                         </p>
-                        <p>
+                        <p class="col-5 inputdata-label">
                           {% if data_kondisi.bansos_pusat != 'False'%}
                           <span class="label label-pill label-dark mr-1 array" id="banpus">
                             Pusat : {{data_kondisi.bansos_pusat}}</span>
@@ -471,7 +456,7 @@
                             Kabupaten : {{data_kondisi.bansos_kota}}</span>
                           {% endif %}
                         </p>
-                        <p>
+                        <p class="col-5 inputdata-label">
                           {% if data_kondisi.bansos_desa != 'False'%}
                           <span class="label label-pill label-dark mr-1 array" id="bandes">
                             Desa : {{data_kondisi.bansos_desa}}</span>

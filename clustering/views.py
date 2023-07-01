@@ -19,7 +19,7 @@ from io import BytesIO
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
 
-db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
+db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
 atribut_kondisi_rumah = ['luas_bangunan','luas_lahan']
 atribut_aset = ['gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
                'motor','mobil','perahu','motor_tempel','perahu_motor','kapal','lahan','sapi','kerbau','kuda','babi','kambing','unggas']
@@ -109,7 +109,9 @@ def proses(request):
             df_scaled = scaling(df[value])
             kmeans = KMeans(n_clusters=int(jum_cluster), random_state=30)
             y_predict = kmeans.fit_predict(df_scaled)
-            df['cluster'] = y_predict
+            # df['cluster'] = y_predict
+            df.insert(loc=0, column='cluster', value=y_predict)
+            
             data = df
             output =[]
             for index, row in df.iterrows():
@@ -195,7 +197,7 @@ def get_graph():
 
 def c(request, name):
     nama = name
-    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
+    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
     data = pd.read_sql('SELECT * FROM clustering_'+nama, con=db_connection)
     value = data.columns[2:]
     jum = data['cluster'].nunique()

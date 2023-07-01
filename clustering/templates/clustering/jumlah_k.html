@@ -27,7 +27,7 @@
               <form method="POST">
                 {% csrf_token %}
               <div class="table-responsive input-cluster" style="height:300px;overflow:auto;">
-                <table class="table" style="border:1px solid #00001A">
+                <table class="table" style="border:1px solid #252e4b">
                   <thead style="background-color:white;position:sticky;top:0;">
                     <tr>
                       <th style="width:0%">#</th>
@@ -46,7 +46,7 @@
                     </tbody>
                   </table>
                 </div>
-                <button type="submit" class="btn mb-1" style="width:100%;background-color:#00001a;color:white;">Proses Analisis</button>
+                <button type="submit" class="btn mb-1" style="width:100%;background-color:#252e4b;color:white;">Proses Analisis</button>
               </form>
           </div>
         </div>
@@ -99,7 +99,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% for silhouette in silhouette %}
+                    {% for silhouette_ in silhouette %}
                     <tr>
                           <th>{{silhouette_.index}}</th>
                           <td>{{silhouette_.silhouette}}</td>
