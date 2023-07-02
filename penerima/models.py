@@ -9,7 +9,7 @@ class Penerima(models.Model):
         ('Diterima', 'Diterima'),
         ]
   anggota=models.ForeignKey(Anggota, on_delete=models.CASCADE)
-  foto_bukti = models.ImageField(upload_to='bukti/', null=True)
+  foto_bukti = models.FileField(upload_to='bukti/', null=True)
   tahun = models.CharField(max_length=10, blank=True, null=True)
   bansos = models.ForeignKey(Bansos, on_delete=models.CASCADE, null=True)
   date = models.DateTimeField(auto_now_add=True, blank=True)
@@ -27,5 +27,6 @@ class Ranking(models.Model):
     ('Penerima', 'Penerima'),
   ]
   anggota=models.ForeignKey(Anggota, on_delete=models.CASCADE)
-  status=models.CharField(max_length=20, choices=STATUS_VERIF, default='Balum Diverifikasi')
+  status=models.CharField(max_length=20, choices=STATUS_VERIF, default='Belum Diverifikasi')
   tahun = models.CharField(max_length=10, blank=True, null=True)
+  bansos = models.ForeignKey(Bansos, on_delete=models.CASCADE, null=True)

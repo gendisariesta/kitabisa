@@ -13,7 +13,7 @@
     {% comment %} <link rel="stylesheet" type="type/css" href="{% static 'admin/css/style.css' %}"> {% endcomment %}
     <!-- Favicon icon -->
     <link href="{% static "admin/plugins/jquery-steps/css/jquery.steps.css" %}" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'home/images/logo_pbg.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/logo_pbg.png' %}">
     <link href="{%static 'admin/plugins/sweetalert/css/sweetalert.css' %}" rel="stylesheet">
     <!-- Pignose Calender -->
     <link href="{% static 'admin/plugins/pg-calendar/css/pignose.calendar.min.css' %}" rel="stylesheet">
@@ -64,13 +64,13 @@
         ***********************************-->
         <div class="nav-header">
             <div class="brand-logo">
-                <a href="index.html">
-                    <img src="{% static 'img/logo_pbg.png' %}" height="40" width="40" alt="">
-                    <!-- <b class="logo-abbr"><img src="{%static 'admin/images/logo.png' %}" alt=""> </b>
-                    <span class="logo-compact"><img src="{%static 'admin/images/logo-compact.png' %}" alt=""></span>
+                <a href="{% url 'dashboard' %}">
+                    <b class="logo-abbr"><img src="{% static 'img/logo_pbg.png' %}" alt=""> </b>
+                    <span class="logo-compact"><img src="{% static 'img/logo-text-pbg.png' %}" alt=""></span>
                     <span class="brand-title">
-                        <img src="{%static 'home/images/logo_pbg.png' %}" alt="">
-                    </span> -->
+                        <img width="160px" src="{% static 'img/logo_text.png' %}" alt="">
+                    </span>
+                    <hr style="border: white solid;">
                 </a>
             </div>
         </div>
@@ -88,21 +88,6 @@
                         <span class="toggle-icon"><i class="icon-menu"></i></span>
                     </div>
                 </div>
-                <div class="header-left">
-                    <div class="input-group icons">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i
-                                    class="mdi mdi-magnify"></i></span>
-                        </div>
-                        <input type="search" class="form-control" placeholder="Search Dashboard"
-                            aria-label="Search Dashboard">
-                        <div class="drop-down animated flipInX d-md-none">
-                            <form action="#">
-                                <input type="text" class="form-control" placeholder="Search">
-                            </form>
-                        </div>
-                    </div>
-                </div>
                 <div class="header-right">
                     <ul class="clearfix">
                         <li class="icons dropdown d-none d-md-flex">
@@ -116,7 +101,7 @@
                                     <ul>
                                         <li><h4>{{user.username}}</h4></li>
                                         <li>
-                                            <a href="app-profile.html"><i class="icon-user"></i>
+                                            <a href="{% url 'account:profile' id=user.id %}"><i class="icon-user"></i>
                                                 <span>Profile</span></a>
                                         </li>
                                         <hr class="my-2">
@@ -138,34 +123,35 @@
             ***********************************-->
     <div class="nk-sidebar">
         <div class="nk-nav-scroll">
-            <ul class="metismenu" id="menu">
+            <ul class="metismenu" id="menu" style="margin-top: 20px;">
                 <li class="mega-menu mega-menu-sm">
                     <a href="{% url 'tksk:dashboard' %}" aria-expanded="false">
-                        <span class="nav-text">Dashboard</span>
+                        <i class="icon-speedometer menu-icon" style="color:white;"></i><span class="nav-text">Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'tksk:input' %}" aria-expanded="false">
-                        <span class="nav-text">Input Data</span>
+                    <a href="{% url 'dtks:index' %}" aria-expanded="false">
+                        <i class="icon-note menu-icon" style="color:white;"></i><span class="nav-text">DTKS</span>
                     </a>
                 </li>
                 <li class="mega-menu mega-menu-sm">
                     <a class="has-arrow" href="#" aria-expanded="false">
-                        <span class="nav-text">Penerima Bantuan Sosial</span>
+                        <i class="icon-menu menu-icon" style="color:white;"></i><span class="nav-text">Penerima Bansos</span>
                     </a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="#">Sembako Lansia</a></li>
-                        <li><a href="#">Sembako Disabilitas</a></li>
+                        {% for bansos in bansos %}
+                        <li><a href="{% url 'penerima:index' bansos.slug %}">{{bansos.nama_bansos}}</a></li>
+                        {% endfor %}
                     </ul>
                 </li>
                 <li>
                     <a href="{% url 'mapping:index' %}" aria-expanded="false">
-                        <span class="nav-text">Pemetaan Bansos</span>
+                        <i class="ti-location-pin menu-icon" style="color:white;"></i><span class="nav-text">Pemetaan Bansos</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" aria-expanded="false">
-                        <span class="nav-text">Upload Bukti</span>
+                    <a href="{% url 'tksk:upload_bukti' %}" aria-expanded="false">
+                        <i class="ti-export menu-icon" style="color:white;"></i><span class="nav-text">Upload Bukti</span>
                     </a>
                 </li>
             </ul>

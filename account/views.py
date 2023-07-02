@@ -135,6 +135,8 @@ def update(request, id):
 @login_required(login_url='account:login')
 def profile(request, id):
   data_user = User.objects.get(id=id)
+  bansos = Bansos.objects.all()
+
   if request.method == 'POST':
     form = PasswordChangeForm(request.user, request.POST)
     if form.is_valid():
@@ -155,6 +157,7 @@ def profile(request, id):
     'title':'User Profile',
     'user': data_user,
     'base':base,
+    'bansos':bansos,
     'form': form
   }
   return render(request, 'account/profile.html', context)

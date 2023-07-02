@@ -19,7 +19,7 @@ from io import BytesIO
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
 
-db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
+db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
 atribut_kondisi_rumah = ['luas_bangunan','luas_lahan']
 atribut_aset = ['gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
                'motor','mobil','perahu','motor_tempel','perahu_motor','kapal','lahan','sapi','kerbau','kuda','babi','kambing','unggas']
@@ -29,6 +29,8 @@ for i in atribut_kondisi_rumah :
 for i in atribut_aset :
     atribut.append(i)
 
+@login_required(login_url='account:login')
+@allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def index(request):
     row_count = Rumah.objects.all().count()
     atribut_count = (len(atribut_kondisi_rumah)+len(atribut_aset))
@@ -75,6 +77,8 @@ def scaling(df):
     df_scaled = pd.DataFrame(df_scaled)
     return df_scaled
 
+@login_required(login_url='account:login')
+@allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def proses(request):
     global data, name_table, jum_cluster, value, atr_kondisi, atr_aset
     
@@ -197,7 +201,7 @@ def get_graph():
 
 def c(request, name):
     nama = name
-    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
+    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
     data = pd.read_sql('SELECT * FROM clustering_'+nama, con=db_connection)
     value = data.columns[2:]
     jum = data['cluster'].nunique()
@@ -237,6 +241,8 @@ def c(request, name):
     }
     return render(request, 'clustering/proses.html', context)
 
+@login_required(login_url='account:login')
+@allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def analisis_cluster(request):
     get = []
     value = []

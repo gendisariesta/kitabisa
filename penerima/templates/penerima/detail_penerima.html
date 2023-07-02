@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends base %}
 {% load static %}
 
 {% block head %}
@@ -26,9 +26,15 @@
     <!-- row -->
   
     <div class="container-fluid">
-        <div class="alert alert-success" role="alert">
-            Anggota ini telah menerima sebanyak 3 kali <a href="#" class="alert-link">Bantuan Sosial Sembako Lansia</a>.
-        </div>
+      {% if jumlah_menerima > 3 %}
+      <div class="alert alert-danger" role="alert">
+          Anggota ini telah menerima sebanyak <b>{{jumlah_menerima}}</b> kali <b>Bantuan Sosial {{penerima.bansos}}</b>. Klik disini untuk lihat <a href="{% url 'dtks:detail_art' penerima.anggota.id %}" class="alert-link">Detail Anggota</a>.
+      </div>
+      {% else %}
+      <div class="alert alert-success" role="alert">
+          Anggota ini telah menerima sebanyak <b>{{jumlah_menerima}}</b> kali <b>Bantuan Sosial {{penerima.bansos}}</b>. Klik disini untuk lihat <a href="{% url 'dtks:detail_art' penerima.anggota.id %}" class="alert-link">Detail Anggota</a>.
+      </div>
+      {% endif %}
       <div class="row">
         <div class="col-12">
           <div class="card">
@@ -37,21 +43,74 @@
                 <div class="basic-form">
                     <form>
                         <div class="form-group row mb-2 mt-0">
-                            <label class="col-sm-2 col-form-label">Nama</label>
-                            <h6 class="col-sm-6 col-form-label"><b>{{penerima.anggota}}</b></h6>
+                          <div class="col-6">
+                            <div class="row">
+                              <label class="col-sm-4 col-form-label">Nama</label>
+                              <h6 class="col-sm-4 col-form-label"><b>{{penerima.anggota}}</b></h6>
+                            </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="row">
+                              <label class="col-sm-4 col-form-label">NIK</label>
+                              <h6 class="col-sm-4 col-form-label"><b>{{penerima.anggota.nik}}</b></h6>
+                            </div>
+                          </div>
                         </div>
                         <div class="form-group row mb-2 mt-0">
-                            <label class="col-sm-2 col-form-label">Alamat</label>
-                            <h6 class="col-sm-6 col-form-label"><b>{{penerima.anggota.rumah.alamat}}</b></h6>
+                          <div class="col-6">
+                            <div class="row">
+                              <label class="col-sm-4 col-form-label">Alamat</label>
+                              <h6 class="col-sm-6 col-form-label"><b>{{penerima.anggota.rumah.alamat}}</b></h6>
+                            </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="row">
+                              <label class="col-sm-4 col-form-label">Jenis Bantuan</label>
+                              <h6 class="col-sm-6 col-form-label"><b>{{penerima.bansos}}</b></h6>
+                            </div>
+                          </div>
                         </div>
                         <div class="form-group row mb-2 mt-0">
-                            <label class="col-sm-2 col-form-label">Bukti Menerima</label>
-                            <img src="/media/{{penerima.foto_bukti}}" class="col-sm-2 col-form-label" alt="" width="300px">
+                          <div class="col-6">
+                            <div class="row">
+                              <label class="col-sm-4 col-form-label">Tahun Penerimaan</label>
+                              <h6 class="col-sm-6 col-form-label"><b>{{penerima.tahun}}</b></h6>
+                            </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="row">
+                              <label class="col-sm-4 col-form-label">Status</label>
+                              {% if penerima.status == 'Dalam Proses' %}
+                              <span class="badge badge-pill badge-warning px-2" style="
+                              height: fit-content;
+                              margin-top: 10px;
+                              margin-left: 12px;">{{penerima.status}}</span>
+                              {% endif %}
+                              {% if penerima.status == 'Diterima' %}
+                              <span class="badge badge-pill badge-success px-2" style="
+                              height: fit-content;
+                              margin-top: 10px;
+                              margin-left: 12px;">{{penerima.status}}</span>
+                              {% endif %}
+                              
+                            </div>
+                          </div>
                         </div>
+                        {% if penerima.status == 'Diterima' %}
+                        <div class="form-group row mb-2 mt-0">
+                          <div class="col-6">
+                            <div class="row">
+                              <label class="col-sm-4 col-form-label">Bukti Menerima</label>
+                              <a href="/media/{{penerima.foto_bukti}}" target="_blank" class="col-sm-6 col-form-label">Lihat Bukti</a>
+                            </div>
+                          </div>
+                        </div>
+                        {% endif %}
                     </form>
                 </div>
             </div>
           </div>
+          {% if penerima.status == 'Dalam Proses' %}
           <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">Route</h4>      
@@ -62,16 +121,7 @@
                 </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">Bukti Menerima</h4>      
-                <div class="row mb-2 mt-0">
-                    <div class="col">
-                        
-                    </div>
-                </div>
-            </div>
-          </div>
+          {% endif %}
         </div>
       </div>
     </div>

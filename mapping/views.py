@@ -35,7 +35,10 @@ def index(request):
     avg_long = Penerima.objects.aggregate(avg=Avg('anggota__rumah__koordinat_long'))['avg']
 
     #Create Map Object
-    m = folium.Map(location=[avg_lat, avg_long], zoom_start= 12)
+    if penerima :
+        m = folium.Map(location=[avg_lat, avg_long], zoom_start= 12)
+    else :
+        m = folium.Map(location=[-7.28, 109.35], zoom_start= 12)
     
     #cluster marker
     # latitudes = [ang.rumah.koordinat_lat for ang in anggota]
@@ -59,13 +62,14 @@ def index(request):
     # for marker in anggota:
     #     folium.Marker([marker.rumah.koordinat_lat, marker.rumah.koordinat_long]).add_to(m)
     #marker penerima
+    
     for marker in penerima:
         folium.Marker([marker.anggota.rumah.koordinat_lat, marker.anggota.rumah.koordinat_long], tooltip='Click for more',
                         popup='<b>Nama : </b>'+marker.anggota.nama_art+'<br>'+'<b>Kecamatan : </b>'+marker.anggota.rumah.kecamatan.nama_kecamatan+
                         '<br><b>Desa : </b>'+marker.anggota.rumah.desa+'<br><b>Menerima sebanyak 3 kali</b><br><b>Bansos : </b>'+
                         marker.bansos.nama_bansos+'<hr style="border: solid green 4px;opacity: 100;margin-top:10px; margin-bottom:10px;width: 150px;"><a href="#">Detail |</a><a href="http://maps.google.com/?q='+marker.anggota.rumah.koordinat_lat+'"target="_blank"> Route</a>',
                         icon=folium.Icon(color=marker.bansos.color, icon='')).add_to(m)
-    #get HTML representation of map object
+        #get HTML representation of map object
     m = m._repr_html_()
     if request.user.groups.all()[0].name == "TKSK":
         base = 'base_tksk.html'
