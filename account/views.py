@@ -158,3 +158,15 @@ def profile(request, id):
     'form': form
   }
   return render(request, 'account/profile.html', context)
+
+def update_profile(request, id):
+  if request.method == 'POST':
+    newnama = request.POST.get('nama')
+    newusername = request.POST.get('username')
+    user = User.objects.get(id=id)
+    user.name = newnama
+    user.username = newusername
+    user.save()
+    messages.success(request, 'Profil updated!')
+    return HttpResponseRedirect(reverse('account:profile',args=(id,)))
+
