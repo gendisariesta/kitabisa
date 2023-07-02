@@ -56,13 +56,15 @@ def daterange(start, end, step=1):
 
 @login_required(login_url='account:login')
 @allowed_users(allowed_roles=['Superadmin', 'Admin'])
-def ranking(request, tahun):
+def ranking(request, slug, tahun):
     # tahun_filter=TahunFilter(request.POST, queryset=Ranking.objects.all().order_by('status'))
     # ranking=tahun_filter.qs
-    ranking=Ranking.objects.filter(tahun=tahun).order_by('status')
-    belum_diverifikasi = Ranking.objects.filter(tahun=tahun).filter(status='Belum Diverifikasi').count()
-    penerima = Ranking.objects.filter(tahun=tahun).filter(status='Penerima').count()
+    ranking=Ranking.objects.filter(bansos__slug=slug).filter(tahun=tahun).order_by('status')
+    belum_diverifikasi = Ranking.objects.filter(bansos__slug=slug).filter(tahun=tahun).filter(status='Belum Diverifikasi').count()
+    disetujui = Ranking.objects.filter(bansos__slug=slug).filter(tahun=tahun).filter(status='Disetujui').count()
+    penerima = Ranking.objects.filter(bansos__slug=slug).filter(tahun=tahun).filter(status='Penerima').count()
     bansos = Bansos.objects.all()
+    kuota = Bansos.objects.values_list('kuota', flat=True).get(slug=slug)
     t = []
             
     for year in daterange(2019, datetime.now().year):
@@ -73,6 +75,9 @@ def ranking(request, tahun):
         'belum_diverifikasi':belum_diverifikasi,
         'penerima':penerima,
         'bansos':bansos,
+        'slug':slug,
+        'kuota': int(kuota),
+        'disetujui':disetujui,
         't':t
         # 'form':tahun_filter.form,
     }
@@ -83,26 +88,54 @@ def disetujui(request, id):
         ranking = Ranking.objects.get(id=id)
         ranking.status = 'Disetujui'
         ranking.save()
-        return redirect ('penerima:ranking', ranking.tahun)
+        return redirect ('penerima:ranking',slug=ranking.bansos.slug, tahun=ranking.tahun)
 
 def ditolak(request, id):
     if request.method == 'POST':
         ranking = Ranking.objects.get(id=id)
         ranking.status = 'Ditolak'
         ranking.save()
-        return redirect ('penerima:ranking', ranking.tahun)
+        return redirect ('penerima:ranking',slug=ranking.bansos.slug, tahun=ranking.tahun)
     
 def proses(request):
-    calon_penerima = Ranking.objects.filter(status='Disetujui')[:5]
     if request.method == 'POST':
+        jenis_bansos = Bansos.objects.get(slug=request.POST.get('jenis_bansos'))
+        calon_penerima = Ranking.objects.filter(status='Disetujui')[:int(jenis_bansos.kuota)]
         for r in calon_penerima:
             ranking = Ranking.objects.get(id=r.id)
             ranking.status = 'Penerima'
             ranking.save()
             penerima = Penerima(
                 anggota = Anggota.objects.get(id=r.anggota.id),
-                bansos = Bansos.objects.get(nama_bansos='Sembako Lansia'),
-                tahun = datetime.now().year
+                bansos = Bansos.objects.get(nama_bansos=r.bansos),
+                tahun = r.tahun
             )
             penerima.save()
-        return redirect ('penerima:index', slug='sembako-lansia')
+        return redirect ('penerima:index', slug=r.bansos.slug)
+    
+def proses_ranking(request):
+    bansos = Bansos.objects.all()
+    sembako_lansia_tahun_ini = Ranking.objects.filter(bansos__nama_bansos='Sembako Lansia').filter(tahun=datetime.now().year).count()
+    sembako_disabilitas_tahun_ini = Ranking.objects.filter(bansos__nama_bansos='Sembako Disabilitas').filter(tahun=datetime.now().year).count()
+    anggota = Anggota.objects.all()
+    context={
+        'title':'Proses Perankingan',
+        'bansos': bansos,
+        'sembako_lansia_tahun_ini':sembako_lansia_tahun_ini,
+        'sembako_disabilitas_tahun_ini':sembako_disabilitas_tahun_ini,
+        'anggota':anggota
+    }
+    return render(request, 'penerima/ranking_proses.html', context)
+
+def ranking_proses(request, slug):
+    anggota = Anggota.objects.all()
+    if request.method == 'POST':
+        for anggota in anggota:
+            ranking = Ranking(
+                anggota = Anggota.objects.get(id=anggota.id),
+                bansos = Bansos.objects.get(slug = slug),
+                tahun = datetime.now().year
+            )
+            ranking.save()
+        return redirect ('penerima:ranking',slug=slug, tahun = datetime.now().year)
+    

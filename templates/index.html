@@ -140,7 +140,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title text-blue">Grafik Penerima Bansos tiap Kecamatan</h4>
-                                <div id="flotPie1" class="flot-chart"></div>
+                                <canvas id="chart" width="500" height="500"></canvas>
                             </div>
                         </div>
                     </div>
@@ -191,5 +191,37 @@
 {% endblock body %}
 
 {% block footer %}
+<script>
+    let ctx = document.getElementById("chart").getContext("2d");
 
+let chart = new Chart(ctx, {
+  type: "bar",
+  data: {
+     labels: [{%for tahun in tahun%}'{{tahun}}',{%endfor%}],
+     datasets: [
+        {
+          label: "PMKS",
+          backgroundColor: "#79AEC8",
+          borderColor: "#417690",
+          data: [{%for pmks in pmks%}'{{pmks}}',{%endfor%}]
+        },
+        {
+            label: "Penerima",
+            backgroundColor: "blue",
+            data: [{%for penerima in penerima%}'{{penerima}}',{%endfor%}]
+        },
+     ]
+  },
+  options: {
+     scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            min: 0
+          }    
+        }]
+      }
+  }
+});
+</script>
 {% endblock footer %}

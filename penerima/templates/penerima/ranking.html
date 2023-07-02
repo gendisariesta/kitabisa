@@ -18,15 +18,15 @@
                                     <button type="button" class="btn mt-2 btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tahun</button>
                                     <div class="dropdown-menu">
                                         {% for t in t %}
-                                        <a class="dropdown-item" href="{% url 'penerima:ranking' tahun=t %}">{{t}}</a>
+                                        <a class="dropdown-item" href="{% url 'penerima:ranking' slug=slug tahun=t %}">{{t}}</a>
                                         {% endfor %}
                                     </div>
                                 </div>
                                 <div class="btn-group" role="group">
-                                {% if belum_diverifikasi == 0 and penerima == 0 %}
+                                {% if disetujui >= kuota and penerima == 0 and ranking %}
                                 <form method="POST" action="{% url 'penerima:proses' %}">
                                     {% csrf_token %}
-                                    <input name="_method" type="hidden" value="DISETUJUI">
+                                    <input name="jenis_bansos" id="jenis_bansos" type="hidden" value="{{slug}}">
                                     <button type="submit" class="btn mt-2 ml-2 btn-info">Proses Data</button>
                                 </form>
                                 {% endif %}

@@ -2,18 +2,33 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from dtks.models import Anggota, Bansos, Kecamatan, Rumah, Aset, Kondisi_Rumah
-from penerima.models import Penerima
+from penerima.models import Penerima, Ranking
 
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
+
 
 # Create your views here.
 @login_required(login_url='account:login')
 def index(request):
     bansos = Bansos.objects.all()
+    tahun = Penerima.objects.values_list('tahun', flat=True).distinct()
+
+    penerima = []
+    for p in tahun:
+        count = Penerima.objects.filter(tahun = p).count()
+        penerima.append(count)
+    pmks = []
+    for p in tahun:
+        count = Ranking.objects.filter(tahun = p).count()
+        pmks.append(count)
+
     context={
         'bansos':bansos,
-        'title': 'Dashboard TKSK'
+        'title': 'Dashboard TKSK',
+        'penerima' : penerima,
+        'tahun':tahun,
+        'pmks':pmks
     }
     return render (request, 'tksk/index.html', context)
 

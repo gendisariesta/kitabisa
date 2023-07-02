@@ -27,5 +27,6 @@ class Ranking(models.Model):
     ('Penerima', 'Penerima'),
   ]
   anggota=models.ForeignKey(Anggota, on_delete=models.CASCADE)
-  status=models.CharField(max_length=20, choices=STATUS_VERIF, default='Balum Diverifikasi')
+  status=models.CharField(max_length=20, choices=STATUS_VERIF, default='Belum Diverifikasi')
   tahun = models.CharField(max_length=10, blank=True, null=True)
+  bansos = models.ForeignKey(Bansos, on_delete=models.CASCADE, null=True)
