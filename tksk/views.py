@@ -11,6 +11,15 @@ from account.decorators import unauthenticated_user, allowed_users
 # Create your views here.
 @login_required(login_url='account:login')
 def index(request):
+    bansos_disabilitas = Bansos.objects.get(nama_bansos='Sembako Disabilitas')
+    bansos_lansia = Bansos.objects.get(nama_bansos='Sembako Lansia')
+
+    count_disabilitas_diterima = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status="Disetujui").count()
+    count_disabilitas_ditolak = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status="Ditolak").count()
+    count_lansia_diterima = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Disetujui").count()
+    count_lansia_ditolak = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Ditolak").count()
+    count_pmks = Anggota.objects.all().count()
+    
     bansos = Bansos.objects.all()
     tahun = Penerima.objects.values_list('tahun', flat=True).distinct()
 
@@ -28,7 +37,12 @@ def index(request):
         'title': 'Dashboard TKSK',
         'penerima' : penerima,
         'tahun':tahun,
-        'pmks':pmks
+        'pmks':pmks,
+        'count_pmks':count_pmks,
+        'count_disabilitas_diterima':count_disabilitas_diterima,
+        'count_disabilitas_ditolak':count_disabilitas_ditolak,
+        'count_lansia_diterima':count_lansia_diterima,
+        'count_lansia_ditolak':count_lansia_ditolak,
     }
     return render (request, 'tksk/index.html', context)
 

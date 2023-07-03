@@ -25,6 +25,9 @@
     <link href="{% static 'admin/css/custom.css' %}" rel="stylesheet">
     <!-- Chartist -->
     <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{% static 'admin/plugins/owl.carousel/dist/css/owl.carousel.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'admin/plugins/owl.carousel/dist/css/owl.theme.default.min.css' %}"/>
+
     <!--Leaflet-->
     <link rel="stylesheet" href="{% static "mapping/leaflet/leaflet.css" %}"/>
     <script src="{% static "mapping/leaflet/leaflet.js" %}"></script>
@@ -132,6 +135,11 @@
                 <li>
                     <a href="{% url 'dtks:index' %}" aria-expanded="false">
                         <i class="icon-note menu-icon" style="color:white;"></i><span class="nav-text">DTKS</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'clustering:hasil' %}" aria-expanded="false">
+                        <i class="ti-vector menu-icon" style="color:white;"></i><span class="nav-text">Hasil Clustering</span>
                     </a>
                 </li>
                 <li class="mega-menu mega-menu-sm">

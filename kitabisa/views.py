@@ -20,14 +20,29 @@ def dashboard(request):
   bansos = Bansos.objects.all()
   tahun = Penerima.objects.values_list('tahun', flat=True).distinct()
   kecamatan = Kecamatan.objects.all()
-  # for kec in kecamatan:
-  #   data_kecamatan = []
-  #   rumah = Rumah.objects.filter(kecamatan=kec)
+  data_kecamatan = []
+  for kec in kecamatan:
+    count_anggota = []
+    rumah = Rumah.objects.filter(kecamatan=kec).values()
+    for r in rumah:
+      i = 0
+      count = Anggota.objects.filter(rumah=r.get("id")).count()
+      i=i+count
+      count_anggota.append(i)  
+    a = sum(count_anggota)
+    print(a)
+    data_kecamatan.append({"kec":kec,"count":a})
     
-  #   for r in rumah:
-  #     count = Anggota.objects.filter(rumah=r).count()
-      
-    
+  
+  bansos_disabilitas = Bansos.objects.get(nama_bansos='Sembako Disabilitas')
+  bansos_lansia = Bansos.objects.get(nama_bansos='Sembako Lansia')
+
+  count_disabilitas_diterima = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status="Disetujui").count()
+  count_disabilitas_ditolak = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status="Ditolak").count()
+  count_lansia_diterima = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Disetujui").count()
+  count_lansia_ditolak = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Ditolak").count()
+  count_pmks = Anggota.objects.all().count()
+  
   penerima = []
   for p in tahun:
       count = Penerima.objects.filter(tahun = p).count()
@@ -43,5 +58,12 @@ def dashboard(request):
     'tahun':tahun,
     'pmks':pmks,
     'kecamatan' :kecamatan,
+    'data_kecamatan':data_kecamatan,
+    'count_pmks':count_pmks,
+    'count_disabilitas_diterima':count_disabilitas_diterima,
+    'count_disabilitas_ditolak':count_disabilitas_ditolak,
+    'count_lansia_diterima':count_lansia_diterima,
+    'count_lansia_ditolak':count_lansia_ditolak,
+
   }
   return render(request, 'index.html', context)
