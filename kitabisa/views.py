@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from dtks.models import Bansos
 from penerima.models import Penerima, Ranking
+from dtks.models import Kecamatan,Rumah, Anggota
 
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
@@ -18,7 +19,15 @@ def index(request):
 def dashboard(request):
   bansos = Bansos.objects.all()
   tahun = Penerima.objects.values_list('tahun', flat=True).distinct()
-
+  kecamatan = Kecamatan.objects.all()
+  # for kec in kecamatan:
+  #   data_kecamatan = []
+  #   rumah = Rumah.objects.filter(kecamatan=kec)
+    
+  #   for r in rumah:
+  #     count = Anggota.objects.filter(rumah=r).count()
+      
+    
   penerima = []
   for p in tahun:
       count = Penerima.objects.filter(tahun = p).count()
@@ -32,6 +41,7 @@ def dashboard(request):
     'bansos':bansos,
     'penerima' : penerima,
     'tahun':tahun,
-    'pmks':pmks
+    'pmks':pmks,
+    'kecamatan' :kecamatan,
   }
   return render(request, 'index.html', context)

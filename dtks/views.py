@@ -387,7 +387,7 @@ def input_art(request, id):
   
   bansos = Bansos.objects.all()
   context={
-    'base':base,
+    'base': base,
     'data_rumah'  : data_rumah,
     'input_art'    : 'active',
     'bansos':bansos,
@@ -398,6 +398,10 @@ def input_art(request, id):
 @login_required(login_url='account:login')
 @allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def input_excel_art(request):
+  if request.user.groups.all()[0].name == "TKSK":
+    base = 'base_tksk.html'
+  else:
+    base = 'base.html'
   data_rumah = Rumah.objects.all()
   data_anggota = Anggota.objects.all()
   bansos = Bansos.objects.all()
@@ -406,6 +410,7 @@ def input_excel_art(request):
     'data_rumah': data_rumah,
     'bansos':bansos,
     'title':'Login',
+    'base':base
   }
   if request.method == 'POST' :
     dataset = Dataset()
