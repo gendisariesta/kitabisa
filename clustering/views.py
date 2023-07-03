@@ -19,7 +19,7 @@ from io import BytesIO
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
 
-db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
+db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
 atribut_kondisi_rumah = ['luas_bangunan','luas_lahan']
 atribut_aset = ['gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
                'motor','mobil','perahu','motor_tempel','perahu_motor','kapal','lahan','sapi','kerbau','kuda','babi','kambing','unggas']
@@ -55,6 +55,7 @@ def index(request):
         desc.append({'nama' : i, 'max' : max_data, 'min' : min_data, 'mean' : std_data, 'std' : mean_data, 'count' : count_data})
     bansos = Bansos.objects.all()
     context = {
+        'base' : 'base.html',
         'row_count' : row_count,
         'atribut_count' : atribut_count,
         'desc'     : desc,
@@ -199,9 +200,14 @@ def get_graph():
     buffer.close()
     return graph
 
+@login_required(login_url='account:login')
 def c(request, name):
+    if request.user.groups.all()[0].name == "TKSK":
+        base = 'base_tksk.html'
+    else:
+        base = 'base.html'
     nama = name
-    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
+    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
     data = pd.read_sql('SELECT * FROM clustering_'+nama, con=db_connection)
     value = data.columns[2:]
     jum = data['cluster'].nunique()
@@ -228,6 +234,7 @@ def c(request, name):
 
     bansos = Bansos.objects.all()
     context = {
+        "base"  : base,
         "atribut"   :   atribut, 
         "value"     : value,
         "output"    : output,
@@ -308,16 +315,27 @@ def silhouette(df):
         score.append(({"index" : i, "silhouette" : silhouette_avg}))
     return score
 
+@login_required(login_url='account:login')
 def hasil(request):
+    if request.user.groups.all()[0].name == "TKSK":
+        base = 'base_tksk.html'
+        no_edit = 'd-none'
+    else:
+        base = 'base.html'
+        no_edit = 'd-flex'
     clustering = Jenis.objects.all()
     
     bansos = Bansos.objects.all()
     context = {
+        "base" : base,
         "cluster"   : clustering,
         'bansos':bansos,
         'title':'Clustering',
+        'no_edit' :no_edit,
     }
     return render(request, 'clustering/hasil.html', context) 
+
+
 
 def delete(request, name):
   Jenis.objects.get(nama_cluster=name).delete()

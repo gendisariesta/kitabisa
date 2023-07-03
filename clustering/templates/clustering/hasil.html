@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{% extends base %} 
 {% load static %} 
 {% block head %}
 {% endblock head %} 
@@ -50,11 +50,11 @@
                             <div class="btn-group" role="group">
                               <button type="button" class="btn mb-1 btn-info  dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
                               <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                <a class="dropdown-item" href="{% url 'clustering:c' cl.nama_cluster %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
+                                <a class="dropdown-item " href="{% url 'clustering:c' cl.nama_cluster %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
                                 {% comment %} <a class="dropdown-item" href="{% url 'clustering:c' cl.nama_cluster %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a>  {% endcomment %}
-                                <form method="POST" action="{% url 'clustering:delete' cl.nama_cluster %}">
+                                <form class="{{no_edit}}" method="POST" action="{% url 'clustering:delete' cl.nama_cluster %}">
                                   {% csrf_token %}
-                                  <input name="_method" type="hidden" value="DELETE">
+                                  <input  name="_method" type="hidden" value="DELETE">
                                   <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
                                 </form>
                               </div>
