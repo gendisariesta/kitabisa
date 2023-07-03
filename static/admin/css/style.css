@@ -406,6 +406,8 @@ h6, .h6 {
   font-weight: 300;
   line-height: 1.2; }
 
+
+
 hr {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -7157,6 +7159,9 @@ a.text-dark:hover, a.text-dark:focus {
 .text-blue{
   color: #063970;
 }
+.display-7 {
+  font-size: 30px!important; }
+  
 .yellow-logo{
  opacity: 1 !important; 
  background-color: #FBB917!important;
@@ -7171,6 +7176,13 @@ a.text-dark:hover, a.text-dark:focus {
   border-radius: 10px!important;
   color: #063970;
  }
+ .blue-logo{
+  opacity: 1 !important; 
+  background-image: linear-gradient(310deg,#252e4b,#061235)!important;
+  padding: 8px!important;
+  border-radius: 10px!important;
+  color: white;
+ }
 .inputdata-label{
   font-weight: bold;
   color: #000;
@@ -7180,7 +7192,9 @@ a.text-dark:hover, a.text-dark:focus {
   font-weight: bold;
   color: #252e4b;
 }
-
+.owl-stage-outer{
+  height:95px !important;
+}
 .gradient-1 {
   color: #fff !important; }
   .gradient-1-shadow {
@@ -7447,6 +7461,8 @@ sub {
 
 .display-6 {
   font-size: 3.6rem; }
+
+
 
 .box {
   border-radius: .4rem;

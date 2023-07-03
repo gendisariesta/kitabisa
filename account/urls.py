@@ -12,6 +12,7 @@ urlpatterns = [
     path('delete/<int:id>', views.delete, name='delete'),
     path('update/<int:id>', views.update, name='update'),
     path('profile/<int:id>', views.profile, name='profile'),
-    path('change_password/', PasswordChangeView.as_view(template_name='account/change_password.html',  success_url=reverse_lazy('account:password_change_done'), form_class=ChangePasswordForm), name='change_password'),
+    path('update_profile/<int:id>', views.update_profile, name='update_profile'),
+    path('change_password/', PasswordChangeView.as_view(template_name='account/change_password.html', success_url=reverse_lazy('account:password_change_done'), form_class=ChangePasswordForm), name='change_password'),
     path('change_password/done/', PasswordChangeDoneView.as_view(template_name='account/change_password_done.html'), name='password_change_done')
 ]
