@@ -13,6 +13,17 @@
   border:2px #4d7cff solid;
   background-color: #4d7cff30;
 }
+.input-excel1{
+  display:block;
+  width: 100%;
+  height:100%;
+  border-radius:10px;
+  text-align:center;
+  padding: 10% 0;
+  transition: 0s!important;
+  border:2px #4d7cff solid;
+  background-color: #4d7cff30;
+}
 .active-file{
   border:2px #4d7cff solid;
   background-color: #4d7cff30;
@@ -45,13 +56,13 @@
   border-radius: 5px;
   border: 2px dashed #6990F2;
 }
-.input-excel :where(i, p){
+.input-excel1, .input-excel :where(i, p){
   color: #6990F2;
 }
-.input-excel i{
+.input-excel1 i, .input-excel i{
   font-size: 50px;
 }
-.input-excel p{
+.input-excel1 p, .input-excel p{
   margin-top: 15px;
   font-size: 16px;
 }

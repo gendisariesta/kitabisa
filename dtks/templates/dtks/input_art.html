@@ -242,7 +242,7 @@
                         name="tgl_kehamilan"
                         id="tgl_kehamilan"
                         value=""
-                        required
+                        
                       />
                     </div>
                   </div>
@@ -941,7 +941,7 @@
                   </div>
                 </div>
                 <button type="submit" class="btn btn-primary float-right">
-                  Tambah Data
+                  {{button_submit}}
                 </button>
               </form>
             </div>
@@ -965,8 +965,8 @@
       $('#nik').val("{{data_anggota.nik}}");
       $('#no_kk').val("{{data_anggota.no_kk}}");
       $('#ibu_kandung').val("{{data_anggota.ibu_kandung}}");
-      $('#hubungan_krt').val("{{data_anggota.hubungan_krt}}");
-      $('#hubungan_kk').val("{{data_anggota.hubungan_kk}}");
+      $('#hubungan_krt').val($.trim("{{data_anggota.hubungan_krt}}"));
+      $('#hubungan_kk').val($.trim("{{data_anggota.hubungan_kk}}"));
       $('#tempat_lahir').val("{{data_anggota.tempat_lahir}}");
       $('#tanggal_lahir').val("{{tanggal_lahir}}");
       $('#jenis_kelamin').val("{{data_anggota.jenis_kelamin}}");
@@ -975,17 +975,37 @@
       $('#tercantum_kk').val("{{data_anggota.tercantum_kk}}");
       $('#kepemilikan_kartu').val(kepemilikan_kartu.replace(/&quot;/g, '"'));
       $('#status_kehamilan').val("{{data_anggota.status_kehamilan}}");
-      $('#tgl_kehamilan').val("{{tgl_kehamilan}}");
+      $('#tgl_kehamilan').val("{{data_anggota.tgl_kehamilan}}");
       $('#jenis_disabilitas').val("{{data_anggota.jenis_disabilitas}}");
       $('#penyakit').val("{{data_anggota.penyakit}}");
       $('#sekolah').val("{{data_anggota.sekolah}}");
-      $('#jenjang_pendidikan').val("{{data_anggota.jenjang_pendidikan}}");
-      $('#kelas_tertinggi').val("{{data_anggota.kelas_tertinggi}}");
-      $('#ijazah_tertinggi').val("{{data_anggota.ijazah_tertinggi}}");
+      {% if data_anggota.jenjang_pendidikan == None %}
+        $('#jenjang_pendidikan').val("Tidak sekolah")
+      {% else %}
+        $('#jenjang_pendidikan').val("{{data_anggota.jenjang_pendidikan}}");
+      {% endif %}
+      {% if data_anggota.kelas_tertinggi == None %}
+        $('#kelas_tertinggi').val("Tidak sekolah");
+      {% else %}
+        $('#kelas_tertinggi').val("{{data_anggota.kelas_tertinggi}}");
+      {% endif %}
+      {% if data_anggota.ijazah_tertinggi == None %}
+        $('#ijazah_tertinggi').val("Tidak punya ijazah");
+      {% else %}
+        $('#ijazah_tertinggi').val("{{data_anggota.ijazah_tertinggi}}");
+      {% endif %}
       $('#status_bekerja').val("{{data_anggota.status_bekerja}}");
-      $('#lapangan_usaha').val("{{data_anggota.lapangan_usaha}}");
+      {% if data_anggota.lapangan_usaha == None %}
+        $('#lapangan_usaha').val("Tidak bekerja");
+      {% else %}
+        $('#lapangan_usaha').val("{{data_anggota.lapangan_usaha}}");
+      {% endif %}
       $('#status_kedudukan_kerja').val("{{data_anggota.status_kedudukan_kerja}}");
-      $('#jenis_ketrampilan').val("{{data_anggota.jenis_ketrampilan}}");
+      {% if data_anggota.jenis_ketrampilan == '0' %}
+        $('#jenis_ketrampilan').val("Tidak Ada");
+      {% else %}
+        $('#jenis_ketrampilan').val("{{data_anggota.jenis_ketrampilan}}");
+      {% endif %}
       $('#bansos_provinsi').val(bansos_provinsi.replace(/&quot;/g, '"'));
       $('#bansos_kabupaten').val(bansos_kabupaten.replace(/&quot;/g, '"'));
       $('#bansos_desa').val(bansos_desa.replace(/&quot;/g, '"'));

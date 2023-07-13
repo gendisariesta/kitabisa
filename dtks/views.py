@@ -52,25 +52,86 @@ def index(request):
         alamat=data[9],
         koordinat_lat = coordinates[0],
         koordinat_long = coordinates[1],
+        jum_anggota = 0
       )
       data_rumah.save()
+      if (data[47]==None):
+        data_gas = 0
+      else:
+        data_gas = data[47]
+      if (data[48]==None):
+        data_kulkas = 0
+      else:
+        data_kulkas = data[48]
+      if (data[49]==None):
+        data_ac = 0
+      else:
+        data_ac = data[49]
+      if (data[50]==None):
+        data_pemanas_air = 0
+      else:
+        data_pemanas_air = data[50]
+      if (data[51]==None):
+        data_telepon_rumah = 0
+      else:
+        data_telepon_rumah = data[51]
+      if (data[52]==None):
+        data_tv = 0
+      else:
+        data_tv = data[52]
+      if (data[53]==None):
+        data_perhiasan = 0
+      else:
+        data_perhiasan = data[53]
+      if (data[54]==None):
+        data_komputer = 0
+      else:
+        data_komputer = data[54]
+      if (data[55]==None):
+        data_sepeda = 0
+      else:
+        data_sepeda = data[55]
+      if (data[56]==None):
+        data_motor = 0
+      else:
+        data_motor = data[56]
+      if (data[57]==None):
+        data_mobil = 0
+      else:
+        data_mobil = data[57]
+      if (data[58]==None):
+        data_perahu = 0
+      else:
+        data_perahu = data[58]
+      if (data[59]==None):
+        data_motor_tempel = 0
+      else:
+        data_motor_tempel = data[59]
+      if (data[60]==None):
+        data_perhau_motor = 0
+      else:
+        data_perhau_motor = data[60]
+      if (data[61]==None):
+        data_kapal = 0
+      else:
+        data_kapal = data[61]
       data_aset = Aset(
         rumah=data_rumah,
-        gas=data[47],
-        kulkas=data[48],
-        ac=data[49],
-        pemanas_air=data[50],
-        telepon_rumah=data[51],
-        tv=data[52],
-        perhiasan=data[53],
-        komputer = data[54],
-        sepeda = data[55],
-        motor = data[56],
-        mobil = data[57],
-        perahu = data[58],
-        motor_tempel = data[59],
-        perahu_motor = data[60],
-        kapal = data[61],
+        gas=data_gas,
+        kulkas=data_kulkas,
+        ac=data_ac,
+        pemanas_air=data_pemanas_air,
+        telepon_rumah=data_telepon_rumah,
+        tv=data_tv,
+        perhiasan=data_perhiasan,
+        komputer = data_komputer,
+        sepeda = data_sepeda,
+        motor = data_motor,
+        mobil = data_mobil,
+        perahu = data_perahu,
+        motor_tempel = data_motor_tempel,
+        perahu_motor = data_perhau_motor,
+        kapal = data_kapal,
         lahan = luas_lahan,
         rumah_lain = data[64].split('#')[1],
         sapi = data[65],
@@ -147,7 +208,7 @@ def input_form(request):
     if koordinat_lat=="" and koordinat_long=="":
       koordinat_lat=None
       koordinat_long=None
-    data_rumah = Rumah(IDJTG=idjtg,nama_krt=nama_krt,kabupaten=kabupaten,kecamatan=kecamatan,desa=desa,dusun=dusun,rt=rt,rw=rw,alamat=alamat,koordinat_lat = koordinat_lat+','+koordinat_long,koordinat_long = koordinat_long)
+    data_rumah = Rumah(IDJTG=idjtg,nama_krt=nama_krt,kabupaten=kabupaten,kecamatan=kecamatan,desa=desa,dusun=dusun,rt=rt,rw=rw,alamat=alamat,koordinat_lat = koordinat_lat+','+koordinat_long,koordinat_long = koordinat_long,jum_anggota = 0)
     data_rumah.save()
     
     gas = request.POST['gas']
@@ -383,6 +444,9 @@ def input_art(request, id):
       bansos_lainnya = bansos_lainnya
       )
     data_anggota.save()
+    count = data_rumah.jum_anggota
+    data_rumah.jum_anggota = count+1
+    data_rumah.save()
     return HttpResponseRedirect(reverse('dtks:detail',args=(id,)))
   
   bansos = Bansos.objects.all()
@@ -392,6 +456,7 @@ def input_art(request, id):
     'input_art'    : 'active',
     'bansos':bansos,
     'title':'Input ART',
+    'button_submit': 'Tambah Data'
   }
   return render(request, 'dtks/input_art.html', context)
 
@@ -452,6 +517,10 @@ def input_excel_art(request):
         bansos_lainnya = data[50],
       )
       data_anggota.save()
+      dt_rumah = Rumah.objects.get(IDJTG=data[1])
+      count = dt_rumah.jum_anggota
+      dt_rumah.jum_anggota = count+1
+      dt_rumah.save()
       
   return render(request, 'dtks/index.html', context)
 
@@ -559,7 +628,6 @@ def edit_art(request, id):
   data_anggota = Anggota.objects.get(id=id)
   data_rumah = data_anggota.rumah
   tanggal_lahir = data_anggota.tanggal_lahir.strftime("%Y-%m-%d")
-  tgl_kehamilan = data_anggota.tgl_kehamilan.strftime("%Y-%m-%d")
   bansos = Bansos.objects.all()
   context={
     'title': 'Edit ART',
@@ -568,7 +636,7 @@ def edit_art(request, id):
     'data_anggota' : data_anggota,
     'data_rumah' : data_rumah,
     'tanggal_lahir' : tanggal_lahir,
-    'tgl_kehamilan' : tgl_kehamilan,
+    'button_submit':"Edit Data"
   }
   if request.method == 'POST':
     data_anggota.IDJTG_ART = request.POST['idjtg_art']
@@ -612,4 +680,8 @@ def delete_krt(request, id):
 
 def delete_art(request, id, id_rumah):
   Anggota.objects.get(id=id).delete()
+  data_rumah = Rumah.objects.get(id=id_rumah)
+  count = data_rumah.jum_anggota
+  data_rumah.jum_anggota = count-1
+  data_rumah.save()
   return HttpResponseRedirect('/dtks/detail/'+id_rumah)
