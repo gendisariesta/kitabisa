@@ -19,7 +19,7 @@ from io import BytesIO
 
 # Create your views here.
 def index(request):
-    return render(request, 'ranking/index.html', context) 
+    return render(request, 'ranking/index.html') 
 
 def kriteria(request):
     return render(request, 'ranking/kriteria.html')
