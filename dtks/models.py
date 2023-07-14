@@ -14,6 +14,7 @@ class Rumah(models.Model):
   alamat = models.CharField(max_length=150)
   koordinat_lat = models.CharField(max_length=100, null=True, blank=True)
   koordinat_long = models.CharField(max_length=100, null=True, blank=True)
+  jum_anggota = models.IntegerField(default=0)
   
   def save(self, *args, **kwargs):
     if self.koordinat_lat is None and self.koordinat_long is None:  
@@ -117,7 +118,7 @@ class Anggota(models.Model):
   tercantum_kk = models.CharField(max_length=100)
   kepemilikan_kartu = models.CharField(max_length=100)
   status_kehamilan = models.CharField(max_length=100)
-  tgl_kehamilan = models.DateField(null=True)
+  tgl_kehamilan = models.CharField(max_length=100, null=True)
   jenis_disabilitas = models.CharField(max_length=100)
   penyakit = models.CharField(max_length=100)
   sekolah = models.CharField(max_length=100)

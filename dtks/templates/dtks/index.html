@@ -48,13 +48,6 @@
                                   ></span>
                                     </button>
                             {% endif %}
-                                {% comment %} <div class="dropdown custom-dropdown">
-                                  <button type="button" class="btn btn-primary" data-toggle="dropdown"><i class="ti-search mr-2"></i>Semua Kecamatan<span class="btn-icon-right"
-                                    ><i class="fa fa-angle-down m-l-5"></i>
-                                  </button>
-                                  <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Bobotsari</a> <a class="dropdown-item" href="#">9 AM</a> <a class="dropdown-item" href="#">12 AM</a>
-                                  </div>
-                              </div> {% endcomment %} 
                     <table class="table" id="tabel-dtks">
                       <thead>
                         <tr>
@@ -106,14 +99,16 @@
                               </div>
                               <div class="modal-body">
                                 <div class="input-excel krt">
-                                  <i class="fas fa-cloud-upload-alt"></i>
-                                  <p>Browse File to Upload</p>
+                                  <i class="fas fa-cloud-upload-alt konten-upload"></i>
+                                  <p class="konten-upload">Browse File to Upload</p>
+                                  <i id="icon-info"></i>
+                                  <p id="file_info"></p>
                                 </div>
-                                <form method="POST" enctype="multipart/form-data">
+                                <form method="POST" enctype="multipart/form-data" id="upload_form">
                                   {% csrf_token %}
-                                  <input class="file-input" type="file" id="file-excel" name="file-excel-rt" style="height:200px" hidden>
+                                  <input onchange="uploadFile()" class="file-input" type="file" id="file-excel" name="file-excel-rt" style="height:200px" hidden>
                                     <div class="float-right" style="margin-top:10px">
-                                      <button class="btn btn-outline-info mr-2">Batal</button>
+                                      <button type="button" class="btn btn-outline-info mr-2" data-dismiss="modal" aria-label="Close">Batal</button>
                                       <button type="submit" class="btn btn-info" >Kirim</button>   
                                     </div>
                                 </form>
@@ -132,14 +127,16 @@
                               </div>
                               <div class="modal-body">
                                 <div class="input-excel art">
-                                  <i class="fas fa-cloud-upload-alt"></i>
-                                  <p>Browse File to Upload</p>
+                                  <i class="fas fa-cloud-upload-alt konten-upload1"></i>
+                                  <p class="konten-upload1">Browse File to Upload</p>
+                                  <i id="icon-info1"></i>
+                                  <p id="file_info1"></p>
                                 </div>
                                 <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
                                   {% csrf_token %}
-                                  <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
+                                  <input onchange="uploadFile1()" class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
                                     <div class="float-right" style="margin-top:10px">
-                                      <button class="btn btn-outline-info mr-2">Batal</button>
+                                      <button type="button" class="btn btn-outline-info mr-2" data-dismiss="modal" aria-label="Close">Batal</button>
                                       <button type="submit" class="btn btn-info" >Kirim</button>   
                                     </div>
                                 </form>
@@ -172,8 +169,33 @@
     });
     $('.art').click( function() {
       $('#file-excel-art').trigger('click');
-    });
+    });    
 } );
+
+function uploadFile() {
+  $('.konten-upload').hide();
+  $('#file-excel').click(false);
+  $('.krt').removeClass('input-excel').addClass('input-excel1');
+  $('#icon-info').addClass('fas fa-file-alt');
+
+  var files = $('#file-excel')[0].files;
+  for(var i = 0; i<files.length; i++){
+   console.log(files[i].name+'----'+files[i].size);
+   document.getElementById('file_info').innerHTML += "File name : " + files[i].name;
+  }  
+}
+function uploadFile1() {
+  $('.konten-upload1').hide();
+  $('#file-excel-art').click(false);
+  $('.art').removeClass('input-excel').addClass('input-excel1');
+  $('#icon-info1').addClass('fas fa-file-alt');
+
+  var files = $('#file-excel-art')[0].files;
+  for(var i = 0; i<files.length; i++){
+   console.log(files[i].name+'----'+files[i].size);
+   document.getElementById('file_info1').innerHTML += "File name : " + files[i].name;
+  }  
+}
 
 </script>
 {% endblock footer %}

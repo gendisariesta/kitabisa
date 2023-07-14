@@ -95,7 +95,12 @@
               </div>
               <div class="col-6 row">
                 <p class="col-6">Tanggal kehamilan & Usia kehamilan</p>
-                <p class="col-6 inputdata-label">{{data_anggota.tgl_kehamilan}}, {{data_anggota.usia_kehamilan}}</p>
+                {% if data_anggota.tgl_kehamilan == "" %}
+                <p class="col-6 inputdata-label">-</p>
+                {% else %}                
+                <p class="col-6 inputdata-label">{{data_anggota.tgl_kehamilan}} {{data_anggota.usia_kehamilan}}</p>
+                {% endif %}
+
               </div>
               <div class="col-6 row">
                 <p class="col-6">Status bekerja</p>
@@ -223,6 +228,7 @@
 {% block footer %}
 <script>
   $(document).ready(function() {
+    console.log("{{data_anggota.tgl_kehamilan}}")
 $('.array').each(function() {
   console.log($(this).text());
   var text = $(this).text().replace(/"|"/gi, '').replace("[", '').replace("]", '');

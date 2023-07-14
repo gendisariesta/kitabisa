@@ -19,11 +19,16 @@ from io import BytesIO
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
 
+<<<<<<< HEAD
 db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
 atribut_kondisi_rumah = ['luas_bangunan','luas_lahan']
+=======
+db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
+atribut_kondisi_rumah = ['luas_lahan']
+>>>>>>> 54fed11de29194d811f14f480e37ee535c872116
 atribut_aset = ['gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
                'motor','mobil','perahu','motor_tempel','perahu_motor','kapal','lahan','sapi','kerbau','kuda','babi','kambing','unggas']
-atribut = []
+atribut = ['jum_anggota']
 for i in atribut_kondisi_rumah :
     atribut.append(i)
 for i in atribut_aset :
@@ -33,11 +38,19 @@ for i in atribut_aset :
 @allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def index(request):
     row_count = Rumah.objects.all().count()
-    atribut_count = (len(atribut_kondisi_rumah)+len(atribut_aset))
+    atribut_count = (len(atribut))
     df_kondisi_rumah = pd.read_sql('SELECT * FROM dtks_kondisi_rumah', con=db_connection)
     df_aset = pd.read_sql('SELECT * FROM dtks_aset', con=db_connection)
+    df_rumah = pd.read_sql('SELECT jum_anggota FROM dtks_rumah', con=db_connection)
     
     desc = []
+    max_data = df_rumah['jum_anggota'].max()
+    min_data = df_rumah['jum_anggota'].min()
+    mean_data = df_rumah['jum_anggota'].mean()
+    std_data = df_rumah['jum_anggota'].std()
+    count_data = df_rumah['jum_anggota'].count()
+    desc.append({'nama' : 'jum_anggota', 'max' : max_data, 'min' : min_data, 'mean' : std_data, 'std' : mean_data, 'count' : count_data})
+    
     for i in atribut_kondisi_rumah :
         max_data = df_kondisi_rumah[i].max()
         min_data = df_kondisi_rumah[i].min()
@@ -53,22 +66,34 @@ def index(request):
         std_data = df_aset[i].std()
         count_data = df_aset[i].count()
         desc.append({'nama' : i, 'max' : max_data, 'min' : min_data, 'mean' : std_data, 'std' : mean_data, 'count' : count_data})
-    bansos = Bansos.objects.all()
     context = {
         'base' : 'base.html',
         'row_count' : row_count,
         'atribut_count' : atribut_count,
         'desc'     : desc,
         'title':'Clustering',
-        'bansos':bansos,
     }
     return render(request, 'clustering/index.html', context) 
 
 def outlier(df):
-    mean_lahan  = df['luas_lahan'].mean()
-    std_lahan = df['luas_lahan'].std()
-    limit_atas_lahan = mean_lahan+3*std_lahan
-    df = df[(df['luas_lahan'] < limit_atas_lahan)]
+    if ('luas_lahan' and 'lahan') in df.columns:
+       mean_lahan  = df['luas_lahan'].mean()
+       std_lahan = df['luas_lahan'].std()
+       limit_atas_lahan = mean_lahan+3*std_lahan
+       mean_lahan1  = df['lahan'].mean()
+       std_lahan1 = df['lahan'].std()
+       limit_atas_lahan1 = mean_lahan1+3*std_lahan1
+       df = df[(df['luas_lahan'] < limit_atas_lahan) & (df['lahan'] < limit_atas_lahan1)] 
+    elif 'luas_lahan' in df.columns :
+       mean_lahan  = df['luas_lahan'].mean()
+       std_lahan = df['luas_lahan'].std()
+       limit_atas_lahan = mean_lahan+3*std_lahan
+       df = df[(df['luas_lahan'] < limit_atas_lahan)]
+    elif 'lahan' in df.columns :
+       mean_lahan  = df['lahan'].mean()
+       std_lahan = df['lahan'].std()
+       limit_atas_lahan = mean_lahan+3*std_lahan
+       df = df[(df['lahan'] < limit_atas_lahan)]
     return df
     
 def scaling(df):
@@ -92,6 +117,13 @@ def proses(request):
         query = []
         atr_kondisi = []
         atr_aset = []
+        atr_rumah = []
+        
+        if (request.POST.get('jum_anggota') != None):
+            get.append("dtks_rumah.jum_anggota")
+            query.append("jum_anggota INT")
+            value.append('jum_anggota')
+            atr_rumah.append('jum_anggota')
         
         for check_atr in atribut_kondisi_rumah :
             if (request.POST.get(check_atr) != None):
@@ -109,7 +141,7 @@ def proses(request):
     
         sql = "SELECT dtks_rumah.IDJTG, {}".format(", ".join(str(i) for i in get))+" FROM dtks_rumah, dtks_kondisi_rumah, dtks_aset WHERE dtks_rumah.id = dtks_kondisi_rumah.rumah_id and dtks_kondisi_rumah.rumah_id = dtks_aset.rumah_id"
         df = pd.read_sql(sql, con=db_connection)
-        if ('luas_lahan' in df.columns):
+        if (('luas_lahan' or 'lahan') in df.columns):
             df = outlier(df)
             df_scaled = scaling(df[value])
             kmeans = KMeans(n_clusters=int(jum_cluster), random_state=30)
@@ -134,7 +166,7 @@ def proses(request):
             plt.scatter(df3['cluster'],df3['luas_lahan'],color='red')
             plt.scatter(df4['cluster'],df4['luas_lahan'],color='black')
 
-            plt.xlabel('luas_bangunan')
+            plt.xlabel('cluster')
             plt.ylabel('luas_lahan')
             graph = get_graph()
         
@@ -149,6 +181,7 @@ def proses(request):
             "jum_cluster"   : jum_cluster,
             'bansos':bansos,
             'title':'Clustering',
+            'base': 'base.html'
         }
         return render(request, 'clustering/proses.html', context)
     if 'simpan' in request.POST:
@@ -187,6 +220,7 @@ def proses(request):
         'atribut' : atribut,
         'bansos':bansos,
         'title':'Clustering',
+        'base': 'base.html'
     }
     return render(request, 'clustering/proses.html',context)
 
@@ -258,15 +292,17 @@ def analisis_cluster(request):
             if (request.POST.get(check_atr) != None):
                 get.append("dtks_kondisi_rumah."+check_atr)
                 value.append(check_atr)
-                
         for check_atr in atribut_aset :
             if (request.POST.get(check_atr) != None):
                 get.append("dtks_aset."+check_atr)
                 value.append(check_atr)
+        if (request.POST.get('jum_anggota') != None):
+            get.append("dtks_rumah.jum_anggota")
+            value.append('jum_anggota')
     
-        sql = "SELECT {}".format(", ".join(str(i) for i in get))+" FROM dtks_kondisi_rumah, dtks_aset WHERE dtks_kondisi_rumah.rumah_id = dtks_aset.rumah_id"
+        sql = "SELECT {}".format(", ".join(str(i) for i in get))+" FROM dtks_rumah, dtks_kondisi_rumah, dtks_aset WHERE dtks_kondisi_rumah.rumah_id = dtks_aset.rumah_id"
         df = pd.read_sql(sql, con=db_connection)
-        if ('luas_lahan' in df.columns):
+        if (('luas_lahan' or 'lahan') in df.columns):
             df = outlier(df)
             df_ = scaling(df)
             dbi_ = dbi(df_)
@@ -275,14 +311,12 @@ def analisis_cluster(request):
             df_ = scaling(df)
             dbi_ = dbi(df_)
             silhouette_ = silhouette(df_)
-
-        bansos = Bansos.objects.all()
+        print(df)
         context ={
             'dbi'   : dbi_,
             'silhouette'   : silhouette_,
             'value'   : value,
             'atribut' : atribut,
-            'bansos':bansos,
             'title':'Clustering',
         }
         return render(request, 'clustering/jumlah_k.html',context) 
@@ -323,19 +357,14 @@ def hasil(request):
     else:
         base = 'base.html'
         no_edit = 'd-flex'
-    clustering = Jenis.objects.all()
-    
-    bansos = Bansos.objects.all()
+    clustering = Jenis.objects.all()    
     context = {
         "base" : base,
         "cluster"   : clustering,
-        'bansos':bansos,
         'title':'Clustering',
         'no_edit' :no_edit,
     }
     return render(request, 'clustering/hasil.html', context) 
-
-
 
 def delete(request, name):
   Jenis.objects.get(nama_cluster=name).delete()
@@ -348,4 +377,3 @@ def dtks(request, idjtg):
     
     return HttpResponseRedirect(reverse('dtks:detail',args=(data,)))
     
-
