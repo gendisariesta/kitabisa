@@ -27,6 +27,7 @@ urlpatterns = [
     path('', include('account.urls')),
     path('dtks/', include('dtks.urls')),
     path('clustering/', include('clustering.urls')),
+    path('ranking/', include('ranking.urls')),
     path('mapping/', include('mapping.urls')),
     path('export/', include('exportdata.urls')),
     path('penerima/', include('penerima.urls')),

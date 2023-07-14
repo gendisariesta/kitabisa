@@ -1,0 +1,111 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block head %}
+{% endblock head %} {% block body %}
+<div class="content-body" style="min-height: 788px">
+  <div class="row page-titles mx-0">
+    <div class="col p-md-0">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+          <a href="#">List DTKS</a>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <!-- row -->
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Daftar Kriteria</h4>
+                <div class="input-group icons">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
+                    </div>
+                    <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Kriteria">
+                    <div class="drop-down   d-md-none">
+							        <form action="#">
+								        <input type="text" class="form-control" placeholder="Search">
+							        </form>
+                    </div>
+                    <a href="{% url '' %}" type="button" class="btn btn-outline-dark "> 
+                      Tambah Data Manual <span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
+                </div>
+                <div class="table-responsive"> 
+                    <table class="table table-bordered table-striped verticle-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">Kode</th>
+                                <th scope="col">Nama Alternatif</th>
+                                <th scope="col">C1</th>
+                                <th scope="col">C2</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>A1</td>
+                                <td>Dini</td>
+                                <td>Mobil</td>
+                                <td>Listrik PLN</td>
+                                <td><span><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Apr 20,2018</td>
+                                <td><span><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Apr 20,2018</td>
+                                <td><span><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Apr 20,2018</td>
+                                <td><span><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Apr 20,2018</td>
+                                <td><span><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil color-muted m-r-5"></i> </a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Close"><i class="fa fa-close color-danger"></i></a></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+  </div>
+  <!-- #/ container -->
+</div>
+{% endblock body %}
+
+{% block footer %}
+<script>
+  $(".js-example-basic-single").select2({
+    tags: true
+  });
+</script>
+{% endblock footer %}
