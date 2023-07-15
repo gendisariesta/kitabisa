@@ -32,6 +32,7 @@ for i in atribut_aset :
 @login_required(login_url='account:login')
 @allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def index(request):
+    bansos = Bansos.objects.all()
     row_count = Rumah.objects.all().count()
     atribut_count = (len(atribut))
     df_kondisi_rumah = pd.read_sql('SELECT * FROM dtks_kondisi_rumah', con=db_connection)
@@ -67,6 +68,7 @@ def index(request):
         'atribut_count' : atribut_count,
         'desc'     : desc,
         'title':'Clustering',
+        'bansos' : bansos,
     }
     return render(request, 'clustering/index.html', context) 
 
@@ -280,6 +282,7 @@ def c(request, name):
 @login_required(login_url='account:login')
 @allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def analisis_cluster(request):
+    bansos = Bansos.objects.all()
     get = []
     value = []
     if request.method=="POST":
@@ -313,6 +316,7 @@ def analisis_cluster(request):
             'value'   : value,
             'atribut' : atribut,
             'title':'Clustering',
+            'bansos'  : bansos,
         }
         return render(request, 'clustering/jumlah_k.html',context) 
        
@@ -352,12 +356,14 @@ def hasil(request):
     else:
         base = 'base.html'
         no_edit = 'd-flex'
-    clustering = Jenis.objects.all()    
+    clustering = Jenis.objects.all()  
+    bansos = Bansos.objects.all()  
     context = {
         "base" : base,
         "cluster"   : clustering,
         'title':'Clustering',
         'no_edit' :no_edit,
+        'bansos' : bansos
     }
     return render(request, 'clustering/hasil.html', context) 
 

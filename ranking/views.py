@@ -4,34 +4,37 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.conf.urls.static import static
 from dtks.models import Rumah, Aset, Kondisi_Rumah, Anggota, Bansos
-# from . models import Jenis
+from penerima.models import Penerima
+from .models import Kriteria, Crips
 from django.http import HttpResponseRedirect
-from django.urls import reverse
-import mysql.connector as sql
-from django.db import connection
-import pandas as pd
-import numpy as np
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-import matplotlib.pyplot as plt
-import base64, urllib
-from io import BytesIO
+from datetime import datetime
+
 
 # Create your views here.
-def index(request):
-    return render(request, 'ranking/index.html') 
+def index(request,slug,tahun):
+    kriteria1 = [f.name for f in Kondisi_Rumah._meta.get_fields()]
+    kriteria2 = [f.name for f in Anggota._meta.get_fields()]
+    nama_kriteria = kriteria1+kriteria2
+    bansos = Bansos.objects.all()
+    penerima = Penerima.objects.filter(bansos__slug__contains=slug)
+    kriteria = Kriteria.objects.all()
+    get_bansos = Bansos.objects.get(slug=slug)
+    print(slug)
+    if request.method == 'POST':
+        nama = request.POST.get('nama_kriteria')
+        bobot = request.POST.get('bobot')
+        atribut = request.POST.get('atribut')
+        new_kriteria = Kriteria(nama_kriteria=nama,bobot=bobot,atribut=atribut,bansos=get_bansos)
+        new_kriteria.save()  
+    context = {
+        'bansos':bansos,
+        'slug' : slug,
+        'penerima':penerima,
+        'kriteria':kriteria,
+        'nama_kriteria':nama_kriteria,
+    }
+    return render(request, 'ranking/index.html', context) 
 
-def kriteria(request):
-    return render(request, 'ranking/kriteria.html')
-
-def crips(request):
-    return render(request, 'ranking/crips.html')
-
-def alternatif(request):
-    return render(request, 'ranking/alternatif.html')
-
-def bobot(request):
-    return render(request, 'ranking/bobot.html')
-
-def perhitungan(request):
-    return render(request, 'ranking/perhitungan.html')
+def delete_kriteria(request,slug,id):
+    Kriteria.objects.get(id=id).delete()
+    return redirect ('ranking:index',slug=slug, tahun = datetime.now().year)

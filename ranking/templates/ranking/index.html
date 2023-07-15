@@ -58,15 +58,54 @@
               <div id="navpills-1" class="tab-pane active">
                 <div class="row">
                   <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title mb-4">Data Kriteria</h4>
-                            <a href="" type="button" class="btn btn-info ">Tambah Data Manual<span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
+                    <button type="button" class="btn mb-1 btn-info" data-toggle="modal" data-target="#exampleModal" data-backdrop="static">
+                      Tambah Data Kriteria<span class="btn-icon-right"><i class="fa fa-plus"></i></span>
+                        </button>
+                          <!--Modal Tambah Data-->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Tambah Data Kriteria</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="{% url 'ranking:index' slug=slug tahun=current_year %}">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Nama Kriteria<span class="text-danger">*</span></label>
+                                                <select name="nama_kriteria" id="nama_kriteria" class="form-control">
+                                                  {% for k in nama_kriteria %}
+                                                  <option value="{{k}}">{{k}}</option>
+                                                  {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Bobot<span class="text-danger">*</span></label>
+                                                <input type="number" class="form-control" id="bobot" name="bobot" required>
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="recipient-name" class="col-form-label">Atribut<span class="text-danger">*</span></label>
+                                              <select name="atribut" id="atribut" class="form-control">
+                                                <option value="Benefit">Benefit</option>
+                                                <option value="Cost">Cost</option>
+                                              </select>
+                                          </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-primary">Tambah</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <table class="table" id="tabel-dtks">
                           <thead>
                             <tr>
                               <th>#</th>
-                              <th>Kode Kriteria</th>
+                              <th>ID Kriteria</th>
                               <th>Nama Kriteria</th>
                               <th>Bobot</th>
                               <th>Atribut</th>
@@ -74,664 +113,108 @@
                             </tr>
                           </thead>
                           <tbody>
-                            {% for rumah in data_rumah  %}
+                            {% for kriteria in kriteria  %}
                             <tr>
                               <th>{{forloop.counter}}</th>
-                              <td>{{rumah.IDJTG}}</td>
-                              <td>{{rumah.nama_krt}}</td>
-                              <td>{{rumah.kecamatan}}</td>
-                              <td>{{rumah.desa}}</td>
+                              <td>C{{kriteria.id}}</td>
+                              <td>{{kriteria.nama_kriteria}}</td>
+                              <td>{{kriteria.bobot}}</td>
+                              <td>{{kriteria.atribut}}</td>
                               <td class="color-primary d-flex">
-                                <div class="btn-group" role="group">
-                                  <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
-                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                    <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
-                                    <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
-                                    <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
-                                      {% csrf_token %}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
-                                    </form>
-                                  </div>
-                              </td>
+                                <form method="POST" action="{% url 'ranking:delete_kriteria' slug=kriteria.bansos.slug id=kriteria.id %}">
+                                  {% csrf_token %}
+                                  <input name="_method" type="hidden" value="DELETE">
+                                  <button type="submit" class="sweet-confirm btn mb-1 mx-1 btn-rounded btn-danger show_confirm" data-toggle="tooltip" title='Delete'>
+                                    <i class="fa fa-trash font-18 align-middle"></i>
+                                  </button>
+                              </form>
+                                <button type="button" class="btn mb-1 mx-1 btn-rounded btn-info" data-target="#modalUpdate-{{kriteria.id}}" data-toggle="modal" data-backdrop="static"><i class="fa fa-pencil font-18 align-middle"></i></button></td>
+                                <!--Modal Update Data-->
+                                  <div class="modal fade" id="modalUpdate-{{kriteria.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Update Data Kriteria</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="POST" action="{% url 'ranking:index' slug=slug tahun=current_year %}">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-form-label">Nama Kriteria<span class="text-danger">*</span></label>
+                                                        <select name="nama_kriteria" id="nama_kriteria" class="form-control">
+                                                          {% for k in nama_kriteria %}
+                                                          <option value="{{k}}">{{k}}</option>
+                                                          {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-form-label">Bobot<span class="text-danger">*</span></label>
+                                                        <input type="number" class="form-control" id="bobot" name="bobot" value="{{kriteria.bobot}}" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label for="recipient-name" class="col-form-label">Atribut<span class="text-danger">*</span></label>
+                                                      <select name="atribut" id="atribut" class="form-control">
+                                                        <option value="Benefit">Benefit</option>
+                                                        <option value="Cost">Cost</option>
+                                                      </select>
+                                                  </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                      </div>
                             </tr>
                             {% endfor %}
                           </tbody>
                         </table>
-                        <div class="modal fade" id="modal-excel-art" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content" style="width:130%;border-radius:15px;">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="input-excel art">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                      <p>Browse File to Upload</p>
-                                    </div>
-                                    <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
-                                      {% csrf_token %}
-                                      <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
-                                        <div class="float-right" style="margin-top:10px">
-                                          <button class="btn btn-outline-info mr-2">Batal</button>
-                                          <button type="submit" class="btn btn-info" >Kirim</button>   
-                                        </div>
-                                    </form>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
               <div id="navpills-2" class="tab-pane">
                 <div class="row">
                   <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title mb-4">Usia (C1)</h4>
-                            <a href="" type="button" class="btn btn-info ">Tambah Data Manual<span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
-                        <table class="table" id="tabel-dtks">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Nama Sub Kriteria</th>
-                              <th>Nilai</th>
-                              <th>Bobot</th>
-                              <th>Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for rumah in data_rumah  %}
-                            <tr>
-                              <th>{{forloop.counter}}</th>
-                              <td>{{rumah.IDJTG}}</td>
-                              <td>{{rumah.kecamatan}}</td>
-                              <td>{{rumah.desa}}</td>
-                              <td class="color-primary d-flex">
-                                <div class="btn-group" role="group">
-                                  <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
-                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                    <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
-                                    <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
-                                    <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
-                                      {% csrf_token %}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
-                                    </form>
-                                  </div>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <div class="modal fade" id="modal-excel-art" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content" style="width:130%;border-radius:15px;">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="input-excel art">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                      <p>Browse File to Upload</p>
-                                    </div>
-                                    <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
-                                      {% csrf_token %}
-                                      <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
-                                        <div class="float-right" style="margin-top:10px">
-                                          <button class="btn btn-outline-info mr-2">Batal</button>
-                                          <button type="submit" class="btn btn-info" >Kirim</button>   
-                                        </div>
-                                    </form>
-                                  </div>
+                    <table class="table" id="tabel-dtks">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>ID Kriteria</th>
+                          <th>Nama Kriteria</th>
+                          <th>Bobot</th>
+                          <th>Atribut</th>
+                          <th>Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for kriteria in kriteria  %}
+                        <tr>
+                          <th>{{forloop.counter}}</th>
+                          <td>{{kriteria.id}}</td>
+                          <td>{{kriteria.nama_kriteria}}</td>
+                          <td>{{kriteria.bobot}}</td>
+                          <td>{{kriteria.atribut}}</td>
+                          <td class="color-primary d-flex">
+                            <div class="btn-group" role="group">
+                              <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
+                              <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
+                                {% comment %} <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
+                                <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
+                                <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}"> {% endcomment %}
+                                  {% csrf_token %}
+                                  <input name="_method" type="hidden" value="DELETE">
+                                  <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
+                                </form>
                               </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title mb-4">Kepemilikan Aset (C2)</h4>
-                            <a href="" type="button" class="btn btn-info ">Tambah Data Manual<span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
-                        <table class="table" id="tabel-dtks">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Nama Sub Kriteria</th>
-                              <th>Nilai</th>
-                              <th>Bobot</th>
-                              <th>Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for rumah in data_rumah  %}
-                            <tr>
-                              <th>{{forloop.counter}}</th>
-                              <td>{{rumah.IDJTG}}</td>
-                              <td>{{rumah.kecamatan}}</td>
-                              <td>{{rumah.desa}}</td>
-                              <td class="color-primary d-flex">
-                                <div class="btn-group" role="group">
-                                  <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
-                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                    <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
-                                    <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
-                                    <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
-                                      {% csrf_token %}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
-                                    </form>
-                                  </div>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <div class="modal fade" id="modal-excel-art" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content" style="width:130%;border-radius:15px;">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="input-excel art">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                      <p>Browse File to Upload</p>
-                                    </div>
-                                    <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
-                                      {% csrf_token %}
-                                      <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
-                                        <div class="float-right" style="margin-top:10px">
-                                          <button class="btn btn-outline-info mr-2">Batal</button>
-                                          <button type="submit" class="btn btn-info" >Kirim</button>   
-                                        </div>
-                                    </form>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title mb-4">Kepemilikan Aset Tidak Bergerak (C3)</h4>
-                            <a href="" type="button" class="btn btn-info ">Tambah Data Manual<span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
-                        <table class="table" id="tabel-dtks">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Nama Sub Kriteria</th>
-                              <th>Nilai</th>
-                              <th>Bobot</th>
-                              <th>Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for rumah in data_rumah  %}
-                            <tr>
-                              <th>{{forloop.counter}}</th>
-                              <td>{{rumah.IDJTG}}</td>
-                              <td>{{rumah.kecamatan}}</td>
-                              <td>{{rumah.desa}}</td>
-                              <td class="color-primary d-flex">
-                                <div class="btn-group" role="group">
-                                  <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
-                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                    <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
-                                    <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
-                                    <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
-                                      {% csrf_token %}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
-                                    </form>
-                                  </div>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <div class="modal fade" id="modal-excel-art" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content" style="width:130%;border-radius:15px;">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="input-excel art">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                      <p>Browse File to Upload</p>
-                                    </div>
-                                    <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
-                                      {% csrf_token %}
-                                      <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
-                                        <div class="float-right" style="margin-top:10px">
-                                          <button class="btn btn-outline-info mr-2">Batal</button>
-                                          <button type="submit" class="btn btn-info" >Kirim</button>   
-                                        </div>
-                                    </form>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title mb-4">Kepemilikan Hewan Ternak (C4)</h4>
-                            <a href="" type="button" class="btn btn-info ">Tambah Data Manual<span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
-                        <table class="table" id="tabel-dtks">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Nama Sub Kriteria</th>
-                              <th>Nilai</th>
-                              <th>Bobot</th>
-                              <th>Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for rumah in data_rumah  %}
-                            <tr>
-                              <th>{{forloop.counter}}</th>
-                              <td>{{rumah.IDJTG}}</td>
-                              <td>{{rumah.kecamatan}}</td>
-                              <td>{{rumah.desa}}</td>
-                              <td class="color-primary d-flex">
-                                <div class="btn-group" role="group">
-                                  <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
-                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                    <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
-                                    <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
-                                    <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
-                                      {% csrf_token %}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
-                                    </form>
-                                  </div>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <div class="modal fade" id="modal-excel-art" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content" style="width:130%;border-radius:15px;">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="input-excel art">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                      <p>Browse File to Upload</p>
-                                    </div>
-                                    <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
-                                      {% csrf_token %}
-                                      <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
-                                        <div class="float-right" style="margin-top:10px">
-                                          <button class="btn btn-outline-info mr-2">Batal</button>
-                                          <button type="submit" class="btn btn-info" >Kirim</button>   
-                                        </div>
-                                    </form>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title mb-4">Penyakit Kronis/Menahun (C5)</h4>
-                            <a href="" type="button" class="btn btn-info ">Tambah Data Manual<span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
-                        <table class="table" id="tabel-dtks">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Nama Sub Kriteria</th>
-                              <th>Nilai</th>
-                              <th>Bobot</th>
-                              <th>Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for rumah in data_rumah  %}
-                            <tr>
-                              <th>{{forloop.counter}}</th>
-                              <td>{{rumah.IDJTG}}</td>
-                              <td>{{rumah.kecamatan}}</td>
-                              <td>{{rumah.desa}}</td>
-                              <td class="color-primary d-flex">
-                                <div class="btn-group" role="group">
-                                  <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
-                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                    <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
-                                    <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
-                                    <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
-                                      {% csrf_token %}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
-                                    </form>
-                                  </div>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <div class="modal fade" id="modal-excel-art" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content" style="width:130%;border-radius:15px;">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="input-excel art">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                      <p>Browse File to Upload</p>
-                                    </div>
-                                    <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
-                                      {% csrf_token %}
-                                      <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
-                                        <div class="float-right" style="margin-top:10px">
-                                          <button class="btn btn-outline-info mr-2">Batal</button>
-                                          <button type="submit" class="btn btn-info" >Kirim</button>   
-                                        </div>
-                                    </form>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title mb-4">Status Bangunan/Rumah (C6)</h4>
-                            <a href="" type="button" class="btn btn-info ">Tambah Data Manual<span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
-                        <table class="table" id="tabel-dtks">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Nama Sub Kriteria</th>
-                              <th>Nilai</th>
-                              <th>Bobot</th>
-                              <th>Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for rumah in data_rumah  %}
-                            <tr>
-                              <th>{{forloop.counter}}</th>
-                              <td>{{rumah.IDJTG}}</td>
-                              <td>{{rumah.kecamatan}}</td>
-                              <td>{{rumah.desa}}</td>
-                              <td class="color-primary d-flex">
-                                <div class="btn-group" role="group">
-                                  <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
-                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                    <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
-                                    <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
-                                    <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
-                                      {% csrf_token %}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
-                                    </form>
-                                  </div>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <div class="modal fade" id="modal-excel-art" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content" style="width:130%;border-radius:15px;">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="input-excel art">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                      <p>Browse File to Upload</p>
-                                    </div>
-                                    <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
-                                      {% csrf_token %}
-                                      <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
-                                        <div class="float-right" style="margin-top:10px">
-                                          <button class="btn btn-outline-info mr-2">Batal</button>
-                                          <button type="submit" class="btn btn-info" >Kirim</button>   
-                                        </div>
-                                    </form>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title mb-4">Luas Lantai (C7)</h4>
-                            <a href="" type="button" class="btn btn-info ">Tambah Data Manual<span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
-                        <table class="table" id="tabel-dtks">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Nama Sub Kriteria</th>
-                              <th>Nilai</th>
-                              <th>Bobot</th>
-                              <th>Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for rumah in data_rumah  %}
-                            <tr>
-                              <th>{{forloop.counter}}</th>
-                              <td>{{rumah.IDJTG}}</td>
-                              <td>{{rumah.kecamatan}}</td>
-                              <td>{{rumah.desa}}</td>
-                              <td class="color-primary d-flex">
-                                <div class="btn-group" role="group">
-                                  <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
-                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                    <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
-                                    <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
-                                    <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
-                                      {% csrf_token %}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
-                                    </form>
-                                  </div>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <div class="modal fade" id="modal-excel-art" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content" style="width:130%;border-radius:15px;">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="input-excel art">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                      <p>Browse File to Upload</p>
-                                    </div>
-                                    <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
-                                      {% csrf_token %}
-                                      <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
-                                        <div class="float-right" style="margin-top:10px">
-                                          <button class="btn btn-outline-info mr-2">Batal</button>
-                                          <button type="submit" class="btn btn-info" >Kirim</button>   
-                                        </div>
-                                    </form>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title mb-4">Jenis Lantai Terluas (C8)</h4>
-                            <a href="" type="button" class="btn btn-info ">Tambah Data Manual<span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
-                        <table class="table" id="tabel-dtks">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Nama Sub Kriteria</th>
-                              <th>Nilai</th>
-                              <th>Bobot</th>
-                              <th>Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for rumah in data_rumah  %}
-                            <tr>
-                              <th>{{forloop.counter}}</th>
-                              <td>{{rumah.IDJTG}}</td>
-                              <td>{{rumah.kecamatan}}</td>
-                              <td>{{rumah.desa}}</td>
-                              <td class="color-primary d-flex">
-                                <div class="btn-group" role="group">
-                                  <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
-                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                    <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
-                                    <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
-                                    <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
-                                      {% csrf_token %}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
-                                    </form>
-                                  </div>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <div class="modal fade" id="modal-excel-art" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content" style="width:130%;border-radius:15px;">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="input-excel art">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                      <p>Browse File to Upload</p>
-                                    </div>
-                                    <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
-                                      {% csrf_token %}
-                                      <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
-                                        <div class="float-right" style="margin-top:10px">
-                                          <button class="btn btn-outline-info mr-2">Batal</button>
-                                          <button type="submit" class="btn btn-info" >Kirim</button>   
-                                        </div>
-                                    </form>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                          <h4 class="card-title mb-4">Jenis Atap Terluas (C9)</h4>
-                            <a href="" type="button" class="btn btn-info ">Tambah Data Manual<span class="btn-icon-right"><i class="fa fa-plus"></i></span></a>
-                        <table class="table" id="tabel-dtks">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Nama Sub Kriteria</th>
-                              <th>Nilai</th>
-                              <th>Bobot</th>
-                              <th>Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for rumah in data_rumah  %}
-                            <tr>
-                              <th>{{forloop.counter}}</th>
-                              <td>{{rumah.IDJTG}}</td>
-                              <td>{{rumah.kecamatan}}</td>
-                              <td>{{rumah.desa}}</td>
-                              <td class="color-primary d-flex">
-                                <div class="btn-group" role="group">
-                                  <button type="button" class="btn mb-1 btn-primary btn-info dropdown-toggle" style="padding:3px 20px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aksi</button>
-                                  <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
-                                    <a class="dropdown-item" href="{% url 'dtks:detail' rumah.id %}"><i class="fa fa-eye font-18 align-middle mr-2"></i>Detail Data</a>
-                                    <a class="dropdown-item" href="{% url 'dtks:edit_krt' rumah.id %}"><i class="fa fa-pencil font-18 align-middle mr-2"></i>Edit Data</a> 
-                                    <form method="POST" action="{% url 'dtks:delete_krt' rumah.id %}">
-                                      {% csrf_token %}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <a href="#" class="sweet-confirm show_confirm dropdown-item" data-toggle="tooltip" title='Delete'><i class="fa fa-trash font-18 align-middle mr-2"></i>Delete Data</a>
-                                    </form>
-                                  </div>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <div class="modal fade" id="modal-excel-art" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content" style="width:130%;border-radius:15px;">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="input-excel art">
-                                      <i class="fas fa-cloud-upload-alt"></i>
-                                      <p>Browse File to Upload</p>
-                                    </div>
-                                    <form method="POST" enctype="multipart/form-data" action="{% url 'dtks:input_excel_art' %}">
-                                      {% csrf_token %}
-                                      <input class="file-input" type="file" id="file-excel-art" name="file-excel-art" style="height:200px" hidden>
-                                        <div class="float-right" style="margin-top:10px">
-                                          <button class="btn btn-outline-info mr-2">Batal</button>
-                                          <button type="submit" class="btn btn-info" >Kirim</button>   
-                                        </div>
-                                    </form>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
