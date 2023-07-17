@@ -4,6 +4,7 @@ from . import views
 app_name = 'dtks'
 urlpatterns = [
     path('', views.index, name='index'),
+    path('anggota', views.anggota, name='anggota'),
     path('input', views.input_form, name='input_form'),
     path('detail/<int:id>', views.detail, name='detail'),
     path('edit/<int:id>', views.edit_krt, name='edit_krt'),

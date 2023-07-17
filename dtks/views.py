@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Rumah, Aset, Kondisi_Rumah, Anggota, Kecamatan, Bansos
-from penerima.models import Penerima
+from penerima.models import Penerima, Ranking
 from tablib import Dataset
 import pandas as pd 
 
@@ -685,3 +685,24 @@ def delete_art(request, id, id_rumah):
   data_rumah.jum_anggota = count-1
   data_rumah.save()
   return HttpResponseRedirect('/dtks/detail/'+id_rumah)
+
+def anggota(request):
+  if request.user.groups.all()[0].name == "TKSK":
+    base = 'base_tksk.html'
+  else:
+    base = 'base.html'
+  bansos = Bansos.objects.all()
+  anggota = Ranking.objects.all()
+  anggota_tolak = Ranking.objects.filter(status='Ditolak')
+  anggota_setujui = Ranking.objects.filter(status='Disetujui')
+  anggota_pending = Ranking.objects.filter(status='Belum Diverifikasi')
+  context ={
+    'title': 'DTKS Anggota',
+    'bansos': bansos,
+    'anggota': anggota,
+    'anggota_tolak': anggota_tolak,
+    'anggota_setujui': anggota_setujui,
+    'anggota_pending': anggota_pending,
+    'base':base
+  }
+  return render(request, 'dtks/list_art.html', context)
