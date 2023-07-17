@@ -4,7 +4,7 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.conf.urls.static import static
 from dtks.models import Rumah, Aset, Kondisi_Rumah, Anggota, Bansos
-from penerima.models import Penerima
+from penerima.models import Penerima, Ranking
 from .models import Kriteria, Crips
 from django.http import HttpResponseRedirect
 from datetime import datetime
@@ -77,8 +77,21 @@ def index(request,slug,tahun):
                     nilai_akhir.append(nilai)
                 
         data_hitung.update({'nilai_akhir':sum(nilai_akhir)})
-        data_hasil.append(data_hitung)        
-        print(nilai_akhir)
+        data_hasil.append(data_hitung)
+    cek_ranking = Ranking.objects.filter(bansos=get_bansos)
+    print(cek_ranking)
+    if not cek_ranking:        
+        for d in data_hasil:
+            nama = d.get('nama_art')
+            anggota = Anggota.objects.get(nama_art=nama)
+            hasil = d.get('nilai_akhir')
+            data_ranking=Ranking(anggota = anggota,
+                                status="Belum Diverifikasi",
+                                tahun=datetime.now().year,
+                                bansos=get_bansos,
+                                alasan="",
+                                nilai=hasil)
+            data_ranking.save()
 
     context = {
         'bansos':bansos,

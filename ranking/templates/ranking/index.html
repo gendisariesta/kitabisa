@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                         </div>
-                        <table class="table" id="tabel-dtks">
+                        <table class="table" id="tabel-a">
                           <thead>
                             <tr>
                               <th>#</th>
@@ -189,7 +189,7 @@
                 <div class="row">
                   {% for k in kriteria %}
                   <div class="col-12">
-                    <table class="table table-bordered " id="tabel-dtks">
+                    <table class="table table-bordered " id="tabel-1">
                       <form method="POST" action="{% url 'ranking:edit_bobot' slug=slug id=k.id %}">
                               {% csrf_token %}
                       <thead>
@@ -224,7 +224,7 @@
               <div id="navpills-3" class="tab-pane">
                 <div class="row">
                   <div class="col-12">
-                    <table class="table" id="tabel-dtks">
+                    <table class="table" id="tabel-2">
                       <thead>
                         <tr style="background-color:#f3f1fa">
                         <th colspan="100%">Hasil Analisa</th>
@@ -252,7 +252,7 @@
                     </table>
                   </div>
                   <div class="col-12">
-                    <table class="table" id="tabel-dtks">
+                    <table class="table" id="tabel-3">
                       <thead>
                         <tr style="background-color:#f3f1fa">
                         <th colspan="100%">Matrik Normalisasi</th>
@@ -283,7 +283,7 @@
               <div id="navpills-4" class="tab-pane">
                 <div class="row">
                   <div class="col-12">
-                    <table class="table" id="tabel-saw">
+                    <table class="table" id="tabel-dtks">
                       <thead>
                         <tr style="background-color:#f3f1fa">
                         <th colspan="100%">Hasil Perhitungan</th>
@@ -324,9 +324,12 @@
 
 {% block footer %}
 <script>
-  $(document).ready( function () {
-    $('#tabel-saw').DataTable().columns(-1).order('desc').draw(); 
-  });
+{% comment %} $(document).ready( function () {
+    $('#tabel-1').DataTable(); 
+    $('#tabel-2').DataTable(); 
+    $('#tabel-3').DataTable(); 
+    $('#tabel-4').DataTable(); 
+}); {% endcomment %}
 {% for k in kriteria %}
   $('#bobot_{{k.nama_kriteria}}').click(function() {
     $(".bobot_{{k.nama_kriteria}}").removeClass('form-control-plaintext').addClass('form-control').removeAttr('readonly');

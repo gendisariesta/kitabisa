@@ -194,6 +194,11 @@
 {% endblock body %}
 {% block footer %}
 <script>
+  $(document).ready( function () {
+    $('#tabel-1').DataTable(); 
+    $('#tabel-2').DataTable(); 
+    $('#tabel-3').DataTable(); 
+  });
 </script>
 {% endblock footer %}
 
