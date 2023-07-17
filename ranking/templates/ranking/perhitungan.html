@@ -1,0 +1,181 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block head %}
+{% endblock head %} {% block body %}
+<div class="content-body" style="min-height: 788px">
+  <div class="row page-titles mx-0">
+    <div class="col p-md-0">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+          <a href="#">List DTKS</a>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <!-- row -->
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Hasil Analisa</h4>
+                <div class="table-responsive"> 
+                    <table class="table table-bordered table-striped verticle-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Aset</th>
+                                <th scope="col">Perumahan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dini</td>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                            </tr>
+                            <tr>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Apr 20,2018</td>
+                            </tr>
+                            <tr>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Apr 20,2018</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive"> 
+                    <table class="table table-bordered table-striped verticle-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">C1</th>
+                                <th scope="col">C2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>A1</td>
+                                <td>50</td>
+                                <td>75</td>
+                            </tr>
+                            <tr>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Apr 20,2018</td>
+                            </tr>
+                            <tr>
+                                <td>Air Conditioner</td>
+                                <td>Air Conditioner</td>
+                                <td>Apr 20,2018</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+              </div>
+          </div>
+      </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+              <div class="card-body">
+                  <h4 class="card-title">Normalisasi</h4>
+                  <div class="table-responsive"> 
+                      <table class="table table-bordered table-striped verticle-middle">
+                          <thead>
+                              <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">C1</th>
+                                  <th scope="col">C2</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr>
+                                  <td>A1</td>
+                                  <td>0.5</td>
+                                  <td>1</td>
+                              </tr>
+                              <tr>
+                                  <td>Air Conditioner</td>
+                                  <td>Apr 20,2018</td>
+                                  <td>Apr 20,2018</td>
+                              </tr>
+                              <tr>
+                                  <td>Air Conditioner</td>
+                                  <td>Apr 20,2018</td>
+                                  <td>Apr 20,2018</td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+          <div class="card-body">
+              <h4 class="card-title">Perankingan</h4>
+              <div class="table-responsive"> 
+                  <table class="table table-bordered table-striped verticle-middle">
+                      <thead>
+                          <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">C1</th>
+                              <th scope="col">C2</th>
+                              <th scope="col">Total</th>
+                              <th scope="col">Rank</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>Bobot Kriteria</td>
+                              <td>25</td>
+                              <td>20</td>
+                              <td></td>
+                              <td></td>
+                          </tr>
+                          <tr>
+                              <td>A1</td>
+                              <td>12.5</td>
+                              <td>20</td>
+                              <td>6.3333</td>
+                              <td>1</td>
+                          </tr>
+                          <tr>
+                              <td>A2</td>
+                              <td>Air Conditioner</td>
+                              <td>Apr 20,2018</td>
+                              <td>Apr 20,2018</td>
+                              <td>Apr 20,2018</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+  </div>
+  <!-- #/ container -->
+</div>
+{% endblock body %}
+
+{% block footer %}
+<script>
+  $(".js-example-basic-single").select2({
+    tags: true
+  });
+</script>
+{% endblock footer %}

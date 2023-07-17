@@ -150,9 +150,15 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="{% url 'penerima:proses_ranking' %}" aria-expanded="false">
-                        <i class="ti-reload menu-icon" style="color:white;"></i><span class="nav-text">Proses Perankingan</span>
-                    </a>    
+                    {% now "Y" as current_year %}
+                    <a class="has-arrow" href="#" aria-expanded="false">
+                        <i class="icon-badge menu-icon" style="color:white;"></i><span class="nav-text">Perankingan</span>
+                    </a> 
+                    <ul aria-expanded="false" class="collapse">
+                        {% for bansos in bansos %}
+                        <li><a href="{% url 'ranking:index' slug=bansos.slug tahun=current_year %}">{{bansos.nama_bansos}}</a></li>
+                        {% endfor %}
+                    </ul>   
                 </li>
                 <li>
                     {% now "Y" as current_year %}

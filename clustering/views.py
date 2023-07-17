@@ -19,9 +19,8 @@ from io import BytesIO
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
 
-
-db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
-atribut_kondisi_rumah = ['luas_bangunan','luas_lahan']
+db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
+atribut_kondisi_rumah = ['luas_lahan']
 atribut_aset = ['gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
                'motor','mobil','perahu','motor_tempel','perahu_motor','kapal','lahan','sapi','kerbau','kuda','babi','kambing','unggas']
 atribut = ['jum_anggota']
@@ -33,6 +32,7 @@ for i in atribut_aset :
 @login_required(login_url='account:login')
 @allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def index(request):
+    bansos = Bansos.objects.all()
     row_count = Rumah.objects.all().count()
     atribut_count = (len(atribut))
     df_kondisi_rumah = pd.read_sql('SELECT * FROM dtks_kondisi_rumah', con=db_connection)
@@ -68,6 +68,7 @@ def index(request):
         'atribut_count' : atribut_count,
         'desc'     : desc,
         'title':'Clustering',
+        'bansos' : bansos,
     }
     return render(request, 'clustering/index.html', context) 
 
@@ -281,6 +282,7 @@ def c(request, name):
 @login_required(login_url='account:login')
 @allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def analisis_cluster(request):
+    bansos = Bansos.objects.all()
     get = []
     value = []
     if request.method=="POST":
@@ -314,6 +316,7 @@ def analisis_cluster(request):
             'value'   : value,
             'atribut' : atribut,
             'title':'Clustering',
+            'bansos'  : bansos,
         }
         return render(request, 'clustering/jumlah_k.html',context) 
        
@@ -353,12 +356,14 @@ def hasil(request):
     else:
         base = 'base.html'
         no_edit = 'd-flex'
-    clustering = Jenis.objects.all()    
+    clustering = Jenis.objects.all()  
+    bansos = Bansos.objects.all()  
     context = {
         "base" : base,
         "cluster"   : clustering,
         'title':'Clustering',
         'no_edit' :no_edit,
+        'bansos' : bansos
     }
     return render(request, 'clustering/hasil.html', context) 
 

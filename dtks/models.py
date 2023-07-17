@@ -101,6 +101,10 @@ class Kondisi_Rumah(models.Model):
   def __str__(self) :
     return "{}".format(self.rumah.nama_krt)
   
+  @classmethod
+  def fields(self):
+    return [f.name for f in self._meta.fields]
+  
 class Anggota(models.Model):
   IDJTG_ART = models.CharField(max_length=150)
   rumah = models.ForeignKey("Rumah", on_delete=models.CASCADE)
