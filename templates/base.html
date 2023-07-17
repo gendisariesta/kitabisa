@@ -138,6 +138,11 @@
                         <i class="icon-note menu-icon" style="color:white;"></i><span class="nav-text">DTKS</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{% url 'dtks:anggota' %}" aria-expanded="false">
+                        <i class="ti-clipboard menu-icon" style="color:white;"></i><span class="nav-text">Data Anggota</span>
+                    </a>
+                </li>
                 <li class="mega-menu mega-menu-sm clustering">
                     <a class="has-arrow" href="#" aria-expanded="false">
                         <i class="ti-vector menu-icon" style="color:white;"></i><span class="nav-text">Clustering</span>
@@ -163,7 +168,7 @@
                 <li>
                     {% now "Y" as current_year %}
                     <a class="has-arrow" href="#" aria-expanded="false">
-                        <i class="icon-badge menu-icon" style="color:white;"></i><span class="nav-text">Hasil Perankingan</span>
+                        <i class="ti-check menu-icon" style="color:white;"></i><span class="nav-text">Verifikasi Data</span>
                     </a> 
                     <ul aria-expanded="false" class="collapse">
                         {% for bansos in bansos %}

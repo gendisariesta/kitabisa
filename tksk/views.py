@@ -14,22 +14,22 @@ def index(request):
     bansos_disabilitas = Bansos.objects.get(nama_bansos='Sembako Disabilitas')
     bansos_lansia = Bansos.objects.get(nama_bansos='Sembako Lansia')
 
-    count_disabilitas_diterima = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status="Disetujui").count()
-    count_disabilitas_ditolak = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status="Ditolak").count()
-    count_lansia_diterima = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Disetujui").count()
-    count_lansia_ditolak = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Ditolak").count()
-    count_pmks = Anggota.objects.all().count()
+    count_disabilitas_diterima = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(bansos=bansos_disabilitas).filter(status="Disetujui").count()
+    count_disabilitas_ditolak = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(bansos=bansos_disabilitas).filter(status="Ditolak").count()
+    count_lansia_diterima = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(bansos=bansos_lansia).filter(status="Disetujui").count()
+    count_lansia_ditolak = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(bansos=bansos_lansia).filter(status="Ditolak").count()
+    count_pmks = Anggota.objects.filter(rumah__kecamatan__nama_kecamatan=request.user.location).count()
     
     bansos = Bansos.objects.all()
     tahun = Penerima.objects.values_list('tahun', flat=True).distinct()
 
     penerima = []
     for p in tahun:
-        count = Penerima.objects.filter(tahun = p).count()
+        count = Penerima.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(tahun = p).count()
         penerima.append(count)
     pmks = []
     for p in tahun:
-        count = Ranking.objects.filter(tahun = p).count()
+        count = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(tahun = p).count()
         pmks.append(count)
 
     context={
@@ -61,7 +61,7 @@ def input(request):
 
 @login_required(login_url='account:login')
 def upload_bukti(request):
-    penerima_list = Penerima.objects.filter(status='Dalam Proses')
+    penerima_list = Penerima.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(status='Dalam Proses')
     bansos = Bansos.objects.all()
     anggota=Anggota.objects.all()
 
