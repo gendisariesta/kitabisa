@@ -11,4 +11,5 @@ urlpatterns = [
     path('ranking/proses', views.proses_ranking, name='proses_ranking'),
     path('ranking/proses/<str:slug>', views.ranking_proses, name='ranking_proses'),
     path('proses/', views.proses, name='proses'),
+    path('tolak/', views.tolak, name='tolak'),
 ]

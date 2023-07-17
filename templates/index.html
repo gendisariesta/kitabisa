@@ -105,16 +105,21 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xl-3 col-lg-6 col-sm-6 col-xxl-6">
+                    <div class="col-xl-3 col-lg-6 col-sm-12 col-xxl-6">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title text-blue">Grafik Penerima Bansos tiap Kecamatan</h4>
+                                <select class=" float-left  " id="change_kec" onchange="updateChart();" name="change_kec" style="width:150px" required>
+                                    {% for kecamatan in kecamatan %}
+                                        <option value="{{kecamatan.nama_kecamatan}}">{{kecamatan.nama_kecamatan}}</option>
+                                    {% endfor %}
+                                </select>
                                 <canvas id="chart" width="500" height="400"></canvas>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-xl-3 col-lg-6 col-sm-6 col-xxl-6">
+                    <div class="col-xl-3 col-lg-6 col-sm-12 col-xxl-6">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title text-blue">Jumlah PMKS tiap Kecamatan
@@ -178,7 +183,7 @@
     });
   </script>
 <script>
-    let ctx = document.getElementById("chart").getContext("2d");
+{% comment %} let ctx = document.getElementById("chart").getContext("2d");
 
 let chart = new Chart(ctx, {
   type: "bar",
@@ -208,6 +213,72 @@ let chart = new Chart(ctx, {
         }]
       }
   }
-});
+}); {% endcomment %}
+
+var data_penerima = {
+    {% for penerima in penerima_pmks %}
+    '{{penerima.kec}}': {
+        label: 'Penerima',
+        backgroundColor: "rgba(0, 97, 242, 1)",
+        hoverBackgroundColor: "rgba(0, 97, 242, 0.9)",
+        borderColor: "#4e73df",
+        data: [{{penerima.penerima}}]
+    },
+    {% endfor %}
+}
+var data_pmks = {
+    {% for pmks in penerima_pmks %}
+    '{{pmks.kec}}': {
+        label: 'PMKS',
+        backgroundColor: "#f7e70e",
+        hoverBackgroundColor: "#f5e61d",
+        borderColor: "#f5e61d",
+        data: [{{pmks.pmks}}]
+    },
+    {% endfor %}
+}
+    
+    
+    
+    // Variable for Chart created Globally
+    let myBarChart;
+    
+    
+    function updateChart() {
+        let ctx = document.getElementById("chart").getContext("2d");
+        var e = document.getElementById("change_kec");
+        // Get the selected value of dropdown here
+        var dd = e.options[e.selectedIndex].value;
+        // Create dataset
+        var yearData = {
+            labels: [{%for tahun in tahun%}'{{tahun}}',{%endfor%}],
+            datasets_penerima: [data_pmks[dd], data_penerima[dd]]
+    }
+    // Clear you chart before assiging new dataset
+    if (myBarChart !== undefined) {
+        myBarChart.clear();
+        myBarChart.destroy();
+    }
+    
+    myBarChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: yearData.labels, //set labels
+            datasets: yearData.datasets_penerima // set data for selected year
+        },
+        options: {
+            scales: {
+               yAxes: [{
+                 ticks: {
+                   beginAtZero: true,
+                   min: 0
+                 }    
+               }]
+             }
+         }
+    
+    });
+    // once you set new data, need to update the chart.
+    myBarChart.update();}
 </script>
 {% endblock footer %}

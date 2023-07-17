@@ -5,8 +5,13 @@ from .filters import TahunFilter
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
 from datetime import datetime
+from django.http import HttpResponse, JsonResponse
+import json
 
 # Create your views here.
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 @login_required(login_url='account:login')
 def index(request, slug):
     # bansos = Bansos.objects.get(slug=slug)
@@ -89,6 +94,17 @@ def disetujui(request, id):
         ranking.status = 'Disetujui'
         ranking.save()
         return redirect ('penerima:ranking',slug=ranking.bansos.slug, tahun=ranking.tahun)
+
+def tolak(request):
+    if is_ajax(request):
+        # alasan = request.POST.get('alasan', False)
+        alasan = json.loads(request.POST.get('alasan'))
+        id = json.loads(request.POST.get('id'))
+        ranking = Ranking.objects.get(id=id)
+        ranking.status = 'Ditolak'
+        ranking.alasan = alasan
+        ranking.save()
+        return JsonResponse({'data': id})
 
 def ditolak(request, id):
     if request.method == 'POST':

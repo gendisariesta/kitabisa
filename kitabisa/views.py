@@ -7,6 +7,7 @@ from dtks.models import Kecamatan,Rumah, Anggota
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
 
+@unauthenticated_user
 def index(request):
   
   context={
@@ -30,7 +31,6 @@ def dashboard(request):
       i=i+count
       count_anggota.append(i)  
     a = sum(count_anggota)
-    print(a)
     data_kecamatan.append({"kec":kec,"count":a})
     
   
@@ -42,21 +42,23 @@ def dashboard(request):
   count_lansia_diterima = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Disetujui").count()
   count_lansia_ditolak = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Ditolak").count()
   count_pmks = Anggota.objects.all().count()
-  
-  penerima = []
-  for p in tahun:
-      count = Penerima.objects.filter(tahun = p).count()
-      penerima.append(count)
-  pmks = []
-  for p in tahun:
-      count = Ranking.objects.filter(tahun = p).count()
-      pmks.append(count)
+
+  penerima_pmks = []
+  for kec in kecamatan :
+    penerima_count = []
+    pmks_count = []
+    for p in tahun:
+      count_penerima = Penerima.objects.filter(anggota__rumah__kecamatan=kec).filter(tahun = p).count()
+      penerima_count.append(count_penerima)
+    for p in tahun:
+      count_pmks = Ranking.objects.filter(anggota__rumah__kecamatan=kec).filter(tahun = p).count()
+      pmks_count.append(count_pmks)
+    penerima_pmks.append({'penerima':penerima_count, 'pmks':pmks_count, 'kec':kec})
   context={
     'title':"Dashboard",
     'bansos':bansos,
-    'penerima' : penerima,
+    'penerima_pmks' : penerima_pmks,
     'tahun':tahun,
-    'pmks':pmks,
     'kecamatan' :kecamatan,
     'data_kecamatan':data_kecamatan,
     'count_pmks':count_pmks,
