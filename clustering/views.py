@@ -104,7 +104,6 @@ def scaling(df):
 @allowed_users(allowed_roles=['Superadmin', 'Admin'])
 def proses(request):
     global data, name_table, jum_cluster, value, atr_kondisi, atr_aset
-    
     if 'proses' in request.POST:
         name_table = request.POST.get('nama_cl')
         jum_cluster = request.POST.get('klaster')
@@ -117,6 +116,7 @@ def proses(request):
         atr_rumah = []
         
         if (request.POST.get('jum_anggota') != None):
+            print("ANEH LU")
             get.append("dtks_rumah.jum_anggota")
             query.append("jum_anggota INT")
             value.append('jum_anggota')
@@ -189,7 +189,6 @@ def proses(request):
         cursor.execute("CREATE TABLE clustering_"+name_table+"(cluster varchar(100) DEFAULT NULL, IDJTG varchar(100));")
         for check_atr in value :
             cursor.execute("ALTER TABLE clustering_"+name_table+" ADD "+check_atr+" INT;")
-        
         data_dtks = []
         idjtg = data['IDJTG']
         print(idjtg)
@@ -238,7 +237,7 @@ def c(request, name):
     else:
         base = 'base.html'
     nama = name
-    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
+    db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
     data = pd.read_sql('SELECT * FROM clustering_'+nama, con=db_connection)
     value = data.columns[2:]
     jum = data['cluster'].nunique()
