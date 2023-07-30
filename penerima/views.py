@@ -14,7 +14,7 @@ def is_ajax(request):
 
 @login_required(login_url='account:login')
 def index(request, slug):
-    # bansos = Bansos.objects.get(slug=slug)
+    nama_bansos = Bansos.objects.get(slug=slug)
     if request.user.groups.all()[0].name == "TKSK":
         base = 'base_tksk.html'
         penerima = Penerima.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(bansos__slug__contains=slug)
@@ -28,7 +28,8 @@ def index(request, slug):
         'title':'Daftar Penerima',
         'penerima':penerima,
         'base':base,
-        'bansos':bansos
+        'bansos':bansos,
+        'nama_bansos' : nama_bansos
     }
     return render(request, 'penerima/index.html', context)
 
@@ -70,9 +71,10 @@ def ranking(request, slug, tahun):
     penerima = Ranking.objects.filter(bansos__slug=slug).filter(tahun=tahun).filter(status='Penerima').count()
     bansos = Bansos.objects.all()
     kuota = Bansos.objects.values_list('kuota', flat=True).get(slug=slug)
+    nama_bansos = Bansos.objects.get(slug=slug)
     t = []
             
-    for year in daterange(2019, datetime.now().year):
+    for year in daterange(2021, datetime.now().year):
         t.append(year)
     context={
         'title': 'Perankingan',
@@ -83,7 +85,8 @@ def ranking(request, slug, tahun):
         'slug':slug,
         'kuota': int(kuota),
         'disetujui':disetujui,
-        't':t
+        't':t,
+        'nama_bansos': nama_bansos
         # 'form':tahun_filter.form,
     }
     return render(request, 'penerima/ranking.html', context)

@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from dtks.models import Anggota, Bansos, Kecamatan, Rumah, Aset, Kondisi_Rumah
 from penerima.models import Penerima, Ranking
-
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
 
@@ -32,12 +32,13 @@ def index(request):
         count = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(tahun = p).count()
         pmks.append(count)
 
+
     context={
         'bansos':bansos,
         'title': 'Dashboard TKSK',
         'penerima' : penerima,
-        'tahun':tahun,
         'pmks':pmks,
+        'tahun':tahun,
         'count_pmks':count_pmks,
         'count_disabilitas_diterima':count_disabilitas_diterima,
         'count_disabilitas_ditolak':count_disabilitas_ditolak,
@@ -72,6 +73,7 @@ def upload_bukti(request):
         penerima.foto_bukti = bukti
         penerima.status = 'Diterima'
         penerima.save()
+        messages.success(request, 'Upload bukti berhasil!')
         return redirect('tksk:upload_bukti')
     context={
         'bansos':bansos,

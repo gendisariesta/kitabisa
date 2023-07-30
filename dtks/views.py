@@ -689,19 +689,23 @@ def delete_art(request, id, id_rumah):
 def anggota(request):
   if request.user.groups.all()[0].name == "TKSK":
     base = 'base_tksk.html'
+    anggota = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location)
+    anggota_tolak = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(status='Ditolak')
+    anggota_setujui = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(status='Disetujui')
+    anggota_pending = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(status='Belum Diverifikasi')
   else:
     base = 'base.html'
+    anggota = Ranking.objects.all()
+    anggota_tolak = Ranking.objects.filter(status='Ditolak')
+    anggota_disetujui = Ranking.objects.exclude(status='Ditolak').exclude( status='Belum Diverifikasi')
+    anggota_pending = Ranking.objects.filter(status='Belum Diverifikasi')
   bansos = Bansos.objects.all()
-  anggota = Ranking.objects.all()
-  anggota_tolak = Ranking.objects.filter(status='Ditolak')
-  anggota_setujui = Ranking.objects.filter(status='Disetujui')
-  anggota_pending = Ranking.objects.filter(status='Belum Diverifikasi')
   context ={
     'title': 'DTKS Anggota',
     'bansos': bansos,
     'anggota': anggota,
     'anggota_tolak': anggota_tolak,
-    'anggota_setujui': anggota_setujui,
+    'anggota_disetujui': anggota_disetujui,
     'anggota_pending': anggota_pending,
     'base':base
   }

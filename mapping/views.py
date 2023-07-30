@@ -11,6 +11,8 @@ import folium
 from folium.plugins import HeatMap
 from folium.plugins import FastMarkerCluster
 from geopy.geocoders import Nominatim
+import pandas as pd
+from django_pandas.io import read_frame
 
 geolocator = Nominatim(user_agent="bytescout", timeout=None)
 
@@ -54,8 +56,13 @@ def index(request):
     
     #filter
     penerima_filter=PenerimaFilter(request.POST, queryset=Penerima.objects.all())
-    penerima=penerima_filter.qs
+    penerima_query=penerima_filter.qs
 
+    # df = read_frame(penerima_query, fieldnames=['id', 'anggota__nama_art', 'anggota__rumah__koordinat_lat', 'anggota__rumah__koordinat_long'])
+    # dfg = df.groupby(['anggota__rumah__koordinat_lat', 'anggota__rumah__koordinat_long']).agg(lambda x: list(x)).reset_index()
+    
+    # for row in dfg.itertuples() :
+    #     nama = row.anggota__nama_art
     # image_name='bansos.jpg'
     # image=static('mapping/leaflet/images/')+image_name
     #marker anggota
@@ -63,11 +70,14 @@ def index(request):
     #     folium.Marker([marker.rumah.koordinat_lat, marker.rumah.koordinat_long]).add_to(m)
     #marker penerima
     
-    for marker in penerima:
+    for marker in penerima_query:
+        if marker.status == 'Diterima':
+            garis = '<hr style="border: solid green 4px;opacity: 100;margin-top:10px; margin-bottom:10px;width: 150px;">'
+        else :
+            garis = '<hr style="border: solid yellow 4px;opacity: 100;margin-top:10px; margin-bottom:10px;width: 150px;">'
         folium.Marker([marker.anggota.rumah.koordinat_lat, marker.anggota.rumah.koordinat_long], tooltip='Click for more',
                         popup='<b>Nama : </b>'+marker.anggota.nama_art+'<br>'+'<b>Kecamatan : </b>'+marker.anggota.rumah.kecamatan.nama_kecamatan+
-                        '<br><b>Desa : </b>'+marker.anggota.rumah.desa+'<br><b>Menerima sebanyak 3 kali</b><br><b>Bansos : </b>'+
-                        marker.bansos.nama_bansos+'<hr style="border: solid green 4px;opacity: 100;margin-top:10px; margin-bottom:10px;width: 150px;"><a href="#">Detail |</a><a href="http://maps.google.com/?q='+marker.anggota.rumah.koordinat_lat+'"target="_blank"> Route</a>',
+                        '<br><b>Desa : </b>'+marker.anggota.rumah.desa+'<br><b>Bansos : </b>'+marker.bansos.nama_bansos+'<br><b>Status : </b>'+marker.status+garis+'<a href="#">Detail',
                         icon=folium.Icon(color=marker.bansos.color, icon='')).add_to(m)
         #get HTML representation of map object
     m = m._repr_html_()
