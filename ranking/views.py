@@ -36,7 +36,6 @@ def index(request,slug,tahun):
     data_normalisasi1 = []
     data_hasil = []
     anggota = Anggota.objects.all()
-    
     #PROSES NORMALISASI
     for a in anggota:
         nama=a.nama_art
@@ -48,7 +47,6 @@ def index(request,slug,tahun):
         data_hitung = {'nama_art':nama}
         data_normalisasi.append(data_kriteria)
         data_normalisasi1.append(data_kriteria1)
-
         for c in nama_k:
             kondisi=Kondisi_Rumah.objects.values_list(c, flat=True).get(rumah=rumah)
             bobot = Crips.objects.get(nama_crips=kondisi,bansos=get_bansos).bobot_crips
@@ -56,6 +54,7 @@ def index(request,slug,tahun):
             value = kondisi
             new = value.replace(value, str(bobot))
             data_kriteria.update({c:new})
+            
             atribut = Kriteria.objects.get(nama_kriteria=c).atribut
             k = Kriteria.objects.get(nama_kriteria=c)
             MAX = max(Crips.objects.values_list('bobot_crips', flat=True).filter(kriteria=k))
@@ -79,7 +78,6 @@ def index(request,slug,tahun):
         data_hitung.update({'nilai_akhir':sum(nilai_akhir)})
         data_hasil.append(data_hitung)
     cek_ranking = Ranking.objects.filter(bansos=get_bansos)
-    print(cek_ranking)
     if not cek_ranking:        
         for d in data_hasil:
             nama = d.get('nama_art')

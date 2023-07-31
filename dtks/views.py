@@ -50,9 +50,9 @@ def index(request):
         rt=data[11],
         rw=data[12],
         alamat=data[9],
-        koordinat_lat = coordinates[0],
-        koordinat_long = coordinates[1],
-        jum_anggota = 0
+        koordinat_lat = 0,
+        koordinat_long = 0,
+        jum_anggota = data[79]
       )
       data_rumah.save()
       if (data[47]==None):
