@@ -37,31 +37,46 @@ def dashboard(request):
   bansos_disabilitas = Bansos.objects.get(nama_bansos='Sembako Disabilitas')
   bansos_lansia = Bansos.objects.get(nama_bansos='Sembako Lansia')
 
-  count_disabilitas_diterima = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status="Disetujui").count()
+  disabilitas_penerima = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status='Penerima').count()
+  disabilitas_disetujui = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status="Disetujui").count()
+  count_disabilitas_diterima = disabilitas_penerima + disabilitas_disetujui
   count_disabilitas_ditolak = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status="Ditolak").count()
-  count_lansia_diterima = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Disetujui").count()
+  lansia_penerima = Ranking.objects.filter(bansos=bansos_lansia).filter(status='Penerima').count()
+  lansia_disetujui = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Disetujui").count()
+  count_lansia_diterima = lansia_penerima + lansia_disetujui
   count_lansia_ditolak = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Ditolak").count()
-  count_pmks = Anggota.objects.all().count()
+  jumlah_pmks = Anggota.objects.all().count()
 
   penerima_pmks = []
   for kec in kecamatan :
     penerima_count = []
     pmks_count = []
     for p in tahun:
-      count_penerima = Penerima.objects.filter(anggota__rumah__kecamatan=kec).filter(tahun = p).count()
+      count_penerima = Penerima.objects.values_list('anggota', flat=True).filter(anggota__rumah__kecamatan=kec).filter(tahun = p).distinct().count()
       penerima_count.append(count_penerima)
     for p in tahun:
-      count_pmks = Ranking.objects.filter(anggota__rumah__kecamatan=kec).filter(tahun = p).count()
+      count_pmks = Ranking.objects.values_list('anggota', flat=True).filter(anggota__rumah__kecamatan=kec).filter(tahun = p).distinct().count()
       pmks_count.append(count_pmks)
-    penerima_pmks.append({'penerima':penerima_count, 'pmks':pmks_count, 'kec':kec})
+    penerima_pmks.append({'penerima':penerima_count, 'pmks':pmks_count, 'kec':kec, 'tahun':p})
+
+    penerima = []
+    for p in tahun:
+        count = Penerima.objects.values_list('anggota', flat=True).filter(tahun = p).count()
+        penerima.append(count)
+    pmks = []
+    for p in tahun:
+        count = Ranking.objects.values_list('anggota', flat=True).filter(tahun = p).distinct().count()
+        pmks.append(count)
   context={
     'title':"Dashboard",
     'bansos':bansos,
     'penerima_pmks' : penerima_pmks,
     'tahun':tahun,
+    'penerima':penerima,
+    'pmks':pmks,
     'kecamatan' :kecamatan,
     'data_kecamatan':data_kecamatan,
-    'count_pmks':count_pmks,
+    'count_pmks':jumlah_pmks,
     'count_disabilitas_diterima':count_disabilitas_diterima,
     'count_disabilitas_ditolak':count_disabilitas_ditolak,
     'count_lansia_diterima':count_lansia_diterima,

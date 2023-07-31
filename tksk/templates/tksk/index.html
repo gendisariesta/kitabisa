@@ -109,13 +109,12 @@
                 <div class="col-xl-6 col-lg-12 col-sm-12 col-xxl-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title text-blue">Grafik Penerima Bansos Kecamatan {{user.location}}</h4>
+                            <h4 class="card-title text-blue">Grafik PMKS dan Penerima Bansos Kecamatan {{user.location}}</h4>
                             {% comment %} <div id="flotArea2" class="flot-chart"></div> {% endcomment %}
                             <canvas id="chart" width="500" height="150"></canvas>
                         </div>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -153,7 +152,7 @@
     });
   </script>
 <script>
-    let ctx = document.getElementById("chart").getContext("2d");
+let ctx = document.getElementById("chart").getContext("2d");
 
 let chart = new Chart(ctx, {
   type: "bar",
@@ -162,13 +161,16 @@ let chart = new Chart(ctx, {
      datasets: [
         {
           label: "PMKS",
-          backgroundColor: "#79AEC8",
-          borderColor: "#417690",
+          backgroundColor: "#f7e70e",
+          hoverBackgroundColor: "#f5e61d",
+          borderColor: "#f5e61d",
           data: [{%for pmks in pmks%}'{{pmks}}',{%endfor%}]
         },
         {
             label: "Penerima",
-            backgroundColor: "blue",
+            backgroundColor: "rgba(0, 97, 242, 1)",
+            hoverBackgroundColor: "rgba(0, 97, 242, 0.9)",
+            borderColor: "#4e73df",
             data: [{%for penerima in penerima%}'{{penerima}}',{%endfor%}]
         },
      ]
@@ -185,4 +187,5 @@ let chart = new Chart(ctx, {
   }
 });
 </script>
+
 {% endblock footer %}

@@ -47,7 +47,7 @@
                                 <div class="row">
                                     <div class="col-9">
                                         <p class="text-sm mb-1 text-capitalize">Bansos Disabilitas</p>
-                                        <h4 class="text-black font-weight-bold">{{count_disabilitas_diterima}}<span class="ml-1" style="font-size:12px;color:darkred;">(ditolak)</span></h4>
+                                        <h4 class="text-black font-weight-bold">{{count_disabilitas_ditolak}}<span class="ml-1" style="font-size:12px;color:darkred;">(ditolak)</span></h4>
                                     </div>
                                     <div class="col-3">
                                     <i class="display-7 material-icons float-right blue-logo">accessible</i>
@@ -108,8 +108,9 @@
                     <div class="col-xl-3 col-lg-6 col-sm-12 col-xxl-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title text-blue">Grafik Penerima Bansos tiap Kecamatan</h4>
-                                <select class=" float-left  " id="change_kec" onchange="updateChart();" name="change_kec" style="width:150px" required>
+                                <h4 class="card-title text-blue">Grafik PMKS dan Penerima Bansos {{bansos.nama_bansos}}</h4>
+                                <select class=" float-left  " id="change_kec" onchange="updateChart();" name="change_kec" style="width:200px" required>
+                                    <option value="semua" selected>Semua Kecamatan</option>
                                     {% for kecamatan in kecamatan %}
                                         <option value="{{kecamatan.nama_kecamatan}}">{{kecamatan.nama_kecamatan}}</option>
                                     {% endfor %}
@@ -183,77 +184,98 @@
     });
   </script>
 <script>
-{% comment %} let ctx = document.getElementById("chart").getContext("2d");
+// Variable for Chart created Globally
+let myBarChart;
+if ($("#change_kec").val() === "semua") {
 
-let chart = new Chart(ctx, {
-  type: "bar",
-  data: {
-     labels: [{%for tahun in tahun%}'{{tahun}}',{%endfor%}],
-     datasets: [
-        {
-          label: "PMKS",
-          backgroundColor: "#79AEC8",
-          borderColor: "#417690",
-          data: [{%for pmks in pmks%}'{{pmks}}',{%endfor%}]
-        },
-        {
-            label: "Penerima",
-            backgroundColor: "blue",
-            data: [{%for penerima in penerima%}'{{penerima}}',{%endfor%}]
-        },
-     ]
-  },
-  options: {
-     scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            min: 0
-          }    
-        }]
+    let ctx = document.getElementById("chart").getContext("2d");
+    myBarChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+         labels: [{%for tahun in tahun%}'{{tahun}}',{%endfor%}],
+         datasets: [
+            {
+              label: "PMKS",
+              backgroundColor: "#f7e70e",
+              hoverBackgroundColor: "#f5e61d",
+              borderColor: "#f5e61d",
+              data: [{%for pmks in pmks%}'{{pmks}}',{%endfor%}]
+            },
+            {
+                label: "Penerima",
+                backgroundColor: "rgba(0, 97, 242, 1)",
+                hoverBackgroundColor: "rgba(0, 97, 242, 0.9)",
+                borderColor: "#4e73df",
+                data: [{%for penerima in penerima%}'{{penerima}}',{%endfor%}]
+            },
+         ]
+      },
+      options: {
+         scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                min: 0
+              }    
+            }]
+          }
       }
-  }
-}); {% endcomment %}
+    });
+}
+
 
 var data_penerima = {
+    'semua':{
+        label: 'Penerima',
+        backgroundColor: "rgba(0, 97, 242, 1)",
+        hoverBackgroundColor: "rgba(0, 97, 242, 0.9)",
+        borderColor: "#4e73df",
+        data: [{%for penerima in penerima%}'{{penerima}}',{%endfor%}]
+    },
     {% for penerima in penerima_pmks %}
     '{{penerima.kec}}': {
         label: 'Penerima',
         backgroundColor: "rgba(0, 97, 242, 1)",
         hoverBackgroundColor: "rgba(0, 97, 242, 0.9)",
         borderColor: "#4e73df",
-        data: [{{penerima.penerima}}]
+        data: {{penerima.penerima}}
     },
     {% endfor %}
 }
 var data_pmks = {
+    'semua':{
+        label: 'PMKS',
+        backgroundColor: "#f7e70e",
+        hoverBackgroundColor: "#f5e61d",
+        borderColor: "#f5e61d",
+        data: [{%for pmks in pmks%}'{{pmks}}',{%endfor%}]
+    },
     {% for pmks in penerima_pmks %}
     '{{pmks.kec}}': {
         label: 'PMKS',
         backgroundColor: "#f7e70e",
         hoverBackgroundColor: "#f5e61d",
         borderColor: "#f5e61d",
-        data: [{{pmks.pmks}}]
+        data: {{pmks.pmks}}
     },
     {% endfor %}
 }
     
     
-    
-    // Variable for Chart created Globally
-    let myBarChart;
-    
-    
-    function updateChart() {
-        let ctx = document.getElementById("chart").getContext("2d");
-        var e = document.getElementById("change_kec");
-        // Get the selected value of dropdown here
-        var dd = e.options[e.selectedIndex].value;
-        // Create dataset
-        var yearData = {
-            labels: [{%for tahun in tahun%}'{{tahun}}',{%endfor%}],
-            datasets_penerima: [data_pmks[dd], data_penerima[dd]]
+
+
+
+function updateChart() {
+    let ctx = document.getElementById("chart").getContext("2d");
+    var e = document.getElementById("change_kec");
+    // Get the selected value of dropdown here
+    var dd = e.options[e.selectedIndex].value;
+    // Create dataset
+    var yearData = {
+        labels: [{%for tahun in tahun%}'{{tahun}}',{%endfor%}],
+        datasets_penerima: [data_pmks[dd], data_penerima[dd]]
     }
+
     // Clear you chart before assiging new dataset
     if (myBarChart !== undefined) {
         myBarChart.clear();
@@ -268,17 +290,19 @@ var data_pmks = {
         },
         options: {
             scales: {
-               yAxes: [{
-                 ticks: {
-                   beginAtZero: true,
-                   min: 0
-                 }    
-               }]
-             }
-         }
-    
+                yAxes: [{
+                    ticks: {
+                    beginAtZero: true,
+                    min: 0
+                    }    
+                }]
+                }
+            }
+
     });
-    // once you set new data, need to update the chart.
-    myBarChart.update();}
+// once you set new data, need to update the chart.
+myBarChart.update();
+}
+
 </script>
 {% endblock footer %}

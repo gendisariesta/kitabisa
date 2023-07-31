@@ -133,14 +133,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'dtks:index' %}" aria-expanded="false">
-                        <i class="icon-note menu-icon" style="color:white;"></i><span class="nav-text">DTKS</span>
+                    <a class="has-arrow" href="#" aria-expanded="false">
+                        <i class="ti-clipboard menu-icon" style="color:white;"></i><span class="nav-text">DTKS</span>
                     </a>
-                </li>
-                <li>
-                    <a href="{% url 'dtks:anggota' %}" aria-expanded="false">
-                        <i class="ti-clipboard menu-icon" style="color:white;"></i><span class="nav-text">Data Anggota</span>
-                    </a>
+                    <ul aria-expanded="false" class="collapse clustering">
+                        <li><a href="{% url 'dtks:index' %}">Rumah Tangga</a></li>
+                        <li><a href="{% url 'dtks:anggota' %}">Anggota Rumah Tangga</a></li>
+                    </ul>
                 </li>
                 <li>
                     <a href="{% url 'clustering:hasil' %}" aria-expanded="false">
