@@ -17,7 +17,7 @@ def index(request,slug,tahun):
     penerima = Penerima.objects.filter(bansos__slug__contains=slug)
     get_bansos = Bansos.objects.get(slug=slug)
     kriteria = Kriteria.objects.filter(bansos=get_bansos)
-    nama_k = Kriteria.objects.values_list('nama_kriteria', flat=True).filter(bansos=get_bansos)
+    nama_k = Kriteria.objects.values_list('nama_kriteria', flat=True).filter(bansos=get_bansos).distinct()
     get_kriteria = ['nama_art']
     for k in nama_k:
         get_kriteria.append(k)
@@ -36,30 +36,31 @@ def index(request,slug,tahun):
     data_normalisasi1 = []
     data_hasil = []
     anggota = Anggota.objects.all()
-    
     #PROSES NORMALISASI
     for a in anggota:
         nama=a.nama_art
+        id=a.id
         rumah = a.rumah
         nilai_akhir=[]
         
-        data_kriteria = {'nama_art':nama}
-        data_kriteria1 = {'nama_art':nama}
-        data_hitung = {'nama_art':nama}
+        data_kriteria = {'id':id,'nama_art':nama}
+        data_kriteria1 = {'id':id,'nama_art':nama}
+        data_hitung = {'id':id, 'nama_art':nama}
         data_normalisasi.append(data_kriteria)
         data_normalisasi1.append(data_kriteria1)
-
         for c in nama_k:
+            print("CEK"+c)
+            k = Kriteria.objects.get(nama_kriteria=c,bansos=get_bansos)
             kondisi=Kondisi_Rumah.objects.values_list(c, flat=True).get(rumah=rumah)
-            bobot = Crips.objects.get(nama_crips=kondisi,bansos=get_bansos).bobot_crips
+            bobot = str(Crips.objects.get(nama_crips=kondisi,kriteria=k,bansos=get_bansos).bobot_crips)
             bobot_kriteria = Kriteria.objects.get(nama_kriteria=c,bansos=get_bansos).bobot
             value = kondisi
             new = value.replace(value, str(bobot))
             data_kriteria.update({c:new})
-            atribut = Kriteria.objects.get(nama_kriteria=c).atribut
-            k = Kriteria.objects.get(nama_kriteria=c)
-            MAX = max(Crips.objects.values_list('bobot_crips', flat=True).filter(kriteria=k))
-            MIN = min(Crips.objects.values_list('bobot_crips', flat=True).filter(kriteria=k))
+            
+            atribut = Kriteria.objects.get(nama_kriteria=c,bansos=get_bansos).atribut
+            MAX = max(Crips.objects.values_list('bobot_crips', flat=True).filter(kriteria=k).filter(bansos=get_bansos))
+            MIN = min(Crips.objects.values_list('bobot_crips', flat=True).filter(kriteria=k).filter(bansos=get_bansos))
             if bobot != None:
                 MAX=1
                 MIN=1
@@ -75,15 +76,14 @@ def index(request,slug,tahun):
                     nilai = norm*bobot_kriteria/100
                     data_hitung.update({c:nilai})
                     nilai_akhir.append(nilai)
-                
         data_hitung.update({'nilai_akhir':sum(nilai_akhir)})
         data_hasil.append(data_hitung)
     cek_ranking = Ranking.objects.filter(bansos=get_bansos)
-    print(cek_ranking)
     if not cek_ranking:        
         for d in data_hasil:
             nama = d.get('nama_art')
-            anggota = Anggota.objects.get(nama_art=nama)
+            id = d.get('id')
+            anggota = Anggota.objects.get(id=id)
             hasil = d.get('nilai_akhir')
             data_ranking=Ranking(anggota = anggota,
                                 status="Belum Diverifikasi",

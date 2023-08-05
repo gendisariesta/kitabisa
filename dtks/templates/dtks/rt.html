@@ -487,7 +487,7 @@
                       </a>
                       {% endif %}
                 <div class="table-responsive"> 
-                    <table class="table table-bordered table-striped verticle-middle">
+                    <table class="table table-bordered table-striped verticle-middle" id="table-anggota">
                         <thead>
                             <tr>
                                 <th scope="col">No</th>
@@ -565,7 +565,13 @@ $('.array').each(function() {
   var text = $(this).text().replace(/KOSONG|,/gi ,'').replace(/"|"/gi, '').replace("[", '').replace("]", '').replace(/-rtlh|-listrik|-jamban|-air/gi, '');
   $(this).text(text);
 });
+
 });
+</script>
+<script>
+  $(document).ready( function () {
+    $('#table-anggota').DataTable();
+} );
 </script>
 {% endblock footer %}
 

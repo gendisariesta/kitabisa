@@ -3,7 +3,11 @@ import geocoder
 from django.template.defaultfilters import slugify
 
 class Rumah(models.Model):
+<<<<<<< HEAD
   IDJTG = models.CharField(max_length=20, unique = True)
+=======
+  IDJTG = models.CharField(max_length=255)
+>>>>>>> 7bed3fb20739a1c94f21848ce983b01e7dd168e3
   nama_krt = models.CharField(max_length=100)
   kabupaten = models.CharField(max_length=100)
   kecamatan = models.ForeignKey("Kecamatan", on_delete=models.CASCADE)

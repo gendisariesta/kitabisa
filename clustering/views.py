@@ -19,7 +19,7 @@ from io import BytesIO
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
 
-db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='fikkaps21')
+db_connection = sql.connect(database='kitabisa', host = 'localhost', user = 'root', password='Bismillah2203')
 atribut_kondisi_rumah = ['luas_lahan']
 atribut_aset = ['gas','kulkas','ac', 'pemanas_air','telepon_rumah','tv','perhiasan','komputer','sepeda',
                'motor','mobil','perahu','motor_tempel','perahu_motor','kapal','lahan','sapi','kerbau','kuda','babi','kambing','unggas']
@@ -76,20 +76,20 @@ def outlier(df):
     if ('luas_lahan' and 'lahan') in df.columns:
        mean_lahan  = df['luas_lahan'].mean()
        std_lahan = df['luas_lahan'].std()
-       limit_atas_lahan = mean_lahan+3*std_lahan
+       limit_atas_lahan = mean_lahan+2*std_lahan
        mean_lahan1  = df['lahan'].mean()
        std_lahan1 = df['lahan'].std()
-       limit_atas_lahan1 = mean_lahan1+3*std_lahan1
+       limit_atas_lahan1 = mean_lahan1+2*std_lahan1
        df = df[(df['luas_lahan'] < limit_atas_lahan) & (df['lahan'] < limit_atas_lahan1)] 
     elif 'luas_lahan' in df.columns :
        mean_lahan  = df['luas_lahan'].mean()
        std_lahan = df['luas_lahan'].std()
-       limit_atas_lahan = mean_lahan+3*std_lahan
+       limit_atas_lahan = mean_lahan+2*std_lahan
        df = df[(df['luas_lahan'] < limit_atas_lahan)]
     elif 'lahan' in df.columns :
        mean_lahan  = df['lahan'].mean()
        std_lahan = df['lahan'].std()
-       limit_atas_lahan = mean_lahan+3*std_lahan
+       limit_atas_lahan = mean_lahan+2*std_lahan
        df = df[(df['lahan'] < limit_atas_lahan)]
     return df
     
@@ -116,7 +116,6 @@ def proses(request):
         atr_rumah = []
         
         if (request.POST.get('jum_anggota') != None):
-            print("ANEH LU")
             get.append("dtks_rumah.jum_anggota")
             query.append("jum_anggota INT")
             value.append('jum_anggota')
@@ -138,6 +137,7 @@ def proses(request):
     
         sql = "SELECT dtks_rumah.IDJTG, {}".format(", ".join(str(i) for i in get))+" FROM dtks_rumah, dtks_kondisi_rumah, dtks_aset WHERE dtks_rumah.id = dtks_kondisi_rumah.rumah_id and dtks_kondisi_rumah.rumah_id = dtks_aset.rumah_id"
         df = pd.read_sql(sql, con=db_connection)
+        print(df)
         if (('luas_lahan' or 'lahan') in df.columns):
             df = outlier(df)
             df_scaled = scaling(df[value])
@@ -158,10 +158,14 @@ def proses(request):
             df2 = df[df.cluster==0]
             df3 = df[df.cluster==1]
             df4 = df[df.cluster==2]
+            df5 = df[df.cluster==3]
+            df6 = df[df.cluster==4]
             plt.switch_backend('agg')
             plt.scatter(df2['cluster'],df2['luas_lahan'],color='green')
             plt.scatter(df3['cluster'],df3['luas_lahan'],color='red')
             plt.scatter(df4['cluster'],df4['luas_lahan'],color='black')
+            plt.scatter(df5['cluster'],df5['luas_lahan'],color='yellow')
+            plt.scatter(df6['cluster'],df6['luas_lahan'],color='purple')
 
             plt.xlabel('cluster')
             plt.ylabel('luas_lahan')
@@ -194,6 +198,9 @@ def proses(request):
         print(idjtg)
         for i in idjtg :
             values = (0,i,)
+            if 'jum_anggota' in value :
+                x = Rumah.objects.values_list('jum_anggota', flat=True).get(IDJTG=i)
+                values = values+(x,)
             for k in atr_kondisi:
                 data_rumah = Rumah.objects.get(IDJTG=i)
                 a = Kondisi_Rumah.objects.values_list(k, flat=True).get(rumah=data_rumah)
@@ -297,7 +304,8 @@ def analisis_cluster(request):
             get.append("dtks_rumah.jum_anggota")
             value.append('jum_anggota')
     
-        sql = "SELECT {}".format(", ".join(str(i) for i in get))+" FROM dtks_rumah, dtks_kondisi_rumah, dtks_aset WHERE dtks_kondisi_rumah.rumah_id = dtks_aset.rumah_id"
+        sql = "SELECT {}".format(", ".join(str(i) for i in get))+" FROM dtks_rumah, dtks_kondisi_rumah, dtks_aset WHERE dtks_kondisi_rumah.rumah_id = dtks_aset.rumah_id AND dtks_aset.rumah_id = dtks_rumah.id"
+        print(sql)
         df = pd.read_sql(sql, con=db_connection)
         if (('luas_lahan' or 'lahan') in df.columns):
             df = outlier(df)
@@ -346,6 +354,7 @@ def silhouette(df):
         silhouette_avg = silhouette_score(df, labels)
         score.append(({"index" : i, "silhouette" : silhouette_avg}))
     return score
+
 
 @login_required(login_url='account:login')
 def hasil(request):
