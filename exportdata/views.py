@@ -70,14 +70,15 @@ def export(request):
     worksheet.set_footer(footer1)
     data = []
     for d in queryset:
-        data.append((d.id, d.anggota.nik, d.anggota.nama_art, d.bansos.nama_bansos, d.tahun, d.status))
+        data.append((d.id, d.anggota.nik, d.anggota.nama_art, d.bansos.nama_bansos, d.tahun, d.status, d.anggota.rumah.koordinat_lat, d.anggota.rumah.koordinat_long))
 
 
     # Write some test data.
     row = 3
     col = 0
     no = 1
-    for id, nik, nama, bansos, tahun, status in data:
+    for id, nik, nama, bansos, tahun, status, lat, long in data:
+        koordinat = lat+','+long
         # Convert the date string into a datetime object.
         worksheet.write (row, col, no, f2)
         worksheet.write(row, col + 1, id, f2)
