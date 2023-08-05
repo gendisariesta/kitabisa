@@ -96,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'kitabisa',
         'USER': 'root',
-        'PASSWORD': 'fikkaps21',
+        'PASSWORD': 'Bismillah2203',
         'OPTIONS':{'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"}
     }
 }

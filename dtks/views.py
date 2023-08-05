@@ -5,9 +5,11 @@ from .models import Rumah, Aset, Kondisi_Rumah, Anggota, Kecamatan, Bansos
 from penerima.models import Penerima, Ranking
 from tablib import Dataset
 import pandas as pd 
+from django.contrib.auth import authenticate
 
 from django.contrib.auth.decorators import login_required
 from account.decorators import unauthenticated_user, allowed_users
+from django.contrib import messages
 
 
 # Create your views here.
@@ -50,8 +52,8 @@ def index(request):
         rt=data[11],
         rw=data[12],
         alamat=data[9],
-        koordinat_lat = 0,
-        koordinat_long = 0,
+        koordinat_lat = coordinates[0],
+        koordinat_long = coordinates[1],
         jum_anggota = data[79]
       )
       data_rumah.save()
@@ -208,121 +210,126 @@ def input_form(request):
     if koordinat_lat=="" and koordinat_long=="":
       koordinat_lat=None
       koordinat_long=None
-    data_rumah = Rumah(IDJTG=idjtg,nama_krt=nama_krt,kabupaten=kabupaten,kecamatan=kecamatan,desa=desa,dusun=dusun,rt=rt,rw=rw,alamat=alamat,koordinat_lat = koordinat_lat+','+koordinat_long,koordinat_long = koordinat_long,jum_anggota = 0)
-    data_rumah.save()
     
-    gas = request.POST['gas']
-    kulkas = request.POST['kulkas']
-    ac = request.POST['ac']
-    pemanas_air = request.POST['pemanas_air']
-    telepon_rumah = request.POST['telepon_rumah']
-    tv = request.POST['tv']
-    perhiasan = request.POST['perhiasan']
-    komputer = request.POST['komputer']
-    sepeda = request.POST['sepeda']
-    motor = request.POST['motor']
-    mobil = request.POST['mobil']
-    perahu = request.POST['perahu']
-    motor_tempel = request.POST['motor_tempel']
-    perahu_motor = request.POST['perahu_motor']
-    kapal = request.POST['kapal']
-    lahan = request.POST['lahan']
-    rumah_lain = request.POST['rumah_lain']
-    sapi = request.POST['sapi']
-    kerbau = request.POST['kerbau']
-    kuda = request.POST['kuda']
-    babi = request.POST['babi']
-    kambing = request.POST['kambing']
-    unggas = request.POST['unggas']
-    pengeluaran = request.POST['pengeluaran']
-    data_aset = Aset(
-      rumah=data_rumah,
-      gas=gas,
-      kulkas=kulkas,
-      ac=ac,
-      pemanas_air=pemanas_air,
-      telepon_rumah=telepon_rumah,
-      tv=tv,
-      perhiasan=perhiasan,
-      komputer = komputer,
-      sepeda = sepeda,
-      motor = motor,
-      mobil = mobil,
-      perahu = perahu,
-      motor_tempel = motor_tempel,
-      perahu_motor = perahu_motor,
-      kapal = kapal,
-      lahan = lahan,
-      rumah_lain = rumah_lain,
-      sapi = sapi,
-      kerbau = kerbau,
-      kuda = kuda,
-      babi = babi,
-      kambing = kambing,
-      unggas = unggas,
-      pengeluaran = pengeluaran)
-    data_aset.save()
-      
-    status_bangunan = request.POST['status_bangunan']
-    luas_bangunan = request.POST['luas_bangunan']
-    status_lahan = request.POST['status_lahan']
-    luas_lahan = request.POST['luas_lahan']
-    luas_lantai = request.POST['luas_lantai']
-    jenis_lantai = request.POST['jenis_lantai']
-    jenis_dinding = request.POST['jenis_dinding']
-    kondisi_dinding = request.POST['kondisi_dinding']
-    jenis_atap = request.POST['jenis_atap']
-    kondisi_atap = request.POST['kondisi_atap']
-    jum_kamar = request.POST['jum_kamar']
-    sumber_air = request.POST['sumber_air']
-    cara_air = request.POST['cara_air']
-    sumber_penerangan = request.POST['sumber_penerangan']
-    daya = request.POST['daya']
-    id_pel = request.POST['id_pel']
-    status_listrik = request.POST['status_listrik']
-    bahan_bakar = request.POST['bahan_bakar']
-    fasilitas_bab = request.POST['fasilitas_bab']
-    jenis_kloset = request.POST['jenis_kloset']
-    buang_tinja = request.POST['buang_tinja']
-    bansos_pusat = request.POST.get('bansos_pusat', False)
-    bansos_provinsi = request.POST.get('bansos_provinsi', False)
-    bansos_kota = request.POST.get('bansos_kabupaten', False)
-    bansos_desa = request.POST.get('bansos_desa', False)
-    bansos_lainnya = request.POST.get('bansos_lainnya', False)
-    sumber_bansos = request.POST.get('sumber_bansos')
-    data_kondisi = Kondisi_Rumah(
-      rumah=data_rumah, 
-      status_bangunan = status_bangunan,
-      luas_bangunan = luas_bangunan,
-      status_lahan = status_lahan,
-      luas_lahan = luas_lahan,
-      luas_lantai = luas_lantai,
-      jenis_lantai = jenis_lantai,
-      jenis_dinding = jenis_dinding,
-      kondisi_dinding = kondisi_dinding,
-      jenis_atap = jenis_atap,
-      kondisi_atap = kondisi_atap,
-      jum_kamar = jum_kamar,
-      sumber_air = sumber_air,
-      cara_air = cara_air,
-      sumber_penerangan = sumber_penerangan,
-      daya = daya,
-      id_pel = id_pel,
-      status_listrik = status_listrik,
-      bahan_bakar = bahan_bakar,
-      fasilitas_bab = fasilitas_bab,
-      jenis_kloset = jenis_kloset,
-      buang_tinja = buang_tinja,
-      bansos_pusat = bansos_pusat,
-      bansos_provinsi = bansos_provinsi,
-      bansos_kota = bansos_kota,
-      bansos_desa = bansos_desa,
-      bansos_lainnya = bansos_lainnya,
-      sumber_bansos = sumber_bansos,
-      )
-    data_kondisi.save()
-    id = data_rumah.id
-    return HttpResponseRedirect(reverse('dtks:detail',args=(id,)))
+    count_distinct_IDJTG = Rumah.objects.filter(IDJTG='12345678912345').count()
+    if count_distinct_IDJTG == 1:
+      messages.error(request,'IDJTG sudah terdaftar')
+    else:
+      data_rumah = Rumah(IDJTG=idjtg,nama_krt=nama_krt,kabupaten=kabupaten,kecamatan=kecamatan,desa=desa,dusun=dusun,rt=rt,rw=rw,alamat=alamat,koordinat_lat = koordinat_lat+','+koordinat_long,koordinat_long = koordinat_long,jum_anggota = 0)
+      data_rumah.save()
+    
+      gas = request.POST['gas']
+      kulkas = request.POST['kulkas']
+      ac = request.POST['ac']
+      pemanas_air = request.POST['pemanas_air']
+      telepon_rumah = request.POST['telepon_rumah']
+      tv = request.POST['tv']
+      perhiasan = request.POST['perhiasan']
+      komputer = request.POST['komputer']
+      sepeda = request.POST['sepeda']
+      motor = request.POST['motor']
+      mobil = request.POST['mobil']
+      perahu = request.POST['perahu']
+      motor_tempel = request.POST['motor_tempel']
+      perahu_motor = request.POST['perahu_motor']
+      kapal = request.POST['kapal']
+      lahan = request.POST['lahan']
+      rumah_lain = request.POST['rumah_lain']
+      sapi = request.POST['sapi']
+      kerbau = request.POST['kerbau']
+      kuda = request.POST['kuda']
+      babi = request.POST['babi']
+      kambing = request.POST['kambing']
+      unggas = request.POST['unggas']
+      pengeluaran = request.POST['pengeluaran']
+      data_aset = Aset(
+        rumah=data_rumah,
+        gas=gas,
+        kulkas=kulkas,
+        ac=ac,
+        pemanas_air=pemanas_air,
+        telepon_rumah=telepon_rumah,
+        tv=tv,
+        perhiasan=perhiasan,
+        komputer = komputer,
+        sepeda = sepeda,
+        motor = motor,
+        mobil = mobil,
+        perahu = perahu,
+        motor_tempel = motor_tempel,
+        perahu_motor = perahu_motor,
+        kapal = kapal,
+        lahan = lahan,
+        rumah_lain = rumah_lain,
+        sapi = sapi,
+        kerbau = kerbau,
+        kuda = kuda,
+        babi = babi,
+        kambing = kambing,
+        unggas = unggas,
+        pengeluaran = pengeluaran)
+      data_aset.save()
+        
+      status_bangunan = request.POST['status_bangunan']
+      luas_bangunan = request.POST['luas_bangunan']
+      status_lahan = request.POST['status_lahan']
+      luas_lahan = request.POST['luas_lahan']
+      luas_lantai = request.POST['luas_lantai']
+      jenis_lantai = request.POST['jenis_lantai']
+      jenis_dinding = request.POST['jenis_dinding']
+      kondisi_dinding = request.POST['kondisi_dinding']
+      jenis_atap = request.POST['jenis_atap']
+      kondisi_atap = request.POST['kondisi_atap']
+      jum_kamar = request.POST['jum_kamar']
+      sumber_air = request.POST['sumber_air']
+      cara_air = request.POST['cara_air']
+      sumber_penerangan = request.POST['sumber_penerangan']
+      daya = request.POST['daya']
+      id_pel = request.POST['id_pel']
+      status_listrik = request.POST['status_listrik']
+      bahan_bakar = request.POST['bahan_bakar']
+      fasilitas_bab = request.POST['fasilitas_bab']
+      jenis_kloset = request.POST['jenis_kloset']
+      buang_tinja = request.POST['buang_tinja']
+      bansos_pusat = request.POST.get('bansos_pusat', False)
+      bansos_provinsi = request.POST.get('bansos_provinsi', False)
+      bansos_kota = request.POST.get('bansos_kabupaten', False)
+      bansos_desa = request.POST.get('bansos_desa', False)
+      bansos_lainnya = request.POST.get('bansos_lainnya', False)
+      sumber_bansos = request.POST.get('sumber_bansos')
+      data_kondisi = Kondisi_Rumah(
+        rumah=data_rumah, 
+        status_bangunan = status_bangunan,
+        luas_bangunan = luas_bangunan,
+        status_lahan = status_lahan,
+        luas_lahan = luas_lahan,
+        luas_lantai = luas_lantai,
+        jenis_lantai = jenis_lantai,
+        jenis_dinding = jenis_dinding,
+        kondisi_dinding = kondisi_dinding,
+        jenis_atap = jenis_atap,
+        kondisi_atap = kondisi_atap,
+        jum_kamar = jum_kamar,
+        sumber_air = sumber_air,
+        cara_air = cara_air,
+        sumber_penerangan = sumber_penerangan,
+        daya = daya,
+        id_pel = id_pel,
+        status_listrik = status_listrik,
+        bahan_bakar = bahan_bakar,
+        fasilitas_bab = fasilitas_bab,
+        jenis_kloset = jenis_kloset,
+        buang_tinja = buang_tinja,
+        bansos_pusat = bansos_pusat,
+        bansos_provinsi = bansos_provinsi,
+        bansos_kota = bansos_kota,
+        bansos_desa = bansos_desa,
+        bansos_lainnya = bansos_lainnya,
+        sumber_bansos = sumber_bansos,
+        )
+      data_kondisi.save()
+      id = data_rumah.id
+      return HttpResponseRedirect(reverse('dtks:detail',args=(id,)))
   return render(request, 'dtks/input_form.html', context)
 
 @login_required(login_url='account:login')
