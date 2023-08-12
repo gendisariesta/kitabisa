@@ -52,7 +52,7 @@ def export(request):
     worksheet.set_column(1, 20, 20)
 
     worksheet.write('A1', 'DATA PENERIMA BANTUAN SOSIAL DARI DINSOSDALDUKKBP3A KABUPATEN PURBALINGGA', bold)
-    headings = ('No', 'ID Penerima', 'NIK', 'Nama Anggota', ' Jenis Bansos', 'Tahun', 'Status')
+    headings = ('No', 'NIK', 'Nama Anggota', ' Jenis Bansos', 'Tahun', 'Status')
     worksheet.write_row('A3', headings, f1)
     # worksheet.write('A3', 'ID', f1)
     # worksheet.write('B3', 'NIK', f1)
@@ -70,23 +70,22 @@ def export(request):
     worksheet.set_footer(footer1)
     data = []
     for d in queryset:
-        data.append((d.id, d.anggota.nik, d.anggota.nama_art, d.bansos.nama_bansos, d.tahun, d.status, d.anggota.rumah.koordinat_lat, d.anggota.rumah.koordinat_long))
+        data.append((d.anggota.nik, d.anggota.nama_art, d.bansos.nama_bansos, d.tahun, d.status, d.anggota.rumah.koordinat_lat, d.anggota.rumah.koordinat_long))
 
 
     # Write some test data.
     row = 3
     col = 0
     no = 1
-    for id, nik, nama, bansos, tahun, status, lat, long in data:
+    for nik, nama, bansos, tahun, status, lat, long in data:
         koordinat = lat+','+long
         # Convert the date string into a datetime object.
         worksheet.write (row, col, no, f2)
-        worksheet.write(row, col + 1, id, f2)
-        worksheet.write (row, col + 2, nik, f2)
-        worksheet.write (row, col + 3, nama, f2)
-        worksheet.write (row, col + 4, bansos, f2)
-        worksheet.write (row, col + 5, tahun, f2)
-        worksheet.write (row, col + 6, status, f2)
+        worksheet.write (row, col + 1, nik, f2)
+        worksheet.write (row, col + 2, nama, f2)
+        worksheet.write (row, col + 3, bansos, f2)
+        worksheet.write (row, col + 4, tahun, f2)
+        worksheet.write (row, col + 5, status, f2)
         row += 1
         no += 1
 

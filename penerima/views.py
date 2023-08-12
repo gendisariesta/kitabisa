@@ -136,12 +136,14 @@ def proses_ranking(request):
     bansos = Bansos.objects.all()
     sembako_lansia_tahun_ini = Ranking.objects.filter(bansos__nama_bansos='Sembako Lansia').filter(tahun=datetime.now().year).count()
     sembako_disabilitas_tahun_ini = Ranking.objects.filter(bansos__nama_bansos='Sembako Disabilitas').filter(tahun=datetime.now().year).count()
+    alat_bantu_tahun_ini = Ranking.objects.filter(bansos__nama_bansos='Alat Bantu Disabilitas').filter(tahun=datetime.now().year).count()
     anggota = Anggota.objects.all()
     context={
         'title':'Proses Perankingan',
         'bansos': bansos,
         'sembako_lansia_tahun_ini':sembako_lansia_tahun_ini,
         'sembako_disabilitas_tahun_ini':sembako_disabilitas_tahun_ini,
+        'alat_bantu_tahun_ini': alat_bantu_tahun_ini,
         'anggota':anggota
     }
     return render(request, 'penerima/ranking_proses.html', context)
@@ -154,6 +156,7 @@ def ranking_proses(request, slug):
                 anggota = Anggota.objects.get(id=anggota.id),
                 bansos = Bansos.objects.get(slug = slug),
                 tahun = datetime.now().year
+                # datetime.now().year
             )
             ranking.save()
         return redirect ('penerima:ranking',slug=slug, tahun = datetime.now().year)

@@ -62,7 +62,7 @@
                                 <div class="row">
                                     <div class="col-9">
                                         <p class="text-sm mb-1 text-capitalize">Bansos Disabilitas</p>
-                                        <h4 class="text-black font-weight-bold">{{count_disabilitas_diterima}}<span class="ml-1" style="font-size:12px;color:darkgreen;">(diterima)</span></h4>
+                                        <h4 class="text-black font-weight-bold">{{count_disabilitas_diterima}}<span class="ml-1" style="font-size:12px;color:darkgreen;">(disetujui)</span></h4>
                                     </div>
                                     <div class="col-3">
                                     <i class="display-7 material-icons float-right blue-logo">accessible</i>
@@ -92,7 +92,7 @@
                                 <div class="row">
                                     <div class="col-9">
                                         <p class="text-sm mb-1 text-capitalize">Bansos Lansia</p>
-                                        <h4 class="text-black font-weight-bold">{{count_lansia_diterima}}<span class="ml-1" style="font-size:12px;color:darkgreen;">(diterima)</span></h4>
+                                        <h4 class="text-black font-weight-bold">{{count_lansia_diterima}}<span class="ml-1" style="font-size:12px;color:darkgreen;">(disetujui)</span></h4>
                                     </div>
                                     <div class="col-3">
                                     <i class="display-7 material-icons float-right blue-logo">elderly</i>
@@ -123,28 +123,47 @@
                     <div class="col-xl-3 col-lg-6 col-sm-12 col-xxl-6">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title text-blue">Jumlah PMKS tiap Kecamatan
-                                    {% comment %} <span class="input-group-prepend pull-right">
-                                    <button class="btn btn-outline-dark btn-sm badge-pill dropdown-toggle" type="button" data-toggle="dropdown">Tahun 2021</button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item btn-sm" href="#">2021</a> 
-                                            <a class="dropdown-item btn-sm" href="#">2022</a> 
-                                            <a class="dropdown-item btn-sm" href="#">2023</a>
-                                        </div>
-                                    </span> {% endcomment %}
-                                </h4>
+                                <h4 class="card-title text-blue">Akumulasi PMKS dan Penerima tiap Kecamatan</h4>
+                                {% comment %} <span class="input-group-prepend pull-right">
+                                <button class="btn btn-outline-dark btn-sm badge-pill dropdown-toggle" type="button" data-toggle="dropdown">Tahun 2021</button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item btn-sm" href="#">2021</a> 
+                                        <a class="dropdown-item btn-sm" href="#">2022</a> 
+                                        <a class="dropdown-item btn-sm" href="#">2023</a>
+                                    </div>
+                                </span> {% endcomment %}
                                 <div class="media-body pt-3 pb-3">
                                     <div class="media-body">
-                                        <h5>Kecamatan<span class="pull-right">Jumlah</span></h5>
+                                        <h5 class="d-flex justify-content-between"><span style="width:120px;">Kecamatan</span><span>Penerima</span> <span class="pull-right">PMKS</span></h5>
                                     </div>
                                 </div>
                                 <div class="media">
                                     <div class="media-body">
                                         {% for kec in data_kecamatan  %}
-                                        <h6>{{kec.kec}}<span class="pull-right">{{kec.count}}</span></h6>
+                                        <h6 class="d-flex justify-content-between"><span style="width:120px;">{{kec.kec}}</span><span>{{kec.countp}}</span><span>{{kec.count}}</span></h6>
                                         {% endfor %}
-                                        </div>
+                                    </div>
                                 </div>
+                                {% comment %} <div class="table-responsive">
+                                    <table class="table table-xs mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Kecamatan</th>
+                                                <th>Product</th>
+                                                <th>Country</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><img src="./images/avatar/1.jpg" class=" rounded-circle mr-3" alt="">Sarah Smith</td>
+                                                <td>iPhone X</td>
+                                                <td>
+                                                    <span>United States</span>
+                                                </td>Z
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div> {% endcomment %}
                             </div>
                         </div>
                     </div>
