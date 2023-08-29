@@ -106,7 +106,7 @@ class Kondisi_Rumah(models.Model):
     return [f.name for f in self._meta.fields]
   
 class Anggota(models.Model):
-  IDJTG_ART = models.CharField(max_length=20, unique = True)
+  IDJTG_ART = models.CharField(max_length=20)
   rumah = models.ForeignKey("Rumah", on_delete=models.CASCADE)
   nama_art = models.CharField(max_length=255)
   nik = models.CharField(max_length=16, unique = True)

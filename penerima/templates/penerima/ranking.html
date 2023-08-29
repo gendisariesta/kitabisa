@@ -24,7 +24,7 @@
                                 </div>
                                 <div class="btn-group" role="group">
                                 {% if disetujui >= kuota and penerima == 0 and ranking %}
-                                <form method="POST" action="{% url 'penerima:proses' %}">
+                                <form method="POST" action="{% url 'penerima:proses' slug %}">
                                     {% csrf_token %}
                                     <input name="jenis_bansos" id="jenis_bansos" type="hidden" value="{{slug}}">
                                     <button type="submit" class="btn mt-2 ml-2 btn-info">Proses Data</button>

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Rumah, Aset, Kondisi_Rumah, Anggota, Kecamatan, Bansos
@@ -211,7 +211,7 @@ def input_form(request):
       koordinat_lat=None
       koordinat_long=None
     
-    count_distinct_IDJTG = Rumah.objects.filter(IDJTG='12345678912345').count()
+    count_distinct_IDJTG = Rumah.objects.filter(IDJTG=idjtg).count()
     if count_distinct_IDJTG == 1:
       messages.error(request,'IDJTG sudah terdaftar')
     else:
@@ -416,44 +416,55 @@ def input_art(request, id):
     bansos_kota = request.POST['bansos_kabupaten']
     bansos_desa = request.POST['bansos_desa']
     bansos_lainnya = request.POST['bansos_lainnya']
-    data_anggota = Anggota(
-      IDJTG_ART = idjtg_art,
-      rumah = data_rumah,
-      nama_art = nama_art,
-      nik = nik,
-      no_kk = no_kk,
-      ibu_kandung = ibu_kandung,
-      hubungan_krt = hubungan_krt,
-      hubungan_kk = hubungan_kk,
-      tempat_lahir = tempat_lahir,
-      tanggal_lahir = tanggal_lahir,
-      jenis_kelamin = jenis_kelamin,
-      status_perkawinan = status_perkawinan,
-      akta_nikah = akta_nikah,
-      tercantum_kk = tercantum_kk,
-      kepemilikan_kartu = kepemilikan_kartu,
-      status_kehamilan = status_kehamilan,
-      tgl_kehamilan = tgl_kehamilan,
-      jenis_disabilitas = jenis_disabilitas,
-      penyakit = penyakit,
-      sekolah = sekolah,
-      jenjang_pendidikan = jenjang_pendidikan,
-      kelas_tertinggi = kelas_tertinggi,
-      ijazah_tertinggi = ijazah_tertinggi,
-      status_bekerja = status_bekerja,
-      lapangan_usaha = lapangan_usaha,
-      status_kedudukan_kerja = status_kedudukan_kerja,
-      jenis_ketrampilan = jenis_ketrampilan,
-      bansos_pusat = "0",
-      bansos_provinsi = bansos_provinsi,
-      bansos_kota = bansos_kota,
-      bansos_desa = bansos_desa,
-      bansos_lainnya = bansos_lainnya
-      )
-    data_anggota.save()
-    count = data_rumah.jum_anggota
-    data_rumah.jum_anggota = count+1
-    data_rumah.save()
+
+    count_distinct_IDJTG_art = Anggota.objects.filter(IDJTG_ART=idjtg_art).count()
+    count_distinct_nik = Anggota.objects.filter(nik=nik).count()
+    if count_distinct_IDJTG_art == 1:
+      messages.error(request,'IDJTG ART yang Anda masukkan sudah terdaftar')
+      return redirect ('dtks:input_art', id)
+    elif count_distinct_nik == 1:
+      messages.error(request,'NIK yang Anda masukkan sudah terdaftar')
+      return redirect ('dtks:input_art', id)
+    else:
+      data_anggota = Anggota(
+        IDJTG_ART = idjtg_art,
+        rumah = data_rumah,
+        nama_art = nama_art,
+        nik = nik,
+        no_kk = no_kk,
+        ibu_kandung = ibu_kandung,
+        hubungan_krt = hubungan_krt,
+        hubungan_kk = hubungan_kk,
+        tempat_lahir = tempat_lahir,
+        tanggal_lahir = tanggal_lahir,
+        jenis_kelamin = jenis_kelamin,
+        status_perkawinan = status_perkawinan,
+        akta_nikah = akta_nikah,
+        tercantum_kk = tercantum_kk,
+        kepemilikan_kartu = kepemilikan_kartu,
+        status_kehamilan = status_kehamilan,
+        tgl_kehamilan = tgl_kehamilan,
+        jenis_disabilitas = jenis_disabilitas,
+        penyakit = penyakit,
+        sekolah = sekolah,
+        jenjang_pendidikan = jenjang_pendidikan,
+        kelas_tertinggi = kelas_tertinggi,
+        ijazah_tertinggi = ijazah_tertinggi,
+        status_bekerja = status_bekerja,
+        lapangan_usaha = lapangan_usaha,
+        status_kedudukan_kerja = status_kedudukan_kerja,
+        jenis_ketrampilan = jenis_ketrampilan,
+        bansos_pusat = "0",
+        bansos_provinsi = bansos_provinsi,
+        bansos_kota = bansos_kota,
+        bansos_desa = bansos_desa,
+        bansos_lainnya = bansos_lainnya
+        )
+      data_anggota.save()
+      messages.success(request,'Anggota baru berhasil ditambahkan!')
+      count = data_rumah.jum_anggota
+      data_rumah.jum_anggota = count+1
+      data_rumah.save()
     return HttpResponseRedirect(reverse('dtks:detail',args=(id,)))
   
   bansos = Bansos.objects.all()
@@ -554,76 +565,82 @@ def edit_krt(request, id):
     'data_kondisi' : data_kondisi,
   }
   if request.method == 'POST':
-    data_rumah.IDJTG = request.POST['IDJTG']
-    data_rumah.nama_krt = request.POST['nama_krt']
-    data_rumah.kabupaten = request.POST['kabupaten']
-    id_kecamatan = request.POST.get('kecamatan')
-    data_rumah.kecamatan = Kecamatan.objects.get(id=id_kecamatan)
-    data_rumah.desa = request.POST['desa']
-    data_rumah.dusun = request.POST['dusun']
-    data_rumah.rt = request.POST['rt']
-    data_rumah.rw = request.POST['rw']
-    data_rumah.alamat = request.POST['alamat']
-    data_rumah.koordinat_lat = request.POST['koordinat_lat']
-    data_rumah.koordinat_long = request.POST['koordinat_long']
-    data_rumah.save()
-    
-    data_aset.gas = request.POST['gas']
-    data_aset.kulkas = request.POST['kulkas']
-    data_aset.ac = request.POST['ac']
-    data_aset.pemanas_air = request.POST['pemanas_air']
-    data_aset.telepon_rumah = request.POST['telepon_rumah']
-    data_aset.tv = request.POST['tv']
-    data_aset.perhiasan = request.POST['perhiasan']
-    data_aset.komputer = request.POST['komputer']
-    data_aset.sepeda = request.POST['sepeda']
-    data_aset.motor = request.POST['motor']
-    data_aset.mobil = request.POST['mobil']
-    data_aset.perahu = request.POST['perahu']
-    data_aset.motor_tempel = request.POST['motor_tempel']
-    data_aset.perahu_motor = request.POST['perahu_motor']
-    data_aset.kapal = request.POST['kapal']
-    data_aset.lahan = request.POST['lahan']
-    data_aset.rumah_lain = request.POST['rumah_lain']
-    data_aset.sapi = request.POST['sapi']
-    data_aset.kerbau = request.POST['kerbau']
-    data_aset.kuda = request.POST['kuda']
-    data_aset.babi = request.POST['babi']
-    data_aset.kambing = request.POST['kambing']
-    data_aset.unggas = request.POST['unggas']
-    data_aset.pengeluaran = request.POST['pengeluaran'] 
-    data_aset.save()
+    count_distinct_IDJTG = Rumah.objects.filter(IDJTG=request.POST['IDJTG']).count()
+    idjtg = Rumah.objects.values_list('IDJTG', flat = True).get(id=id)
+    if count_distinct_IDJTG == 1 and request.POST['IDJTG'] != idjtg :
+      messages.error(request,'IDJTG sudah terdaftar')
+      return redirect ('dtks:edit_krt', id)
+    else:
+      data_rumah.IDJTG = request.POST['IDJTG']
+      data_rumah.nama_krt = request.POST['nama_krt']
+      data_rumah.kabupaten = request.POST['kabupaten']
+      id_kecamatan = request.POST.get('kecamatan')
+      data_rumah.kecamatan = Kecamatan.objects.get(id=id_kecamatan)
+      data_rumah.desa = request.POST['desa']
+      data_rumah.dusun = request.POST['dusun']
+      data_rumah.rt = request.POST['rt']
+      data_rumah.rw = request.POST['rw']
+      data_rumah.alamat = request.POST['alamat']
+      data_rumah.koordinat_lat = request.POST['koordinat_lat']
+      data_rumah.koordinat_long = request.POST['koordinat_long']
+      data_rumah.save()
       
-    data_kondisi.status_bangunan = request.POST['status_bangunan']
-    data_kondisi.luas_bangunan = request.POST['luas_bangunan']
-    data_kondisi.status_lahan = request.POST['status_lahan']
-    data_kondisi.luas_lahan = request.POST['luas_lahan']
-    data_kondisi.luas_lantai = request.POST['luas_lantai']
-    data_kondisi.jenis_lantai = request.POST['jenis_lantai']
-    data_kondisi.jenis_dinding = request.POST['jenis_dinding']
-    data_kondisi.kondisi_dinding = request.POST['kondisi_dinding']
-    data_kondisi.jenis_atap = request.POST['jenis_atap']
-    data_kondisi.kondisi_atap = request.POST['kondisi_atap']
-    data_kondisi.jum_kamar = request.POST['jum_kamar']
-    data_kondisi.sumber_air = request.POST['sumber_air']
-    data_kondisi.cara_air = request.POST['cara_air']
-    data_kondisi.sumber_penerangan = request.POST['sumber_penerangan']
-    data_kondisi.daya = request.POST['daya']
-    data_kondisi.id_pel = request.POST['id_pel']
-    data_kondisi.status_listrik = request.POST['status_listrik']
-    data_kondisi.bahan_bakar = request.POST['bahan_bakar']
-    data_kondisi.fasilitas_bab = request.POST['fasilitas_bab']
-    data_kondisi.jenis_kloset = request.POST['jenis_kloset']
-    data_kondisi.buang_tinja = request.POST['buang_tinja']
-    data_kondisi.bansos_pusat = request.POST.get('bansos_pusat', False)
-    data_kondisi.bansos_provinsi = request.POST.get('bansos_provinsi', False)
-    data_kondisi.bansos_kota = request.POST.get('bansos_kabupaten', False)
-    data_kondisi.bansos_desa = request.POST.get('bansos_desa', False)
-    data_kondisi.bansos_lainnya = request.POST.get('bansos_lainnya', False)
-    data_kondisi.sumber_bansos = request.POST.get('sumber_bansos')
-    data_kondisi.save()
-    id = data_rumah.id
-    return HttpResponseRedirect(reverse('dtks:detail',args=(id,)))
+      data_aset.gas = request.POST['gas']
+      data_aset.kulkas = request.POST['kulkas']
+      data_aset.ac = request.POST['ac']
+      data_aset.pemanas_air = request.POST['pemanas_air']
+      data_aset.telepon_rumah = request.POST['telepon_rumah']
+      data_aset.tv = request.POST['tv']
+      data_aset.perhiasan = request.POST['perhiasan']
+      data_aset.komputer = request.POST['komputer']
+      data_aset.sepeda = request.POST['sepeda']
+      data_aset.motor = request.POST['motor']
+      data_aset.mobil = request.POST['mobil']
+      data_aset.perahu = request.POST['perahu']
+      data_aset.motor_tempel = request.POST['motor_tempel']
+      data_aset.perahu_motor = request.POST['perahu_motor']
+      data_aset.kapal = request.POST['kapal']
+      data_aset.lahan = request.POST['lahan']
+      data_aset.rumah_lain = request.POST['rumah_lain']
+      data_aset.sapi = request.POST['sapi']
+      data_aset.kerbau = request.POST['kerbau']
+      data_aset.kuda = request.POST['kuda']
+      data_aset.babi = request.POST['babi']
+      data_aset.kambing = request.POST['kambing']
+      data_aset.unggas = request.POST['unggas']
+      data_aset.pengeluaran = request.POST['pengeluaran'] 
+      data_aset.save()
+        
+      data_kondisi.status_bangunan = request.POST['status_bangunan']
+      data_kondisi.luas_bangunan = request.POST['luas_bangunan']
+      data_kondisi.status_lahan = request.POST['status_lahan']
+      data_kondisi.luas_lahan = request.POST['luas_lahan']
+      data_kondisi.luas_lantai = request.POST['luas_lantai']
+      data_kondisi.jenis_lantai = request.POST['jenis_lantai']
+      data_kondisi.jenis_dinding = request.POST['jenis_dinding']
+      data_kondisi.kondisi_dinding = request.POST['kondisi_dinding']
+      data_kondisi.jenis_atap = request.POST['jenis_atap']
+      data_kondisi.kondisi_atap = request.POST['kondisi_atap']
+      data_kondisi.jum_kamar = request.POST['jum_kamar']
+      data_kondisi.sumber_air = request.POST['sumber_air']
+      data_kondisi.cara_air = request.POST['cara_air']
+      data_kondisi.sumber_penerangan = request.POST['sumber_penerangan']
+      data_kondisi.daya = request.POST['daya']
+      data_kondisi.id_pel = request.POST['id_pel']
+      data_kondisi.status_listrik = request.POST['status_listrik']
+      data_kondisi.bahan_bakar = request.POST['bahan_bakar']
+      data_kondisi.fasilitas_bab = request.POST['fasilitas_bab']
+      data_kondisi.jenis_kloset = request.POST['jenis_kloset']
+      data_kondisi.buang_tinja = request.POST['buang_tinja']
+      data_kondisi.bansos_pusat = request.POST.get('bansos_pusat', False)
+      data_kondisi.bansos_provinsi = request.POST.get('bansos_provinsi', False)
+      data_kondisi.bansos_kota = request.POST.get('bansos_kabupaten', False)
+      data_kondisi.bansos_desa = request.POST.get('bansos_desa', False)
+      data_kondisi.bansos_lainnya = request.POST.get('bansos_lainnya', False)
+      data_kondisi.sumber_bansos = request.POST.get('sumber_bansos')
+      data_kondisi.save()
+      id = data_rumah.id
+      return HttpResponseRedirect(reverse('dtks:detail',args=(id,)))
   return render(request, 'dtks/input_form.html', context)
 
 @login_required(login_url='account:login')
@@ -646,38 +663,49 @@ def edit_art(request, id):
     'button_submit':"Edit Data"
   }
   if request.method == 'POST':
-    data_anggota.IDJTG_ART = request.POST['idjtg_art']
-    data_anggota.nama_art = request.POST['nama_art']
-    data_anggota.nik = request.POST['nik']
-    data_anggota.no_kk = request.POST['no_kk']
-    data_anggota.ibu_kandung = request.POST['ibu_kandung']
-    data_anggota.hubungan_krt = request.POST['hubungan_krt']
-    data_anggota.hubungan_kk = request.POST['hubungan_kk']
-    data_anggota.tempat_lahir = request.POST['tempat_lahir']
-    data_anggota.tanggal_lahir = request.POST['tanggal_lahir']
-    data_anggota.jenis_kelamin = request.POST['jenis_kelamin']
-    data_anggota.status_perkawinan = request.POST['status_perkawinan']
-    data_anggota.akta_nikah = request.POST['akta_nikah']
-    data_anggota.tercantum_kk = request.POST['tercantum_kk']
-    data_anggota.kepemilikan_kartu = request.POST['kepemilikan_kartu']
-    data_anggota.status_kehamilan = request.POST['status_kehamilan']
-    data_anggota.tgl_kehamilan = request.POST['tgl_kehamilan']
-    data_anggota.jenis_disabilitas = request.POST['jenis_disabilitas']
-    data_anggota.penyakit = request.POST['penyakit']
-    data_anggota.sekolah = request.POST['sekolah']
-    data_anggota.jenjang_pendidikan = request.POST['jenjang_pendidikan']
-    data_anggota.kelas_tertinggi = request.POST['kelas_tertinggi']
-    data_anggota.ijazah_tertinggi = request.POST['ijazah_tertinggi']
-    data_anggota.status_bekerja = request.POST['status_bekerja']
-    data_anggota.lapangan_usaha = request.POST['lapangan_usaha']
-    data_anggota.status_kedudukan_kerja = request.POST['status_kedudukan_kerja']
-    data_anggota.jenis_ketrampilan = request.POST['jenis_ketrampilan']
-    data_anggota.bansos_provinsi = request.POST['bansos_provinsi']
-    data_anggota.bansos_kota = request.POST['bansos_kabupaten']
-    data_anggota.bansos_desa = request.POST['bansos_desa']
-    data_anggota.bansos_lainnya = request.POST['bansos_lainnya']
-    data_anggota.save()
-    return HttpResponseRedirect(reverse('dtks:detail_art',args=(id,)))
+    count_distinct_IDJTG_art = Anggota.objects.filter(IDJTG_ART=request.POST['idjtg_art']).count()
+    count_distinct_nik = Anggota.objects.filter(nik=request.POST['nik']).count()
+    idjtg_art = Anggota.objects.values_list('IDJTG_ART', flat = True).get(id=id)
+    nik = Anggota.objects.values_list('nik', flat = True).get(id=id)
+    if count_distinct_IDJTG_art == 1 and request.POST['idjtg_art'] != idjtg_art :
+      messages.error(request,'IDJTG ART yang Anda masukkan sudah terdaftar')
+      return redirect ('dtks:edit_art', id)
+    elif count_distinct_nik == 1 and request.POST['nik'] != nik :
+      messages.error(request,'NIK yang Anda masukkan sudah terdaftar')
+      return redirect ('dtks:edit_art', id)
+    else:
+      data_anggota.IDJTG_ART = request.POST['idjtg_art']
+      data_anggota.nama_art = request.POST['nama_art']
+      data_anggota.nik = request.POST['nik']
+      data_anggota.no_kk = request.POST['no_kk']
+      data_anggota.ibu_kandung = request.POST['ibu_kandung']
+      data_anggota.hubungan_krt = request.POST['hubungan_krt']
+      data_anggota.hubungan_kk = request.POST['hubungan_kk']
+      data_anggota.tempat_lahir = request.POST['tempat_lahir']
+      data_anggota.tanggal_lahir = request.POST['tanggal_lahir']
+      data_anggota.jenis_kelamin = request.POST['jenis_kelamin']
+      data_anggota.status_perkawinan = request.POST['status_perkawinan']
+      data_anggota.akta_nikah = request.POST['akta_nikah']
+      data_anggota.tercantum_kk = request.POST['tercantum_kk']
+      data_anggota.kepemilikan_kartu = request.POST['kepemilikan_kartu']
+      data_anggota.status_kehamilan = request.POST['status_kehamilan']
+      data_anggota.tgl_kehamilan = request.POST['tgl_kehamilan']
+      data_anggota.jenis_disabilitas = request.POST['jenis_disabilitas']
+      data_anggota.penyakit = request.POST['penyakit']
+      data_anggota.sekolah = request.POST['sekolah']
+      data_anggota.jenjang_pendidikan = request.POST['jenjang_pendidikan']
+      data_anggota.kelas_tertinggi = request.POST['kelas_tertinggi']
+      data_anggota.ijazah_tertinggi = request.POST['ijazah_tertinggi']
+      data_anggota.status_bekerja = request.POST['status_bekerja']
+      data_anggota.lapangan_usaha = request.POST['lapangan_usaha']
+      data_anggota.status_kedudukan_kerja = request.POST['status_kedudukan_kerja']
+      data_anggota.jenis_ketrampilan = request.POST['jenis_ketrampilan']
+      data_anggota.bansos_provinsi = request.POST['bansos_provinsi']
+      data_anggota.bansos_kota = request.POST['bansos_kabupaten']
+      data_anggota.bansos_desa = request.POST['bansos_desa']
+      data_anggota.bansos_lainnya = request.POST['bansos_lainnya']
+      data_anggota.save()
+      return HttpResponseRedirect(reverse('dtks:detail_art',args=(id,)))
   return render(request, 'dtks/input_art.html', context)  
 
 #Delete Functions
@@ -698,7 +726,7 @@ def anggota(request):
     base = 'base_tksk.html'
     anggota = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location)
     anggota_tolak = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(status='Ditolak')
-    anggota_setujui = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(status='Disetujui')
+    anggota_disetujui = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).exclude(status='Ditolak').exclude( status='Belum Diverifikasi')
     anggota_pending = Ranking.objects.filter(anggota__rumah__kecamatan__nama_kecamatan=request.user.location).filter(status='Belum Diverifikasi')
   else:
     base = 'base.html'

@@ -1,7 +1,10 @@
-{% extends base %} 
-{% load static %} 
-{% block head %}
-<link href="{% static 'dtks/css/mystyle.css' %}" rel="stylesheet" />
+{% extends base %} {% load static %} {% block head %}
+{% comment %} <link href="{% static 'dtks/css/mystyle.css' %}" rel="stylesheet" /> {% endcomment %}
+<style>
+label.error{
+  color: red;
+}
+</style>
 {% endblock head %} {% block body %}
 <div class="content-body">
   <div class="row page-titles mx-0">
@@ -20,11 +23,23 @@
   <div class="container-fluid mb-5">
     <div class="row">
       <div class="col-lg-12" id="input-dtks-art">
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible fade show">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span></button
+          >{{message}}
+        </div>
+        {% endfor %} {% endif %}
         <div class="card">
           <div class="card-body">
             <h4 class="card-title">Formulir Input DTKS ART</h4>
             <div class="basic-form mt-4">
-              <form method="POST">
+              <form method="POST" id="formTambahAnggota">
                 {% csrf_token %}
                 <div class="form-row">
                   <div class="form-group col-md-4">
@@ -35,7 +50,9 @@
                       name="idjtg_art"
                       id="idjtg_art"
                       required
-                      value=""  maxlength="14" minlength="15"
+                      value=""
+                      minlength="14"
+                      maxlength="20"
                     />
                   </div>
                   <div class="form-group col-md-4">
@@ -51,22 +68,26 @@
                     />
                   </div>
                   <div class="form-group col-md-4">
-                    <label class="inputdata-label" >NIK</label>
+                    <label class="inputdata-label">NIK</label>
                     <input
                       type="number"
                       class="form-control"
                       name="nik"
-                      id="nik" minlength="16" maxlength="16"
+                      id="nik"
+                      minlength="16"
+                      maxlength="16"
                       required
                     />
                   </div>
                   <div class="form-group col-md-4">
-                    <label class="inputdata-label" >No KK</label>
+                    <label class="inputdata-label">No KK</label>
                     <input
                       type="number"
                       class="form-control"
                       name="no_kk"
-                      id="no_kk" minlength="16" maxlength="16"
+                      id="no_kk"
+                      minlength="16"
+                      maxlength="16"
                       required
                     />
                   </div>
@@ -242,7 +263,6 @@
                         name="tgl_kehamilan"
                         id="tgl_kehamilan"
                         value=""
-                        
                       />
                     </div>
                   </div>
@@ -953,6 +973,15 @@
   <!-- #/ container -->
 </div>
 {% endblock body %} {% block footer %}
+<script>
+  $("#formTambahAnggota").validate({
+
+    submitHandler: function(form) {
+      form.submit();
+    }
+   });
+</script>
+
 <script>
   {% if data_anggota %}
     var kepemilikan_kartu = "{{data_anggota.kepemilikan_kartu}}";

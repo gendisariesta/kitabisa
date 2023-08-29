@@ -5,7 +5,7 @@ from .models import Penerima, Ranking
 class PenerimaAdmin(admin.ModelAdmin):
     list_display = ('anggota', 'bansos', 'tahun')
 class RankingAdmin(admin.ModelAdmin):
-    list_display = ('anggota', 'status')
+    list_display = ('anggota', 'bansos', 'tahun', 'status')
     
 
 admin.site.register(Penerima, PenerimaAdmin)

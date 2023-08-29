@@ -10,6 +10,6 @@ urlpatterns = [
     path('ranking/ditolak/<int:id>/', views.ditolak, name='ditolak'),
     path('ranking/proses', views.proses_ranking, name='proses_ranking'),
     path('ranking/proses/<str:slug>', views.ranking_proses, name='ranking_proses'),
-    path('proses/', views.proses, name='proses'),
+    path('proses/<str:slug>', views.proses, name='proses'),
     path('tolak/', views.tolak, name='tolak'),
 ]

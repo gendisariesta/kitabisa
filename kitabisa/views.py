@@ -41,6 +41,7 @@ def dashboard(request):
   
   bansos_disabilitas = Bansos.objects.get(nama_bansos='Sembako Disabilitas')
   bansos_lansia = Bansos.objects.get(nama_bansos='Sembako Lansia')
+  alat_bantu = Bansos.objects.get(nama_bansos='Alat Bantu Disabilitas')
 
   disabilitas_penerima = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status='Penerima').count()
   disabilitas_disetujui = Ranking.objects.filter(bansos=bansos_disabilitas).filter(status="Disetujui").count()
@@ -50,7 +51,12 @@ def dashboard(request):
   lansia_disetujui = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Disetujui").count()
   count_lansia_diterima = lansia_penerima + lansia_disetujui
   count_lansia_ditolak = Ranking.objects.filter(bansos=bansos_lansia).filter(status="Ditolak").count()
+  alat_bantu_penerima = Ranking.objects.filter(bansos=alat_bantu).filter(status='Penerima').count()
+  alat_bantu_disetujui = Ranking.objects.filter(bansos=alat_bantu).filter(status="Disetujui").count()
+  count_alat_bantu_diterima = alat_bantu_penerima + alat_bantu_disetujui
+  count_alat_bantu_ditolak = Ranking.objects.filter(bansos=alat_bantu).filter(status="Ditolak").count()
   jumlah_pmks = Anggota.objects.all().count()
+  jumlah_penerima_all= Penerima.objects.all().values_list('anggota', flat=True).distinct().count()
 
   penerima_pmks = []
   for kec in kecamatan :
@@ -80,10 +86,13 @@ def dashboard(request):
     'penerima':penerima,
     'pmks':pmks,
     'kecamatan' :kecamatan,
+    'jumlah_penerima_all' :jumlah_penerima_all,
     'data_kecamatan':data_kecamatan,
     'count_pmks':jumlah_pmks,
     'count_disabilitas_diterima':count_disabilitas_diterima,
     'count_disabilitas_ditolak':count_disabilitas_ditolak,
+    'count_alat_bantu_diterima':count_alat_bantu_diterima,
+    'count_alat_bantu_ditolak':count_alat_bantu_ditolak,
     'count_lansia_diterima':count_lansia_diterima,
     'count_lansia_ditolak':count_lansia_ditolak,
 

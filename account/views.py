@@ -78,6 +78,7 @@ def registration(request):
 def user(request):
   user = User.objects.exclude(groups__name='Superadmin')
   kecamatan = Kecamatan.objects.all()
+  bansos = Bansos.objects.all()
   form = CreateUserForm()
 
   
@@ -93,7 +94,8 @@ def user(request):
     'badge' : 'success',
     'no'    : 1,
     'form'  : form,
-    'kecamatan' : kecamatan
+    'kecamatan' : kecamatan,
+    'bansos' : bansos,
   }
   # if request.method == 'POST':
   #   nama = request.POST['nama']

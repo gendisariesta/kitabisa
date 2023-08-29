@@ -116,11 +116,12 @@ def ditolak(request, id):
         ranking.save()
         return redirect ('penerima:ranking',slug=ranking.bansos.slug, tahun=ranking.tahun)
     
-def proses(request):
+def proses(request, slug):
     if request.method == 'POST':
-        jenis_bansos = Bansos.objects.get(slug=request.POST.get('jenis_bansos'))
-        calon_penerima = Ranking.objects.filter(status='Disetujui')[:int(jenis_bansos.kuota)]
-        for r in calon_penerima:
+        jenis_bansos = Bansos.objects.get(slug=slug)
+        calon_penerima = Ranking.objects.filter(bansos=jenis_bansos).filter(status='Disetujui')[:int(jenis_bansos.kuota)]
+        for r in calon_penerima :
+            
             ranking = Ranking.objects.get(id=r.id)
             ranking.status = 'Penerima'
             ranking.save()
